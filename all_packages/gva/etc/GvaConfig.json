@@ -1,0 +1,43 @@
+{
+  "volume": {
+    "number_of_volume_steps": 20
+  },
+  "device": {
+    "model_id": "Bose."
+  },
+  "logging": {
+    "output_type": [
+      "SYSLOG"
+    ],
+    "level": "INFO",
+    "directory": "/tmp",
+    "max_size_kb": 512
+  },
+  "libas_server": {
+    "libas_server_address": "unix:///tmp/libassist_grpc.socket"
+  },
+  "platform": {
+    "identity_certificate": "/mnt/nv/product-persistence/identity.crt",
+    "chain_certs_path": "/opt/Bose/etc/GVA/chain_certs"
+  },
+  "crash": {
+    "uploader_path": "/opt/Bose/etc/GVA/crash_uploader",
+    "dump_directory": "/tmp"
+  },
+  "do_setup": false,
+  "persistence_path": "/mnt/nv/product-persistence/google-assistant-library",
+  "audio_input_source": {
+    "mic_type": "FAR_FIELD",
+    "disable_hotword": false,
+    "enable_eraser": false,
+    "enable_stopword": true,
+    "enable_hotword_cleaner": true,
+    "input_channel_count": 1
+  },
+  "has_battery": false,
+  "cast_enabled": true,
+  "enable_long_form_audio": true,
+  "enable_multi_user": true,
+  "mic_mute_delay": 750,
+  "delimiter_wav": "/opt/Bose/etc/GVA/delimiter.wav"
+}

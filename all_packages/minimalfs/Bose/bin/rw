@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Make all file systems read/write.
+#
+
+if [ $# -gt 0 ]; then
+    echo >&2 "${0##*/}: unexpected argument" 
+    exit 1
+fi
+
+exit=0
+for fs in / /persist /opt/Bose; do
+    mount -oremount,rw "$fs" || exit=1
+done
+
+exit $exit

@@ -1,0 +1,10 @@
+{
+  "auto_enable_xapp": false,
+  "secure_storage_data": false,
+  "xapp_conf_dir": "/opt/Bose/xapp/config/",
+  "device_type_id": "A3BRT6REMPQWA8",
+  "product_id":"EddieClub",
+  "vsk_supported": false,
+  "has_mic": true,
+  "has_aux": true
+}

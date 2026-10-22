@@ -1,0 +1,33 @@
+#!/bin/sh
+#
+# usage: killbyarg PROGRAM ARG
+#
+# Kill any process whose name is PROGRAM but only if it was started with
+# the command line argument ARG.
+#
+this=${0##*/}
+
+if [ $# -ne 2 ]; then
+    echo >&2 "usage: $this PROGRAM ARG"
+    exit 1
+fi
+prog=$1; shift
+arg=$1; shift
+
+has_arg () {
+    local pid="$1" arg="$2"
+    # True if process $pid was passed argument $arg.
+    local i IFS="$(printf "\31")"
+    for i in $(tr "\0" "\31" <"/proc/$pid/cmdline" 2>/dev/null); do
+        [ "$i" = "$arg" ] && return 0
+    done
+    return 1
+}
+
+exit=0
+for pid in $(pgrep "$prog"); do
+    if has_arg "$pid" "$arg"; then
+        killwait "$pid" || exit=1
+    fi
+done
+exit $exit

@@ -1,0 +1,136 @@
+#!/usr/bin/python
+
+import argparse
+import time
+
+FB_DEVICE_DEFAULT="/dev/fb1"
+SLEEP_TIME_DEFAULT=0.033
+SCREEN_WIDTH_DEFAULT=240
+SCREEN_HEIGHT_DEFAULT=320
+FRAME_COUNT=16
+
+COLOR_BG=[0xff, 0xff]
+COLOR_STRIP=[0x00, 0x00]
+
+CLI_OPTIONS_UNIX = "hd:t:"
+CLI_OPTIONS_GNU  = ["help", "device=", "time="]
+
+imageList 			= [];
+fbDevice 			= FB_DEVICE_DEFAULT
+sleepTime 			= SLEEP_TIME_DEFAULT
+screenWidth 		= SCREEN_WIDTH_DEFAULT
+screenHeight 		= SCREEN_HEIGHT_DEFAULT
+dumpFramesAndExit 	= False
+
+def process_arguments():
+	"""
+	Parse command line arguments.
+	"""
+
+	global dumpFramesAndExit
+	global fbDevice
+	global screenHeight
+	global screenWidth
+	global sleepTime
+
+	parser = argparse.ArgumentParser(description = "Tests video system for tearing.")
+
+	parser.add_argument("-d", "--device", help="Set frame buffer device. Default is " + FB_DEVICE_DEFAULT)
+	parser.add_argument("-t", "--time", help="Set time in seconds between frames. Default is " + str(SLEEP_TIME_DEFAULT))
+	parser.add_argument("--width", help="Screen width. Default " + str(SCREEN_WIDTH_DEFAULT))
+	parser.add_argument("--height", help="Screen height. Default " + str(SCREEN_HEIGHT_DEFAULT))
+	parser.add_argument("--dump", help="Dump generated frames and exit", action="store_true")
+	
+	args = parser.parse_args()
+
+	if args.device:
+		fbDevice = args.device
+
+	if args.time:
+		sleepTime = float(args.time)
+
+	if args.width:
+		screenWidth = int(args.width)
+
+	if args.height:
+		screenHeight = int(args.height)
+
+	if args.dump:
+		dumpFramesAndExit = True
+
+def build_row(frame):
+	"""
+	Generate one row of image data.
+	"""
+	rowData=[]
+
+	for i in range(0, screenWidth):
+
+		if i < frame * stripWidth:
+			rowData.extend(COLOR_BG)
+		elif (i >= frame * stripWidth) and (i < frame * stripWidth + stripWidth):
+			rowData.extend(COLOR_STRIP)
+		else:
+			rowData.extend(COLOR_BG)
+
+	return rowData
+
+
+def build_image(frame):
+	"""
+	Builds one image.
+	"""
+	imageData=[]
+
+	for iRow in range(0, screenHeight):
+		imageData.extend(build_row(frame))
+
+	return bytearray(imageData)
+
+def build_images():
+	"""
+	Builds images for all frames.
+	"""
+	for iFrame in range(0, FRAME_COUNT):
+		print("\tFrame " + str(iFrame))
+		imageList.append(build_image(iFrame))
+
+def render_frames(startIndex, endIndex):
+	"""
+	Draw all frames from startIndex to endIndex.
+	"""
+
+	step = -1 if (endIndex < startIndex) else 1
+	for iFrame in range(startIndex, endIndex, step):
+		with open(fbDevice, "w+b") as fb:
+			fb.write(imageList[iFrame])
+		time.sleep(sleepTime)
+
+def dump_images():
+	"""
+	Dump the image data to files for debugging.
+	"""
+	for iFrame in range(0, FRAME_COUNT):		
+		filename = "test-splash_frame" + str(iFrame) + ".raw"
+		with open(filename, "w+b") as fb:
+			print("writing " + filename)
+			fb.write(imageList[iFrame])
+
+
+
+process_arguments()
+
+stripWidth = screenWidth / FRAME_COUNT
+
+print "Building images..."
+build_images()
+
+if dumpFramesAndExit:
+	dump_images()
+	exit(0)
+
+print("Animating to " + fbDevice + " at " + str(sleepTime) + "s...")
+
+while True:
+	render_frames(0, FRAME_COUNT)
+	render_frames(FRAME_COUNT - 1, 0)

@@ -1,0 +1,10 @@
+{
+    "whoAmI" : "IPC_DEVICE_SOUNDTOUCH",
+    "devices" : [
+        {
+            "device" : "/dev/lpm-ipc",
+            "ids" : [ "IPC_DEVICE_LPM", "IPC_DEVICE_DSP", "IPC_DEVICE_F0" ],
+            "type" : "IPC_INTERFACE_SPI"
+        }
+    ]
+}

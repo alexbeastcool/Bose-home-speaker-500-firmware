@@ -1,0 +1,114 @@
+#!/bin/bash
+#
+# This script is invoke by systemd.
+# See: /etc/systemd/system/bose.service
+#
+# This script's only purpose is for systemd to invoke the SoundTouch script.
+# If you're thinking about having this script do something more, you're almost
+# certainly wrong.
+#
+
+# Todo: Change egrep to jq query
+# Status is Pending install Only if Status is ERROR / INPROGRESS Or 
+# Atleast one status is In START when atleast one is COMPLETE   
+
+# create swUpdateCache if not already exists
+swUpCache=/opt/Bose/.swUpdateCache
+if [ ! -d "$swUpCache" ]; then
+    mount -oremount,rw /opt/Bose
+    mkdir -p $swUpCache
+    mount -oremount,ro /opt/Bose
+fi
+
+use_systemd=false
+
+# If Shepherdd daemon file is not present use systemd
+if [ ! -f /opt/Bose/bin/shepherdd ]; then
+    use_systemd=true
+fi
+
+start_services()
+{
+    if [ "$use_systemd" = false ] ; then
+        exec /opt/Bose/bin/SoundTouch "$@"
+    else
+        systemctl start Configure_Product@"$1".service
+    fi
+}
+
+if [ -f "/opt/Bose/bin/set-default-time" ]; then
+    /opt/Bose/bin/set-default-time
+fi
+
+# Product specific initialization during first boot after update, if required
+if [ -f "/opt/Bose/bin/first-boot-init" ]; then
+    /opt/Bose/bin/first-boot-init
+fi
+
+installPending=false
+jq .SwUpComponents.elements[].status /mnt/nv/updateSwUpComponentStatus.dat > /tmp/status.txt
+if egrep -q "STATUS_ERROR|STATUS_INPROGRESS" /tmp/status.txt; then
+    echo "Install is pending - error / inprogress"
+    installPending=true
+else 
+    if egrep -q "STATUS_START|STATUS_REMOVE" /tmp/status.txt && egrep -q "STATUS_OK" /tmp/status.txt; then
+        echo "Install is pending - one or more complete"
+        installPending=true
+    elif egrep -q "STATUS_START|STATUS_REMOVE" /tmp/status.txt && [ -e /mnt/nv/update/install-in-progress ]; then
+        echo "Install is pending - install-in-progress file exists"
+        installPending=true        
+    fi
+fi
+
+if [ "$use_systemd" = true ] ; then
+    # For the shepherd based products this initialization will happen from SoundTouch script
+
+    ln -sf /opt/Bose/etc/systemd/Configure_Product\@.service /var/run/systemd/system/
+    ln -sf /opt/Bose/etc/systemd/fd.service /var/run/systemd/system/ 
+
+    cfg=/opt/Bose/etc/KeyConfiguration.json
+    if [ -e /mnt/nv/product-persistence/DemoModeOn ]; then
+        log info "--DEMO MODE--"
+        cfg=/mnt/nv/product-persistence/KeyConfiguration-demo.json
+        if ! [ -e "$cfg" ]; then
+            cfg=/opt/Bose/etc/KeyConfiguration-demo.json
+        fi
+    fi
+    log info "Key configuration: $cfg"
+    ln -nsf "$cfg" /var/run/KeyConfiguration.json || exit
+    sync
+fi
+
+if $installPending; then
+    if [ -e /opt/Bose/update/backup/install ]; then
+        echo "Executing install from backup location"
+        if [ -e /opt/Bose/update/backup/unshare ]; then
+            exec /opt/Bose/update/backup/unshare -m /opt/Bose/update/backup/install "$@"
+        else
+            exec /opt/Bose/update/backup/install "$@"
+        fi
+    fi
+    if [ -e /opt/Bose/bin/install ]; then
+        echo "Executing install from normal location"
+        if [ -e /opt/Bose/update/bin/unshare ]; then
+            exec /opt/Bose/update/bin/unshare -m /opt/Bose/bin/install "$@"
+        else
+            exec /opt/Bose/bin/install "$@"
+        fi
+    fi
+    echo "Install is pending but running SoundTouch"
+    start_services $@
+else
+    echo "Install is not pending"
+    if [ -e /opt/Bose/bin/install ]; then
+        start_services $@ &
+        if [ -e /opt/Bose/update/bin/unshare ]; then
+            exec /opt/Bose/update/bin/unshare -m /opt/Bose/bin/install "$@" 
+        else
+            exec /opt/Bose/bin/install "$@" 
+        fi
+    else
+        start_services $@
+    fi
+fi
+

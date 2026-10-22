@@ -1,0 +1,267 @@
+#!/usr/bin/python2.7
+#
+# Re-manufacturing page.
+#
+import os
+import sys
+import json
+import re
+import subprocess
+import md5
+import time
+
+if len(sys.argv) != 2:
+    raise Exception("wrong usage")
+params = sys.argv[1]
+
+def http_ok(content_type="text/plain"):
+    print """\
+HTTP/1.1 200 OK\r
+Content-Type: {}\r
+Cache-Control: no-cache\r
+\r""".format(content_type)
+
+def http_err(code="404 Not Found"):
+    print """\
+HTTP/1.1 {code}\r
+Content-Type: text/plain\r
+\r
+{code}\r""".format(code=code)
+
+def html_escape(text):
+    return re.sub(r'[<"&>]', lambda x: { "<": "&lt;",
+                                         '"': "&quot;",
+                                         "&": "&amp;",
+                                         ">": "&gt;" }[x.group(0)], text)
+
+def url_unescape1(match):
+    v = match.group(0)
+    return " " if v == "+" else chr(int(v[1:], 16))
+
+def url_unescape(text):
+    return re.sub(r'\+|%[0-9A-F][0-9A-F]', url_unescape1, text)
+
+def md5sig(text):
+    m = md5.new()
+    m.update(text)
+    return m.hexdigest()
+
+# ----------------------------------------------------------------------------
+
+fields = """
+  BMAPVariantID
+  productColor
+  country_code
+  deviceAbsorptionLux
+  mic_gain
+  snSystem
+""".split()
+
+field_notes = {
+  "BMAPVariantID":	"1 (black), 2 (white), 3 (silver)",
+  "productColor":	"Same as BMAPVariantID",
+  "country_code":	"US, JP, CN, NZ, ...",
+  "deviceAbsorptionLux": "1.00 to 100.00",
+  "mic_gain":		"8 microphone gain values",
+  "snSystem":		"17-character serial number",
+}
+
+# ----------------------------------------------------------------------------
+# Load mfg_data.json
+
+mfg_data = json.load(open("/persist/mfg_data.json"))
+if mfg_data.get("service") != "true":
+    http_err()
+    sys.exit()
+
+fn_json = "mfg_data.json"
+fn_sig = "mfg_data.md5"
+
+# ----------------------------------------------------------------------------
+# Parse CGI parameters
+
+button = None
+force = False
+for param in params.split("&"):
+    i = param.find("=")
+    if i == -1:
+        name, value = param, ""
+    else:
+        name, value = param[:i], url_unescape(param[i+1:])
+    if name.startswith("i_"):
+        name = name[2:]
+        for f in fields:
+            if f == name:
+                mfg_data[name] = value.strip()
+                break
+    elif name.startswith("b_"):
+        button = name[2:]
+    elif name == "force":
+        force = True
+
+# ----------------------------------------------------------------------------
+# Validate
+
+is_valid = True
+validation_output = []
+
+if button == "validate" or button == "apply":
+    # Validate the mfgdata values.
+    del mfg_data["service"]
+    mfg_data["modified"] = time.strftime("%a, %d %b %Y %H:%M:%S %z")
+    text = json.dumps(mfg_data, indent=2, sort_keys=True) \
+               .replace(" \n", "\n") + "\n"
+    os.chdir("/tmp")
+    with open(fn_json, "w") as fh:
+        fh.write(text)
+    with open(fn_sig, "w") as fh:
+        fh.write("{}  {}\n".format(md5sig(text), fn_json))
+
+    os.environ["BOSE_PERSIST_DIR"] = "."
+    ph = subprocess.Popen(["validate-mfgdata", "--brief"],
+                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    validation_output = ph.stdout.readlines()
+    if validation_output:
+        is_valid = False
+    if ph.wait() == 0:
+        validation_output.insert(0, "Validation succeeded")
+    else:
+        validation_output.insert(0, "Validation failed")
+        is_valid = False
+
+# ----------------------------------------------------------------------------
+# Apply
+
+apply_output = []
+applied = False
+
+if button == "apply" and (is_valid or force):
+    ph = subprocess.Popen(["bash", "-c", """\
+mount -oremount,rw /persist
+mv {} {} /persist || exit
+mount -oremount,ro /persist
+LpmMfgTool || exit
+""".format(fn_json, fn_sig)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    apply_output = ph.stdout.readlines()
+    if ph.wait() == 0:
+        apply_output.insert(0, "Changes applied. This unit is no longer in service mode.")
+        applied = True
+    else:
+        apply_output.insert(0, "Apply failed")
+
+# ----------------------------------------------------------------------------
+# Generate the page HTML
+
+http_ok("text/html")
+
+print """\
+<html>
+<head>
+<title>Service</title>
+<style type="text/css">
+ body {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+ }
+ hr {
+   border: 1px solid blue;
+   color: #fff;
+   background-color: #fff;
+   height: 1px;
+   width: 100%;
+ }
+ div.box {
+   background-color: lightgrey;
+   border: thin dotted;
+   padding: 1em;
+   margin: 1em;
+ }
+ .hilite {
+   background-color: yellow;
+ }
+ input[type=submit] {
+   width: 20em;
+ }
+</style>
+<script>
+function click_force() {
+  force = document.getElementById("force");
+  apply = document.getElementById("xapply");
+  apply.disabled = !force.checked;
+}
+</script>
+</head>
+<body>
+<h1>Service</h1>
+<hr>
+<form>
+"""
+
+# ----------------------------------------------------------------------------
+# The table of name/value pairs
+
+if not applied:
+    print """<div class="box" id="keys"><table>"""
+
+    for f in fields:
+        print """\
+<tr>
+  <td>{name}</td>
+  <td><input type="text" size="60" name="i_{name}" value="{value}"></td>
+  <td>{notes}</td>
+</tr>
+""".format(name=f,
+           value=html_escape(mfg_data.get(f, "")),
+           notes=html_escape(field_notes[f]))
+
+    print """\
+</table>
+</div>
+<div class="box" id="apply">
+  <input type="submit" name="b_validate" value="Validate">
+  <input type="submit" name="b_apply" id="xapply" value="Apply" {}>
+</div>
+""".format("" if is_valid or force else "disabled")
+
+# ----------------------------------------------------------------------------
+
+if validation_output:
+    print """<div class="box" id="validation_output"><table>"""
+    for line in validation_output:
+        print "<tr><td>", html_escape(line), "</td></tr>"
+    print "</table></div>"
+
+# ----------------------------------------------------------------------------
+
+if apply_output:
+    print """<div class="box" id="apply_output"><table>"""
+    for line in apply_output:
+        print "<tr><td>", html_escape(line), "</td></tr>"
+    print "</table></div>"
+
+# ----------------------------------------------------------------------------
+
+if not is_valid and not applied:
+    print """
+<div class="box" id="not_applied">
+  <input type="checkbox" name="force" id="force" onclick="click_force()" {}>
+  Allow changes to be applied despite validation issues
+</div>
+""".format("checked" if force else "")
+
+# ----------------------------------------------------------------------------
+
+if applied:
+    print """
+<div class="box" id="applied">
+  <input type="submit" value="Service Another Unit" onclick="location.href='/service'">
+</div>
+"""
+
+# ----------------------------------------------------------------------------
+
+print """\
+</form>
+<hr>
+</body>
+</html>
+"""

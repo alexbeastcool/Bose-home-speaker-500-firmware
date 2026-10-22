@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# init-rsa
+#
+# Use GoogleCastLite -i to load the RSA2048 device key
+# if that fails, allow writing to /persist and try again, which will create the key.
+
+cd ${0%/*}
+
+./GoogleCastLite -i && exit # since key was found
+
+# create key by allowing /persist to be written to temporarily
+mount -o remount,rw /persist
+./GoogleCastLite -i
+mount -o remount,ro /persist

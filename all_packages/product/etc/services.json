@@ -1,0 +1,287 @@
+{
+  "ipc": {
+    "services": [
+      {
+        "name": "A4VDeviceController",
+        "addresses": ["stream:A4VDeviceController?nonblocking"]
+      },
+      {
+        "name": "A4VServer",
+        "addresses": ["stream:A4VServer?nonblocking"]
+      },
+      {
+        "name": "ABLServer",
+        "addresses": ["stream:ABLServer?nonblocking"]
+      },
+      {
+        "name": "AECReferenceService",
+        "addresses": ["stream:AECReference_Data?nonblocking"]
+      },
+      {
+        "name": "APDashboard",
+        "addresses": ["stream:APDashboard?nonblocking"]
+      },
+      {
+        "name": "APProductServer",
+        "addresses": ["stream:APProductServer?nonblocking"]
+      },
+      {
+        "name": "APServer",
+        "addresses": ["stream:APServer?nonblocking"]
+      },
+      {
+        "name": "xAppPrimary",
+        "addresses": ["stream:xappprimary?nonblocking"]
+      },
+      {
+        "name": "xAppSecondary",
+        "addresses": ["stream:xappsecondary?nonblocking"]
+      },
+      {
+        "name": "APServerSlaveService",
+        "addresses": ["stream://:40002?no_delay&nonblocking"]
+      },
+      {
+        "name": "APServerSlaveDataService",
+        "addresses": ["stream://:40003?no_delay&nonblocking&assuredforwarding"]
+      },
+      {
+        "name": "APGroupSlaveServer",
+        "addresses": ["stream://:40031?no_delay&nonblocking"]
+      },
+      {
+        "name": "APGstreamerServer",
+        "addresses": ["stream:APGstreamerServer?nonblocking"]
+      },
+      {
+        "name": "APIPCBTSourceUDSService",
+        "addresses": ["stream:APIPCBTSourceUDSService?nonblocking"]
+      },
+      {
+        "name": "AirplayController",
+        "addresses": ["stream://:17005?no_delay&nonblocking"]
+      },
+      {
+        "name": "AirPlay2Audio",
+        "addresses": ["stream:airplay2audio?nonblocking"]
+      },
+      {
+        "name": "AVSAudio",
+        "addresses": ["stream:avsaudio?nonblocking"]
+      },
+      {
+        "name": "GVAAudio",
+        "addresses": ["stream:gvaaudio?nonblocking"]
+      },
+      {
+        "name": "GVATTS",
+        "addresses": ["stream:gvatts?nonblocking"]
+      },
+      {
+        "name": "GVAChime",
+        "addresses": ["stream:gvachime?nonblocking"]
+      },
+      {
+        "name": "GCastAudio",
+        "addresses": ["stream:gcastaudio?nonblocking"]
+      },
+      {
+        "name": "GCastTTS",
+        "addresses": ["stream:gcasttts?nonblocking"]
+      },
+      {
+        "name": "GCastChime",
+        "addresses": ["stream:gcastchime?nonblocking"]
+      },
+      {
+        "name": "BatteryMonitor",
+        "addresses": ["stream:BatteryMonitor?nonblocking"]
+      },
+      {
+        "name": "BluetoothAudio",
+        "addresses": ["stream:btaudio?nonblocking"]
+      },
+      {
+        "name": "BluetoothSetup",
+        "addresses": ["stream:btmgr?nonblocking"]
+      },
+      {
+        "name": "BLESetupServer",
+        "addresses": ["stream:BLESetupServer?nonblocking"]
+      },
+      {
+        "name": "BTOutCtrl",
+        "addresses": ["stream:btoutctrl?nonblocking"]
+      },
+      {
+        "name": "BTOutData",
+        "addresses": ["stream:btoutdata?nonblocking"]
+      },
+      {
+        "name": "CC2540Update",
+        "addresses": ["stream:CC2540Update?nonblocking"]
+      },
+      {
+        "name": "CliServerCommand",
+        "addresses": ["stream:cliservercommand?nonblocking"]
+      },
+      {
+        "name": "ClockSync",
+        "addresses": ["stream:ClockSync?nonblocking"]
+      },
+      {
+        "name": "ClockSyncControl",
+        "addresses": ["stream://:40035?no_delay&nonblocking"]
+      },
+      {
+        "name": "ClockSyncStatus",
+        "addresses": ["stream:ClockSyncStatus?nonblocking"]
+      },
+      {
+        "name": "DiscoveryService",
+        "addresses": ["stream:DiscoveryService?nonblocking"]
+      },
+      {
+        "name": "LpmService",
+        "addresses": ["stream:LpmService?nonblocking"]
+      },
+      {
+        "name": "FrontDoor",
+        "addresses": ["stream:FrontDoor?nonblocking"]
+      },
+      {
+        "name": "NetManager",
+        "addresses": ["stream:NetManager?nonblocking"]
+      },
+      {
+        "name": "NetworkPowerService",
+        "addresses": ["stream:NetworkPowerService?nonblocking"]
+      },
+      {
+        "name": "Passport",
+        "addresses": ["stream:Passport?nonblocking"]
+      },
+      {
+        "name": "DataCollectionUDCService",
+        "addresses": ["DataCollectionUDCService?nonblocking"]
+      },
+      {
+        "name": "DataCollectionNDCService",
+        "addresses": ["stream:DataCollectionNDCService?nonblocking"]
+      },
+      {
+        "name": "SpotifyAudio",
+        "addresses": ["stream:spotifyaudio?nonblocking"]
+      },
+      {
+        "name": "SsdpControl",
+        "addresses": ["stream:SsdpControl?nonblocking"]
+      },
+      {
+        "name": "StpProduct",
+        "addresses": ["stream:StpProduct?nonblocking"]
+      },
+      {
+        "name": "SwUpdate",
+        "addresses": ["stream:SwUpdate?nonblocking"]
+      },
+      {
+        "name": "SwUpdateInstaller",
+        "addresses": ["stream://:40015?no_delay&nonblocking"]
+      },
+      {
+        "name": "SwUpdateModule",
+        "addresses": ["stream:SwUpdateModule?nonblocking"]
+      },
+      {
+        "name": "SysCheck",
+        "addresses": ["stream:syscheck?nonblocking"]
+      },
+      {
+        "name": "UpnpSource",
+        "addresses": ["stream:UpnpSource?nonblocking"]
+      },
+      {
+        "name": "A4VVideoManagerService",
+        "addresses": ["stream:A4VVideoManagerService?nonblocking"]
+      },
+      {
+        "name": "A4VRemoteCommunicationService",
+        "addresses": ["stream:A4VRemoteCommunicationService?nonblocking"]
+      },
+      {
+        "name": "A4VQuickSetService",
+        "addresses": ["stream:A4VQuickSetService?nonblocking"]
+      },
+      {
+        "name": "HomeKit",
+        "addresses": ["stream:HomeKit?nonblocking"]
+      },
+      {
+        "name": "WebServer",
+        "addresses": ["stream:WebServer?nonblocking"]
+      },
+      {
+        "name": "WifiManager",
+        "addresses": ["stream:WifiManager?nonblocking"]
+      },
+      {
+        "name": "GroupMessage",
+        "addresses": ["stream://:17200?no_delay&nonblocking"]
+      },
+      {
+        "name": "UIGroupMessage",
+        "addresses": ["stream://:17300?no_delay&nonblocking"]
+      },
+      {
+        "name": "VfeNetwork",
+        "addresses": ["stream:VfeNetwork?nonblocking"]
+
+      },
+      {
+        "name": "VfeService",
+        "addresses": ["stream:vfeControl?nonblocking"]
+      },
+      {
+        "name": "STSServer",
+        "addresses": ["stream:STSServer?nonblocking"]
+      },
+      {
+        "name": "VPAControllerServer",
+        "addresses": ["stream:VPAControllerServer?nonblocking"]
+      },
+      {
+        "name": "IotClientService",
+        "addresses": ["stream:IotClientService?nonblocking"]
+      },
+      {
+        "name": "VoicePrompts",
+        "addresses": ["stream:VoicePrompts?nonblocking"]
+      },
+      {
+        "name": "AlexaToMusicServiceIPC",
+        "addresses": [ "stream:AlexaToMusicServiceIPC?nonblocking" ]
+      },
+      {
+        "name": "ProductDiscoveryMdnsService",
+        "addresses": [ "stream:ProductDiscoveryMdnsService?nonblocking" ]
+      },
+      {
+        "name": "ProductDiscoverySsdpService",
+        "addresses": [ "stream:ProductDiscoverySsdpService?nonblocking" ]
+      },
+      {
+        "name": "SwUpdateComm",
+        "addresses": [ "stream:SwUpdateComm?nonblocking" ]
+      },
+      {
+        "name": "HapticAudioServer",
+        "addresses": [ "stream:HapticAudioServer?nonblocking" ]
+      },
+      {
+        "name": "AiQAudioServer",
+        "addresses": [ "stream:AiQAudioServer?nonblocking" ]
+      }
+    ]
+  }
+}

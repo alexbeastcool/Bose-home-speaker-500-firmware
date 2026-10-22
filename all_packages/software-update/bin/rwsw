@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# Remounts .swUpdateCache partition as read write.
+# This script will restart all services in order to mount .swUpdateCache partition again
+
+if [ $# -gt 0 ]; then
+    echo >&2 "${0##*/}: unexpected argument"
+    exit 1
+fi
+
+# Stop all services
+# we need to stop all services here because after boot if we stop only software update services 
+# it bose.service will stop all services
+/opt/Bose/bin/stop || exit
+
+# unmount swUpdateCache if still mounted
+if [ "$(awk '$2 == "/opt/Bose/.swUpdateCache"' /proc/mounts)" ]; then
+    umount /opt/Bose/.swUpdateCache || exit
+fi
+
+# start Shepherd
+/opt/Bose/bin/SoundTouch start
+
+# start software update services with or without rw access of .swUpdateCache to outer world
+exec /opt/Bose/bin/install start &

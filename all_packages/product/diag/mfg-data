@@ -1,0 +1,16 @@
+#!/usr/bin/python2.7
+#
+# Invoked via pts-handler to display pages related to diagnostics.
+#
+import sys
+
+if len(sys.argv) != 1:
+    raise Exception("wrong usage " + str(sys.argv))
+
+print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/plain\r
+Cache-Control: no-cache\r
+\r"""
+
+sys.stdout.write(open("/persist/mfg_data.json").read())

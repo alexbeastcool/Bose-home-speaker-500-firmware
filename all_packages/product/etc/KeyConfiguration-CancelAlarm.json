@@ -1,0 +1,6 @@
+{ "alarmCancelKeyExceptionList":
+[
+    {"keyOrigin": 0, "keyId": 3, "comment": "Volume UP key press does not cancel an alarm"},
+    {"keyOrigin": 0, "keyId": 5, "comment": "Volume Down key press does not cancel an alarm"}
+]
+}

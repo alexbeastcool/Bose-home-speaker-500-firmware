@@ -1,0 +1,6 @@
+<ShepherdConfig>
+  <daemon name="AirPlay2"
+          exe="startAirPlay2"
+          cpuset="6">
+  </daemon>
+</ShepherdConfig>

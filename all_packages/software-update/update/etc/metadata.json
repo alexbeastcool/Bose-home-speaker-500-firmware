@@ -1,0 +1,14 @@
+{
+    "excludePackagesListLocal": [
+        "product-script", 
+        "software-update", 
+        "hsp"
+    ], 
+    "excludePackagesListOTA": [
+        "product-script", 
+        "software-update", 
+        "hsp"
+    ], 
+    "privateKey": "dev", 
+    "targetProductType": "eddie,eddieclub"
+}

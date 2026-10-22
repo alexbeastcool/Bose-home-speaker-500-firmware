@@ -1,0 +1,127 @@
+#!/usr/bin/env python2.7
+#
+# This script will chnage version of specifed packages to 0.0.1 so that OTA update
+# will take place for the same version oploaded on server.
+#
+# This script is intended for develpment purpose only
+
+import sys
+import os
+import argparse
+import subprocess
+import logging
+import shutil
+
+status_file="/opt/Bose/.swUpdateCache/status"
+temp_copy="/tmp/swup_status"
+
+package_prefix="Package: "
+version_prefix="Version: "
+
+def prepare_new_status_file(args):
+    '''
+    Prepare new status file with version 0.0.1 for specified packages
+    :param args: arguement list
+    :return: none
+    '''
+
+    if not os.path.exists(status_file) :
+        logging.error("packages status file not found!")
+        sys.exit(1)
+
+    skipLine=False
+    packageFound=False
+
+    # copy file to temp location with change in version
+    with open(status_file, "rt") as fin:
+        with open(temp_copy, "wt") as fout:
+            for line in fin:
+                if args.all:
+                    # check if the line represents version entry
+                    if version_prefix in line:
+                        # set version as 0.0.1 as all packages needs to be updated
+                        fout.write("Version: 0.0.1\n")
+                        packageFound=True
+                    else:
+                        # write all other details as is
+                        fout.write(line)
+                else:
+                    # check if the line represents package name entry
+                    if package_prefix in line:
+                        # get package name
+                        package_name=line[len(package_prefix):].strip()
+
+                        # check if the package in the list specified by User
+                        if package_name in args.packages:
+                            # if yes, change its version to 0.0.1
+                            fout.write(line)
+                            fout.write("Version: 0.0.1\n")
+                            packageFound = True
+                            # set flag to ignore version line for this specific package
+                            skipLine=True
+                        else:
+                            fout.write(line)
+                    else:
+                        # check if the line represents version entry
+                        if version_prefix in line:
+                            # if version entry check if version entry is already added and skipLine set to true
+                            if not skipLine:
+                                fout.write(line)
+                            else:
+                                skipLine = False
+                        else:
+                            # write all other details as is
+                            fout.write(line)
+
+    if not packageFound:
+        print("Specified package(s) not installed on device")
+        sys.exit(1)
+
+
+def replace_status_file():
+    '''
+    replace newly generated status file at /opt/Bose/.swUpdateCache
+    For that we need to stop all processes, mount /opt/Bose as rw and start all services again.
+    :return: none
+    '''
+
+    # stop all services
+    subprocess.call(["/opt/Bose/bin/stop"])
+    # mount /opt/Bose as rw
+    subprocess.call(["/opt/Bose/bin/rw"])
+
+    # move temporary status file to /opt/Bose/.swUpdateCache
+    shutil.move(temp_copy, status_file)
+
+    # mount /opt/Bose as ro
+    subprocess.call(["/sbin/reboot"])
+
+if __name__ == '__main__':
+    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+
+    parser = argparse.ArgumentParser(
+        description='Change the version of all / specified packages to 0.0.1 to allow OTA update to same version')
+    parser.add_argument( '-a', '--all',
+                        default=False,
+                        action='store_true',
+                        required=False,
+                        help="Allow force update of all installed packages")
+    parser.add_argument('-p', '--packages',
+                        nargs='+',
+                        help='List of packages needs to be updated forcefully through OTA',
+                        required=False)
+
+    args = parser.parse_args()
+
+    if not args.all and not args.packages:
+        print("Please specify packages to be updated forcefully")
+        parser.print_help()
+        sys.exit(1)
+
+    del parser
+
+    # prepare new status file with version set to 0.0.1 for specified components
+    prepare_new_status_file(args)
+
+    # replace newly generated status file at original location and restart services
+    replace_status_file()

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Do not create crash entry during SoundTouch stop or FactoryDefault
+if [ -e "/var/run/.factory_defaulting" ] || [ -e "/var/run/.soundtouch_stop_issued" ] ; then
+  echo "Skipping as the crash is during shutdown of the service."
+  exit
+fi
+

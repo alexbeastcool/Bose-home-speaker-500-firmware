@@ -1,0 +1,30 @@
+#!/bin/sh
+echo "Starting RecoveryMain"
+
+#we want to use our copy of abctl and shared library
+#LPMServiceRecovery i.e LPMService also needs new Shared Library path
+export LD_LIBRARY_PATH=/cache/librecovery/:/cache/
+export PATH=/cache/:$PATH
+
+if [ -f /cache/RecoveryMain ]; then
+    # Angus will require LPMService to be started
+    if [ -f /cache/LPMServiceRecovery ]; then
+        /cache/LPMServiceRecovery -c /cache/LpmServiceConfigRecovery.json &
+    fi
+
+    if [ -f /cache/RecoveryMain.service ]; then
+        # Coronado platform
+        ln -s /cache/RecoveryMain.service /var/run/systemd/system
+        systemctl start RecoveryMain.service
+    else
+        # Riviera platform
+        /cache/RecoveryMain &
+    fi
+elif [ -f /opt/Bose/bin/RecoveryMain ]; then
+    # Angus recovery will never go in this condition
+    /opt/Bose/bin/RecoveryMain &
+else
+    echo "RecoverMain not found"
+fi
+
+exit 0

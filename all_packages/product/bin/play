@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# Play an audio URL.
+#
+# Example:
+#  play /opt/Bose/etc/Voice/avs.alarm.mp3
+#
+this=${0##*/}
+
+if (( $# == 0 )); then
+    echo >&2 "usage: $this URLs..."
+    exit 1
+fi
+
+exit=0
+for url; do
+    if ! [[ $url = *:* ]]; then
+        if ! url=$(readlink -f "$url"); then
+            echo "$this: No file: $url"
+            exit=1
+            continue
+        fi
+        url=file://$url
+    fi
+    req=$(echo '{}' | jq --arg url "$url" '.url=$url')
+    if ! rsp=$(frontdoorutil -v "2.0" -c POST /sass/playRequest "$req"); then
+        echo >&2 "$this: request failed: $url"
+        exit=1
+        continue
+    fi
+    status=$(echo "$rsp" | jq .header.status)
+    if [ "$status" != 200 ]; then
+        echo >&2 "$this: request failed, status $status: $url"
+        exit=1
+    fi
+done
+exit $exit

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AudioPathBTParameters>
+        <primaryVolumeControlParameters minimum="100"
+maximum="100"
+slope="0.8"
+intercept="9"
+defaultValue="100"/>
+        <chimeVolumeControlParameters minimum="50"
+maximum="100"
+slope="-0.1"
+intercept="100"
+defaultValue="100"/>
+        <TTSVolumeControlParameters minimum="50"
+maximum="100"
+slope="-0.1"
+intercept="100"
+defaultValue="100"/>
+        <duckedVolumeControlParameters minimum="0"
+maximum="50"
+slope="0.5"
+intercept="0"
+defaultValue="50"/>
+        <sbcFrameAccumulationParameters BAX="4"
+HSS="2"/>
+</AudioPathBTParameters>

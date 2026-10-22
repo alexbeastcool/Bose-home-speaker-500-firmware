@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AudioPathParameters>
+  <primaryParameters hasAudioInputMux="false"
+                     hasAIC="false"
+                     putDSPinSuspend="false"
+                     hasBMPSMode="false"
+                     mainRendererPipelineName="MainRenderer">
+           <channelSelectorSet> 
+             <channelSelectors pipelineName="MainRenderer"
+                               channels="0,1" />
+             <channelSelectors pipelineName="AEC"
+                               channels="0,1,2"/>
+           </channelSelectorSet>
+  </primaryParameters>
+
+  <chimeVolumeControlParameters minimum="16"
+               maximum="40"
+               slope="0.8"
+               intercept="9"
+               defaultValue="40"/>
+
+  <TTSVolumeControlParameters minimum="16"
+             maximum="58"
+             slope="0.8"
+             intercept="9"
+             defaultValue="10"/>
+
+  <VOIPVolumeControlParameters minimum="22"
+             maximum="58"
+             slope="0.8"
+             intercept="9"
+             defaultValue="10"/>
+
+  <duckedVolumeControlParameters minimum="0"
+                maximum="25"
+                slope="0.5"
+                intercept="0"
+                defaultValue="25"/>
+
+  <outputDeviceParameters>
+    <audioParams objName="APPAudio">
+      <app/>
+    </audioParams>
+    <muteParams objName="APPMute">
+      <app/>
+    </muteParams>
+  </outputDeviceParameters>
+
+  <outputDriverParameterSet defaultOutputDriverIndex="0">
+    <outputDriverParameters outputDriverType="AUDIO_DEVICE_TYPE_ALSA"
+                            hardwareDeviceName="hw:0,12"
+                            samplesPerFrame="192"
+                            outputSampleRate="48000"
+                            outputChannels="2"
+                            wifiAttenuation="0.39810699"
+                            auxAttenuation="1"
+                            wifiBufferTarget="1802"
+                            auxBufferTarget="1802"
+                            useDither="false">
+    </outputDriverParameters>
+  </outputDriverParameterSet>
+  <aecSource source="LOCAL"/>
+  <inputDevice url="aux://" clockDomain="ISOCHRONOUS">
+     <deviceInfo deviceName="hw:0,12" 
+                 sampleRate="48000"
+                 periodSize="192" 
+                 bufferSize="768"
+                 numChannels="2" 
+                 type = "ALSA"
+                 srcLatency="0" />
+     <startOffset startOffsetCommandedMs="12" />
+  </inputDevice>
+  <btConfigValueConfigDirPath btConfigDirPath="/opt/Bose/etc/"/>
+  <coexLatency coexMinLatencyOffsetUS="17000"
+               nominalBTOutLatencyUS="150000"
+               darr24GHzLatencyOffsetUS="37000"
+               wifi24GHzOffsetUS="6000"
+               btFixedLatencyUS="8000"/>
+</AudioPathParameters>

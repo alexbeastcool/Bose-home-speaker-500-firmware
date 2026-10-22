@@ -1,0 +1,29 @@
+{
+    "remoteVideoPlayer" : {
+        "operations": [
+            "SearchAndPlay",
+            "SearchAndDisplayResults"
+        ],
+        "entityTypes": [
+            "MediaType", "Actor", "Character", "Event", "Franchise", "Genre", "League", "Season", "Episode", "Sport", "SportsTeam", "Video"
+        ],
+        "catalogs": [
+            {
+                "type": "VIDEO_PUBLIC_CATALOG_IDENTIFIER",
+                "sourceId": "gvd"
+            }
+        ]
+    },
+    "channelController" : {
+        "lineup": {
+            "operatorName": "Verizon FiOS",
+            "lineupName": "Verizon Fios Queens",
+            "postalCode": "11550",
+            "type": "overTheAir",
+            "lineupId": {
+                "catalog": "GRACENOTE",
+                "id": "amzn1.p11cat.lineup.fea5de4c-b92c-5411-bd7f-fab6442943ea"
+            }
+        }
+    }
+}

@@ -1,0 +1,5 @@
+<ShepherdConfig>
+
+  <daemon name="DemoController"/>
+
+</ShepherdConfig>

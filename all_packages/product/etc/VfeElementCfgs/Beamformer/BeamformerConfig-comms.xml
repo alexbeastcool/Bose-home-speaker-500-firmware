@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<BeamformerConfigMsg num_channels_in="8" num_channels_out="1" >
+  <threadCfg affinity="2" priority="47" />
+</BeamformerConfigMsg>
+

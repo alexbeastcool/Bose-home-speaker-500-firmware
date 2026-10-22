@@ -1,0 +1,5 @@
+#!/bin/bash
+if (( $(date +%s) < 1775133959 )); then
+    logger -s -t set-default-time Using default time Thu Apr  2 12:45:59 UTC 2026
+    date -s@1775133959
+fi

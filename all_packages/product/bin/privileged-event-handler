@@ -1,0 +1,45 @@
+#!/bin/bash
+# Currently we have only factory_default event but in future we can add new events which require root privilege.
+
+while [ 1 ]; do 
+read -u 3 EVENT
+CMD=($EVENT)
+
+VALID_INTERFACES="eth0 eth1 wlan0 wlan1"
+case "${CMD[0]}" in
+    "factory_default")
+        touch /var/run/.factory_defaulting # For Coronado platform
+        systemctl start --wait fd.service
+        ;;
+    "reflash")
+        systemctl start --wait PlatformResetIntoQfil
+        ;;
+    "avahi-autoipd")
+        # interface name should be provided with the command
+        if [ "2" -eq "${#CMD[@]}" ]; then
+            if ! [[ " $VALID_INTERFACES " =~ .*\ ${CMD[1]}\ .* ]]; then
+                >&2 echo "Interface value not in supported value list: ${CMD[1]}"
+            else
+                /opt/Bose/bin/avahi-autoipd -k ${CMD[1]}
+            fi
+        else
+            >&2 echo "Invalid number of arguement with event, Need interface value with this event: $EVENT"
+        fi
+        ;;
+    "avahi-autoipd-linkup")
+        # interface name should be provided with the command
+        if [ "2" -eq "${#CMD[@]}" ]; then
+            if ! [[ " $VALID_INTERFACES " =~ .*\ ${CMD[1]}\ .* ]] && ! [[ "${CMD[1]}" =~ p2p-wlan0-.* ]]; then
+                >&2 echo "Interface value not in supported value list: ${CMD[1]}"
+            else
+                /opt/Bose/bin/avahi-autoipd -wD --script=/opt/Bose/bin/avahi-autoipd.action ${CMD[1]}
+            fi
+        else
+            >&2 echo "Invalid number of arguement with event, Need interface value with this event: $EVENT"
+        fi
+        ;;
+    *)
+        >&2 echo "unsupported event: $EVENT"
+        ;;
+esac
+done

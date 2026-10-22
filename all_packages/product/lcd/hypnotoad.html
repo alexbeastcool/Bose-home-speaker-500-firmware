@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Challenge: Hypnotoad</title>
+        <style>
+            #gifParent
+            {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                width: 240px;
+                height: 320px;
+            }
+
+            #gif 
+            {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+    <div id="gifParent">
+        <img id="gif" src="http://media3.giphy.com/media/rou0CTAp6Z8VW/giphy.gif">
+    </div>
+
+  <script>
+  var gifElement = document.getElementById("gif");
+
+  var startTime = new Date().getTime();
+  var gifIt = function() 
+  {
+      var currTime = new Date().getTime();
+      var secondsElapsed = ((currTime - startTime)/1000);
+  };
+  gifIt();
+  </script>
+
+    </body>
+</html>

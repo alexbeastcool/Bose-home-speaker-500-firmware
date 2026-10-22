@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xAppAlexaConfigMsg num_channels_in="8" >
+  <threadCfg affinity="4" priority="42" />
+</xAppAlexaConfigMsg>

@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SwUpConfiguration>
+    <cloudPollDuration seconds="604800" />
+    <componentProgressTimer seconds="2" />
+    <bosefsbasepath path="/opt/Bose/" />
+    <productName name="product" />
+    <packageConfigPathFile fullPath="/opt/Bose/etc/SoftwareUpdatePackageConfiguration.xml" />
+    <baseURLQuery url="https://eco2ota.api.bose.cn/v1" />
+    <otaDownloadDir directory="/opt/Bose/.swUpdateCache/ipks/" />
+    <localUpdateDir directory="/opt/Bose/.swUpdateCache/localupdate/" />
+    <persistDir path="/mnt/nv/update/" />
+    <certPubKeyDetails CAFileName="bose_ca_cert_swupdate.pem" CAFilePath="/opt/Bose/etc/secure/CACerts/" publicKeyFileName="bose_public_key_swupdate.pem" publicKeyFilePath="/opt/Bose/etc/secure/publicKeys/" />
+    <certPubKeyDetails CAFileName="bose_ca_cert_swupdate.pem" CAFilePath="/opt/Bose/.swUpdateCache/BackUp/secure/CACerts/" publicKeyFileName="bose_public_key_swupdate.pem" publicKeyFilePath="/opt/Bose/.swUpdateCache/BackUp/secure/publicKeys/" />
+    <ipkSequenceConfigFile directory="/opt/Bose/.swUpdateCache/ipks/" fileName="SWUpdateInstallSequence.json" />
+    <ipkSequenceSignatureFile directory="/opt/Bose/.swUpdateCache/ipks/" fileName="SWUpdateInstallSequence.json.sig" />
+    <ipkPackageConfigFile directory="/opt/Bose/.swUpdateCache/ipks/" fileName="Packages.gz" />
+    <ipkPackageSignatureFile directory="/opt/Bose/.swUpdateCache/ipks/" fileName="Packages.gz.sig" />
+    <baseURLStatus url="http://iot-product-state-core/state/" />
+    <mandatoryUpdateTimer seconds="600" />
+    <deferredUpdateTimer seconds="0" />
+    <tcpReceiveBufferSize bytes="4096" />
+    <tcpReceiveBufferSizeForMandatory bytes="65535" />
+    <updateStatusNotifyInterval seconds="3600" />
+    <urlQueryDelayBinSize seconds="10800" />
+    <downloadFrontDoorNotifyCfg minInterval="0" percentThreshold="1" timeThreshold="15" />
+    <downloadCloudNotifyCfg minInterval="10" percentThreshold="20" timeThreshold="3600" />
+    <installCloudNotifyCfg minInterval="10" percentThreshold="1" timeThreshold="1" />
+    <metaStrictCheckOn isCheckOn="0" />
+</SwUpConfiguration>

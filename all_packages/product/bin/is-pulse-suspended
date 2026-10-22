@@ -1,0 +1,16 @@
+source_list_status=$(pactl list sources short)
+
+running_string="RUNNING"
+idle_string="IDLE"
+
+if grep -q "$idle_string" <<< "$source_list_status"; then
+  echo "A Pulse Source Is IDLE"
+  exit -1
+fi
+
+if grep -q "$running_string" <<< "$source_list_status"; then
+  echo "A Pulse Source Is RUNNING"
+  exit -1
+fi
+
+exit 0

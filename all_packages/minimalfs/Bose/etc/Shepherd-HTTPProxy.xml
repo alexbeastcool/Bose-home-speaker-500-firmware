@@ -1,0 +1,6 @@
+<ShepherdConfig>
+  <daemon name="HTTPProxy" exe="sh">
+    <arg>-c</arg>
+    <arg>exec env TZ=UTC HTTPProxy -sdcache /tmp/sdcache.json `mfgdata get guid` </arg>
+  </daemon>
+</ShepherdConfig>

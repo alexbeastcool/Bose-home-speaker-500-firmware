@@ -1,0 +1,197 @@
+#!/bin/bash
+
+function usage() {
+    cat <<USAGE
+usage: $0 [-h] [-0] INTERFACES...
+  Configure a basic DROP-by-default firewall for an ECOx device.
+  See https://jirapro.bose.com/browse/CASTLE-47826
+
+  INTERFACES must be a list of zero-or-more upstream network interfaces
+  that are up and need to have filtering configured.
+  Traffic received on these interfaces which did not originate from the
+  local IP subnet will be blocked (unless part of an ongoing connection).
+
+  See: https://jirapro.bose.com/browse/EMBEDSECUR-42
+
+  arguments:
+    -h|help  display this message and exit
+
+    -0|--off remove all firewall rules and forwarding
+USAGE
+    exit 1
+}
+
+EXCLUDEFILE=/opt/Bose/etc/bosefirewall-exclude.conf
+ARGS=$(getopt -o h0 --long help,off, -n $0 -- "$@")
+[[ $? = 0 ]] || usage $0
+
+eval set -- "$ARGS"
+while true; do
+    case "$1" in
+        -h|--help) usage $0;     shift   ;;
+        -0|--off)  OFF=TRUE; shift  ;;
+
+        --) shift; break;;
+    esac
+done
+
+# No interfaces are up, no iptables rules should exist
+if test $# -eq 0
+then
+    OFF=TRUE
+fi
+
+# Remove duplicate interfaces and aliases
+IFACES=$(echo ${@%:*} | xargs -n1 | sort | uniq)
+
+# Make sure the interfaces exist
+# Handle virtual interfaces
+for IFACE in $IFACES; do
+    if ! ip link show "$IFACE" > /dev/null; then
+        logger -t BoseFirewall.child -p local0.error Interface "$IFACE" not found
+        exit
+    fi
+done
+
+# Allow packets from pre-existing connections.
+function allow_existing_conns() {
+    echo -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+}
+
+# During Setup AP mode, Madrid acts as a DHCP client
+# Allow incoming UDP traffic to port 67 from port 68 on wlan1
+function allow_dhcpcli_traffic() {
+    . /opt/Bose/etc/update_iptables.conf
+    for IFACE in $@; do
+        if [[ "$IFACE" == "$APMODEIFACE" ]]; then
+            echo -A INPUT -i "$IFACE" -p udp --sport 68 --dport 67 -j ACCEPT
+        fi
+    done
+}
+
+# For each IP on each interface, add a rule accepting traffic from
+# the local subnet.
+#
+# Although it's frowned upon we scrape the output of `ip` to grab the IP
+# addresses and netmasks of the listed interfaces. `ip addr show` prints
+# this in the form "1.2.3.4/24", which we can pass directly into a call
+# to iptables. A little bit of `awk`-foo isolates this information.
+function accept_local_traffic() {
+    [[ -n "$OFF" ]] && return
+
+    # Support multicast
+    echo -A INPUT -m pkttype --pkt-type multicast -j ACCEPT
+    
+    #Allow ping request on IP addresses and netmasks of the listed interfaces
+    echo -A inspect_incoming_packet_port -p icmp -j ACCEPT
+
+    echo -A inspect_incoming_packet_port -p tcp --dport 22 -j ACCEPT
+
+    #Allow local IP addresses tcp port interfaces on basis of development/production mode
+    TCP_PORTS=$(jq -r .$(mfgdata get development false).tcp[] /opt/Bose/etc/port.json)
+    for port in $TCP_PORTS; do
+        echo -A inspect_incoming_packet_port -p tcp --dport $port -j ACCEPT
+    done
+
+    #Airplay TCP ports
+    echo -A inspect_incoming_packet_port -m multiport -p tcp --dports 7000:7301 -j ACCEPT
+
+    #Cast TCP ports
+    echo -A inspect_incoming_packet_port -m multiport -p tcp --dports 8008,8009,8443,9000,10001,10003,10006,10007,32000:32555 -j ACCEPT
+    
+    #APServer TCP ports
+    echo -A inspect_incoming_packet_port -m multiport -p tcp --dports 31000:31009,31025:31034,31050:31059,31075:31084 -j ACCEPT
+
+    #APServer UDP ports
+    echo -A inspect_incoming_packet_port -m multiport -p udp --dports 31000:31009,31025:31034,31050:31059,31075:31084 -j ACCEPT
+
+    #Allow local IP addresses udp port interfaces on basis of development/production mode
+    UDP_PORTS=$(jq -r .$(mfgdata get development false).udp[] /opt/Bose/etc/port.json)
+    for port in $UDP_PORTS; do
+        echo -A inspect_incoming_packet_port -p udp --dport $port -j ACCEPT
+    done
+
+    #Airplay UDP ports
+    echo -A inspect_incoming_packet_port -m multiport -p udp --dports 319,320,7000:7301 -j ACCEPT
+
+    #Cast UDP ports
+    echo -A inspect_incoming_packet_port -m multiport -p udp --dports 10002,10003,10004,10008 -j ACCEPT
+
+    #ABI (AVS) UDP port
+    echo -A inspect_incoming_packet_port -m multiport -p udp --dports 5001 -j ACCEPT
+
+    for IFACE in $@; do
+        if grep -q "$IFACE" "$EXCLUDEFILE"; then
+            continue
+        fi
+
+        IFADDRS=$(ip addr show dev "$IFACE" | awk '$1 ~ /^inet$/ { print $2 }')
+
+        # If there are no addresses configured on this interface: no action
+        if [[ -z "$IFADDRS" ]]; then
+            continue;
+        fi
+
+        for ADDR in $IFADDRS; do
+            echo -A INPUT -i "$IFACE" -s "$ADDR" -j inspect_incoming_packet_port
+        done
+    done
+
+    # Until this point all we've specified are packets to explicitly
+    # allow through (-j ACCEPT). The final steps are to log packets
+    # which don't match the accept criteria and then DROP them
+
+    # To see these log messages on the console, do `dmesg -n8`.
+    echo -A INPUT -m limit --limit 6/minute --limit-burst 6 \
+            -j LOG --log-level debug --log-prefix "BoseFirewall:DROPPING:"
+}
+
+# Active excluded interfaces accept their traffic unconditionally
+function apply_excluded_interfaces() {
+    for IFACE in $(cat "$EXCLUDEFILE"); do
+        IFADDRS=$(ip addr show dev "$IFACE" | awk '$1 ~ /^inet$/ { print $2 }')
+        if [[ -z "$IFADDRS" ]]; then 
+            continue
+        fi
+
+        echo -A INPUT -i $IFACE -j ACCEPT
+        logger -t BoseFirewall.child -p local0.notice Interface "$IFACE" excluded
+    done
+}
+
+# Rules to configure the 'filter' table
+function iptables_filter_setup() {
+    [[ -n "$OFF" ]] && return
+
+    cat <<-FILTER
+	$(allow_existing_conns)
+	$(allow_dhcpcli_traffic "$IFACES")
+	$(accept_local_traffic "$IFACES")
+	FILTER
+}
+
+# Reset filter table
+function iptables_filter_reset() {
+    cat <<-FILTERRESET
+	*filter
+	:INPUT DROP [0:0]
+	:FORWARD ACCEPT [0:0]
+	:OUTPUT ACCEPT [0:0]
+	:inspect_incoming_packet_port - [0:0]
+	FILTERRESET
+}
+
+# Mimic the format of iptables-save to perform the modification in a
+# single atomic commit.
+#
+# This usage, and the format of this invocation, is documented at:
+#    http://www.iptables.info/en/iptables-save-restore-rules.html
+#
+logger -t BoseFirewall.child -p local0.notice Setting iptables filtering for "["$@"]"
+#cat <<-IPTABLES_RULES
+(iptables-restore || exit) <<-IPTABLES_RULES
+	$(iptables_filter_reset)
+	$(apply_excluded_interfaces "$IFACES")
+	$(iptables_filter_setup "$IFACES")
+	COMMIT
+	IPTABLES_RULES

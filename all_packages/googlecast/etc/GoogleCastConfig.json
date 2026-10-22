@@ -1,0 +1,17 @@
+{
+  "additional_renderingdelay_us": 100000,
+  "auto_enable_cast": false,
+  "cast_conf_file": "/opt/Bose/etc/cast_conf/bose_cast_lite.conf",
+  "multizone_port": 10003,
+  "dev_params": {
+    "param": []
+  },
+  "build_type": 2,
+  "enable_metrics_collection": false,
+  "metrics_collection_period_s": 300,
+  "volume_up_down_percentage": 5,
+  "enable_multiroom": true,
+  "minimum_renderingdelay_us": 100000,
+  "platform_name": "BOSE-Gen-1",
+  "enable_atmos": false
+}

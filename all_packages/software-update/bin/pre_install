@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [[ $(mount -t ext4 | grep /opt/bose_images) ]]; then
+    mount -oremount,rw /opt/bose_images
+fi
+
+if [[ $(mount -t ext4 | grep /opt/Bose) ]]; then
+    mount -oremount,rw /opt/Bose
+fi
+
+# Remount swUpdateCache with execution permission to go ahead with installation
+if [[ $(mount | grep swUpdateCache) ]]; then
+    mount -o remount,nosuid,nodev -w /opt/Bose/.swUpdateCache /opt/Bose/.swUpdateCache
+else
+    mount -o remount,exec /data
+fi
+

@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# An arbitrary collection of system status information to be
+# delivered via the /pts.txt endpoint of the PtsServer.
+#
+
+if (( $# > 0 )); then
+    echo >&2 "$0: unexpected argument '$1'"
+    exit 1
+fi
+exec 2>&1 # stderr goes to stdout
+PS4='> '; set -x
+
+date
+uptime
+cat /opt/Bose/etc/BoseVersion.json
+cat /persist/mfg_data.json
+cat /etc/riviera-version
+cat /opt/Bose/monaco/version.txt
+free -m
+df -h
+ifconfig -a
+ip route list
+wpa_cli status
+wpa_cli scan_results
+head -20 /mnt/nv/product-persistence/*
+ls -lHt /mnt/nv/BoseLog
+ps
+printenv
+jq . /mnt/nv/update/telemetry.json
+jq . /mnt/nv/updateSwUpComponentStatus.dat
+ls -lHt /opt/Bose/.swUpdateCache/ipks
+ls -lHt /opt/Bose/.swUpdateCache/localupdate
+tap-command 'lpm pt "lb history"'
+tap-command 'lpm pt "vr"'
+tap-command getpdo system
+tap-command network status
+tap-command network wifi profiles info
+tap-command network wifi status
+tap-command galapagos status
+tap-command galapagos discovery response
+tap-command softwareupdate state
+tap-command softwareupdate history
+tap-command softwareupdate status
+tap-command softwareupdate update history
+tap-command softwareupdate list

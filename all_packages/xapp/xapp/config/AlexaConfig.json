@@ -1,0 +1,12 @@
+{
+    "BuildVersion": "27000096",
+    "AppStage": "PROD",
+    "FeatureName": "",
+    "AutoAcceptTermsAndConditions": false,
+    "UseLWA": false,
+    "TokenUpgradeOverride": false,
+    "TokenUpgradeASAP": false,
+    "WakeWordCascadeEnabledOverride": false,
+    "EndOfRequestAudioCue": false,
+    "DisableStartOfRequestAudioCue": true
+}

@@ -1,0 +1,17 @@
+#!/bin/bash
+# Runs AirPlay2, ensures app specific NV SW Token directory is present
+
+CMD_OPTIONS=""
+
+#Enable to Force SW Token Authentication (ignore MFi HW)
+#CMD_OPTIONS="$CMD_OPTIONS --sw-auth"
+
+#Disable iOS device pairing
+#CMD_OTPIONS="$CMD_OPTIONS --allow-pairing=false"
+
+SW_TOKEN_DIR="/mnt/nv/product-persistence/AirPlay2"
+
+mkdir -pm700 "$SW_TOKEN_DIR"
+chmod 0700 "$SW_TOKEN_DIR"
+
+exec AirPlay2 $CMD_OPTIONS

@@ -1,0 +1,9 @@
+system=fbdev
+fbdev=/dev/fb1
+mode=240x320-30
+pixelformat=RGB16
+depth=16
+no-vt
+no-vt-switch
+no-vt-switching
+no-graphics-vt

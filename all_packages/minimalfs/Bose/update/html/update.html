@@ -1,0 +1,140 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Bose&#153; Wi-Fi&reg; Music System Bonjour Update</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/app.js"></script>
+  </head>
+
+  <body>
+    <div id="main">
+      <div id="header">
+        <div id="headerLogo">
+          <img src="images/Bose_Logo_Black.png" />
+        </div>
+        <div id="headerText"></div>
+        <hr class="topRule" />
+        <div id="productInfoContainer" class="pageText">
+          <div id="productInfo" class="productInfoRow">
+            <div id="systemInfo" class="rowTitle"></div>
+            &nbsp;
+            <div id="productTypeAndEnvironment" class="bold"></div>
+          </div>
+          <div class="productInfoRow">
+            <div id="firmwareInfo" class="rowTitle"></div>
+            &nbsp;
+            <div id="productFirmware" class="bold"></div>
+          </div>
+        </div>
+        <hr class="bottomRule" />
+      </div>
+
+      <div id="content">
+        <div class="panes" id="default">
+          <div id="pageText_default" class="pageText">
+            <div id="pageTitle_default" class="pageTitle"></div>
+            <div id="helpTitle_default" class="helpTitle"></div>
+          </div>
+          <div id="uploadBox_default" class="uploadBox">
+            <div id="uploadBoxContent_default" class="uploadBoxContent">
+              <div id="uploadBoxMessage_default" class="uploadBoxMessage"></div>
+              <div id="fileinputs">
+                <form
+                  id="fileupload"
+                  class="center"
+                  name="input"
+                  enctype="multipart/form-data"
+                  method="POST"
+                >
+                  <input
+                    id="filebox"
+                    type="file"
+                    name="filename"
+                    class="hiddenFileChoose"
+                  />
+                </form>
+                <div class="fakeContainer">
+                  <button id="chooseFile" class="chooseFileButton"></button>
+                  <div class="fakeFile">
+                    <input id="fakeFileInput" />
+                  </div>
+                </div>
+                <button id="upload"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panes" id="uploading">
+          <div id="pageText_uploading" class="pageText">
+            <div id="pageTitle_uploading" class="pageTitle"></div>
+            <div id="helpTitle_uploading" class="helpTitle"></div>
+          </div>
+          <div id="uploadBox_uploading" class="uploadBox">
+            <div id="uploadBoxContent_uploading" class="uploadBoxContent">
+              <div
+                id="uploadBoxMessage_uploading"
+                class="uploadBoxMessage"
+              ></div>
+              <div id="progressBarHolder">
+                <div id="uploadProgress"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panes" id="finished">
+          <div id="pageText_finished" class="pageText">
+            <div id="pageTitle_finished" class="pageTitle"></div>
+            <div id="helpTitle_finished" class="helpTitle"></div>
+          </div>
+          <div id="uploadBox_finished" class="uploadBox">
+            <div id="uploadBoxContent_finished" class="uploadBoxContent">
+              <img src="images/checkmark.png" id="finishedImg" />
+            </div>
+          </div>
+        </div>
+
+        <div class="panes" id="error">
+          <div id="pageText_error" class="pageText">
+            <div id="pageTitle_error" class="pageTitle"></div>
+            <div id="helpTitle_error" class="helpTitle"></div>
+          </div>
+          <button id="btn_error" onclick="reloadPage()"></button>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="js/lang/lang_cs.js"></script>
+    <script type="text/javascript" src="js/lang/lang_da.js"></script>
+    <script type="text/javascript" src="js/lang/lang_de.js"></script>
+    <script type="text/javascript" src="js/lang/lang_el.js"></script>
+    <script type="text/javascript" src="js/lang/lang_en.js"></script>
+    <script type="text/javascript" src="js/lang/lang_es.js"></script>
+    <script type="text/javascript" src="js/lang/lang_fi.js"></script>
+    <script type="text/javascript" src="js/lang/lang_fr.js"></script>
+    <script type="text/javascript" src="js/lang/lang_hu.js"></script>
+    <script type="text/javascript" src="js/lang/lang_it.js"></script>
+    <script type="text/javascript" src="js/lang/lang_ja.js"></script>
+    <script type="text/javascript" src="js/lang/lang_ko.js"></script>
+    <script type="text/javascript" src="js/lang/lang_nb.js"></script>
+    <script type="text/javascript" src="js/lang/lang_no.js"></script>
+    <script type="text/javascript" src="js/lang/lang_nl.js"></script>
+    <script type="text/javascript" src="js/lang/lang_pl.js"></script>
+    <script type="text/javascript" src="js/lang/lang_pt.js"></script>
+    <script type="text/javascript" src="js/lang/lang_ro.js"></script>
+    <script type="text/javascript" src="js/lang/lang_ru.js"></script>
+    <script type="text/javascript" src="js/lang/lang_sl.js"></script>
+    <script type="text/javascript" src="js/lang/lang_sv.js"></script>
+    <script type="text/javascript" src="js/lang/lang_th.js"></script>
+    <script type="text/javascript" src="js/lang/lang_tr.js"></script>
+    <script type="text/javascript" src="js/lang/lang_zh_hans.js"></script>
+    <script type="text/javascript" src="js/lang/lang_zh_hant.js"></script>
+    <script type="text/javascript" src="js/lang/main.js"></script>
+  </body>
+</html>

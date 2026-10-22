@@ -1,0 +1,50 @@
+#!/bin/bashrc
+this_file=$0
+# @todo: This is temporary script created to resolve issue of SOS to SOP build Bonjour downgrades.
+# Once SOP release retire, this script should retire too.
+# SoftwareUpdateService SOS codebase already has better way to handle this for future.
+
+shortRetries=5
+jq .SwUpComponents.elements[].status /mnt/nv/updateSwUpComponentStatus.dat > /tmp/status.txt
+if ! egrep -q "STATUS_ERROR|STATUS_INPROGRESS|STATUS_START" /tmp/status.txt; then
+
+    filename="/mnt/nv/update/unusedComponents.dat"
+    output="/tmp/opkg-output"
+    if [ -e "$filename" ] ; then
+        /opt/Bose/bin/pre_install 
+        while read -r line
+        do                                           
+            echo "$this_file: Removing package $line"                                                                          
+            while
+                rm "$output"
+                /opt/Bose/update/opkg/opkg -f /mnt/nv/update/opkg.conf  --add-arch armv7a-vfp-neon:100   --verbosity=3 remove $line &> $output
+                if [ $? -eq 0 ]; then
+                    echo "\"$line\" package removed successfully"
+                    break
+                fi
+                
+                if grep -q "opkg_lock: Could not create lock file" "$output" || grep -q "opkg_lock: Could not lock" "$output"; then
+                    # .swUpdateCache permission issue, retry after delay
+                    echo ".swUpdateCache permission issue, retrying removal after delay"
+                    if (( $shortRetries > 0 )); then                    
+                        ((shortRetries--))
+                        sleep 1
+                    else
+                        # retry every 5 minutes after shortRetries counter expires
+                        sleep 300
+                    fi
+                    /opt/Bose/bin/pre_install
+                else
+                    # some other error removing package
+                    echo "CRITICAL: Error removing package \"$line\", skipping it"
+                    cat "$output"
+                    break
+                fi
+            do :; done
+        done < "$filename"
+                      
+        rm "$filename"
+        rm "$output"
+        /opt/Bose/bin/post_install       
+    fi
+fi

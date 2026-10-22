@@ -1,0 +1,258 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 2 (0x2)
+        Signature Algorithm: ecdsa-with-SHA256
+        Issuer: C=US, ST=Massachusetts, L=Framingham, O=Bose Corporation, OU=Consumer Electronics Product Division, CN=TLS Client Certificate Authority (non-prod)
+        Validity
+            Not Before: Jun 17 23:59:59 2018 GMT
+            Not After : Jun 17 23:59:59 2028 GMT
+        Subject: C=US, ST=Massachusetts, L=Framingham, O=Bose Corporation, OU=Consumer Electronics Product Division, CN=TLS Client Certificate Authority (non-prod)
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (384 bit)
+                pub:
+                    04:77:47:ce:a1:75:fc:39:bb:7d:8b:d2:0b:4b:97:
+                    8c:da:7b:9a:d3:5c:76:d9:2e:89:30:4c:33:25:57:
+                    97:ef:4c:0f:e2:f5:6c:55:b4:97:0b:c7:9e:1e:29:
+                    e5:01:cd:52:5f:07:33:53:a0:fd:7b:89:5a:52:61:
+                    f4:b6:3e:f0:8c:92:19:96:6b:e7:84:f9:51:cc:83:
+                    f9:82:04:00:a1:96:82:17:84:87:f5:cc:6b:1f:87:
+                    c5:a2:e2:1d:2c:00:c5
+                ASN1 OID: secp384r1
+                NIST CURVE: P-384
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Certificate Sign, CRL Sign
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Subject Key Identifier: 
+                68:2F:08:59:80:0E:97:86:54:78:EC:4A:A3:CF:23:9C:D6:96:9E:00
+    Signature Algorithm: ecdsa-with-SHA256
+         30:64:02:30:05:65:30:54:0b:78:2d:75:6a:bb:dd:71:2d:71:
+         ad:08:88:18:2b:ec:86:0e:16:90:4a:34:59:75:3c:df:fb:04:
+         d0:c2:e2:39:49:1d:f8:3f:a7:86:31:95:27:01:c0:ef:02:30:
+         25:bc:20:4c:71:44:76:cb:8a:64:0c:bc:9f:50:65:35:da:63:
+         02:32:71:35:17:6b:b2:52:47:4a:53:24:32:5b:71:34:65:36:
+         ad:d9:c3:79:81:5b:e9:45:35:56:b4:37
+-----BEGIN CERTIFICATE-----
+MIIC5TCCAmygAwIBAgIBAjAKBggqhkjOPQQDAjCBuzELMAkGA1UEBhMCVVMxFjAU
+BgNVBAgMDU1hc3NhY2h1c2V0dHMxEzARBgNVBAcMCkZyYW1pbmdoYW0xGTAXBgNV
+BAoMEEJvc2UgQ29ycG9yYXRpb24xLjAsBgNVBAsMJUNvbnN1bWVyIEVsZWN0cm9u
+aWNzIFByb2R1Y3QgRGl2aXNpb24xNDAyBgNVBAMMK1RMUyBDbGllbnQgQ2VydGlm
+aWNhdGUgQXV0aG9yaXR5IChub24tcHJvZCkwHhcNMTgwNjE3MjM1OTU5WhcNMjgw
+NjE3MjM1OTU5WjCBuzELMAkGA1UEBhMCVVMxFjAUBgNVBAgMDU1hc3NhY2h1c2V0
+dHMxEzARBgNVBAcMCkZyYW1pbmdoYW0xGTAXBgNVBAoMEEJvc2UgQ29ycG9yYXRp
+b24xLjAsBgNVBAsMJUNvbnN1bWVyIEVsZWN0cm9uaWNzIFByb2R1Y3QgRGl2aXNp
+b24xNDAyBgNVBAMMK1RMUyBDbGllbnQgQ2VydGlmaWNhdGUgQXV0aG9yaXR5IChu
+b24tcHJvZCkwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAAR3R86hdfw5u32L0gtLl4za
+e5rTXHbZLokwTDMlV5fvTA/i9WxVtJcLx54eKeUBzVJfBzNToP17iVpSYfS2PvCM
+khmWa+eE+VHMg/mCBAChloIXhIf1zGsfh8Wi4h0sAMWjQjBAMA4GA1UdDwEB/wQE
+AwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBRoLwhZgA6XhlR47EqjzyOc
+1paeADAKBggqhkjOPQQDAgNnADBkAjAFZTBUC3gtdWq73XEtca0IiBgr7IYOFpBK
+NFl1PN/7BNDC4jlJHfg/p4YxlScBwO8CMCW8IExxRHbLimQMvJ9QZTXaYwIycTUX
+a7JSR0pTJDJbcTRlNq3Zw3mBW+lFNVa0Nw==
+-----END CERTIFICATE-----
+
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 2 (0x2)
+    Signature Algorithm: ecdsa-with-SHA256
+        Issuer: C=US, O=Bose Corporation, OU=Bose Device Intermediate CA - PSE1, CN=Bose Device Intermediate CA - PSE1
+        Validity
+            Not Before: Jan 31 12:56:19 2018 GMT
+            Not After : Jan 31 23:59:59 2028 GMT
+        Subject: C=US, O=Bose Corporation, OU=Consumer Electronics Product Division, CN=Bose CEPD Device CA - PSE2
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (384 bit)
+                pub: 
+                    04:74:dd:e9:3c:a2:6f:69:38:75:e3:30:85:f3:61:
+                    77:f0:ad:0a:03:f2:48:3a:b8:61:60:ae:18:05:ff:
+                    e2:95:e7:16:47:45:17:4a:0f:86:10:42:15:11:7e:
+                    dd:4a:ff:81:5c:6d:ad:71:bd:d2:ec:d4:09:03:d7:
+                    81:cb:62:6c:ab:9d:df:3b:cc:ce:01:ae:53:0c:be:
+                    80:ae:50:a2:1b:12:a7:71:cd:d4:68:19:2c:b6:dd:
+                    be:ef:73:5f:79:59:91
+                ASN1 OID: secp384r1
+                NIST CURVE: P-384
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Certificate Sign, CRL Sign
+            X509v3 Basic Constraints: critical
+                CA:TRUE, pathlen:0
+            X509v3 Subject Key Identifier: 
+                D8:EB:50:C3:83:4C:4C:90:F1:9B:DD:F7:08:EB:8C:10:32:13:11:7C
+            X509v3 Authority Key Identifier: 
+                keyid:20:58:4F:86:56:F7:C8:E2:15:C0:DB:D5:6D:03:C6:C9:18:8C:99:B2
+
+            Authority Information Access: 
+                CA Issuers - URI:http://pki.bose.io/device-ca-ecc.cer
+
+            X509v3 CRL Distribution Points: 
+
+                Full Name:
+                  URI:http://pki.bose.io/device-ca-ecc.crl
+
+            X509v3 Certificate Policies: 
+                Policy: 1.3.6.1.4.1.6036.2018.0.1
+                Policy: 1.3.6.1.4.1.6036.2018.0.2
+
+    Signature Algorithm: ecdsa-with-SHA256
+         30:66:02:31:00:9d:f7:6a:59:9a:60:d3:86:02:1d:1c:d6:1e:
+         df:5b:0e:1d:d2:2a:ac:c4:a8:6d:2a:3c:de:cb:37:70:bc:44:
+         ba:c7:7b:f5:c9:b9:b3:ea:07:c1:fa:c3:1d:18:c2:bb:a4:02:
+         31:00:bb:ac:83:8f:5c:ac:3d:17:ef:df:fd:88:1c:41:7a:f4:
+         4d:b8:54:e8:aa:8d:a8:22:73:11:2a:65:05:51:a6:8c:02:f8:
+         e4:af:5e:81:4a:77:27:54:e6:ed:b1:c8:2d:5e
+-----BEGIN CERTIFICATE-----
+MIIDOzCCAsCgAwIBAgIBAjAKBggqhkjOPQQDAjCBgjELMAkGA1UEBhMCVVMxGTAX
+BgNVBAoMEEJvc2UgQ29ycG9yYXRpb24xKzApBgNVBAsMIkJvc2UgRGV2aWNlIElu
+dGVybWVkaWF0ZSBDQSAtIFBTRTExKzApBgNVBAMMIkJvc2UgRGV2aWNlIEludGVy
+bWVkaWF0ZSBDQSAtIFBTRTEwIBcNMTgwMTMxMTI1NjE5WhgPMjAyODAxMzEyMzU5
+NTlaMH0xCzAJBgNVBAYTAlVTMRkwFwYDVQQKDBBCb3NlIENvcnBvcmF0aW9uMS4w
+LAYDVQQLDCVDb25zdW1lciBFbGVjdHJvbmljcyBQcm9kdWN0IERpdmlzaW9uMSMw
+IQYDVQQDDBpCb3NlIENFUEQgRGV2aWNlIENBIC0gUFNFMjB2MBAGByqGSM49AgEG
+BSuBBAAiA2IABHTd6Tyib2k4deMwhfNhd/CtCgPySDq4YWCuGAX/4pXnFkdFF0oP
+hhBCFRF+3Ur/gVxtrXG90uzUCQPXgctibKud3zvMzgGuUwy+gK5QohsSp3HN1GgZ
+LLbdvu9zX3lZkaOCAQowggEGMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAG
+AQH/AgEAMB0GA1UdDgQWBBTY61DDg0xMkPGb3fcI64wQMhMRfDAfBgNVHSMEGDAW
+gBQgWE+GVvfI4hXA29VtA8bJGIyZsjBABggrBgEFBQcBAQQ0MDIwMAYIKwYBBQUH
+MAKGJGh0dHA6Ly9wa2kuYm9zZS5pby9kZXZpY2UtY2EtZWNjLmNlcjA1BgNVHR8E
+LjAsMCqgKKAmhiRodHRwOi8vcGtpLmJvc2UuaW8vZGV2aWNlLWNhLWVjYy5jcmww
+JwYDVR0gBCAwHjANBgsrBgEEAa8Uj2IAATANBgsrBgEEAa8Uj2IAAjAKBggqhkjO
+PQQDAgNpADBmAjEAnfdqWZpg04YCHRzWHt9bDh3SKqzEqG0qPN7LN3C8RLrHe/XJ
+ubPqB8H6wx0YwrukAjEAu6yDj1ysPRfv3/2IHEF69E24VOiqjagicxEqZQVRpowC
++OSvXoFKdydU5u2xyC1e
+-----END CERTIFICATE-----
+
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 6 (0x6)
+    Signature Algorithm: ecdsa-with-SHA256
+        Issuer: C=US, O=Bose Corporation, OU=Bose Product Root CA - PSE0, CN=Bose Product Root CA - PSE0
+        Validity
+            Not Before: Feb  1 00:00:00 2018 GMT
+            Not After : Dec 31 23:59:59 2038 GMT
+        Subject: C=US, O=Bose Corporation, OU=Bose Device Intermediate CA - PSE1, CN=Bose Device Intermediate CA - PSE1
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (384 bit)
+                pub: 
+                    04:23:28:bd:23:1c:19:54:02:14:13:8d:9a:47:a9:
+                    1c:9e:7b:3a:d8:47:2c:4a:f2:7a:5c:a3:2e:b6:3e:
+                    75:29:08:1b:35:6e:81:69:bf:ef:36:67:0b:0e:7d:
+                    6c:53:dc:a2:c1:3f:67:1e:53:77:1e:7a:80:68:5b:
+                    de:a1:03:a9:68:6a:72:36:8e:11:b7:4e:cd:3a:c4:
+                    eb:09:e9:e8:be:26:55:bc:fc:69:dd:91:c1:19:f7:
+                    93:76:1d:8b:b3:e1:d1
+                ASN1 OID: secp384r1
+                NIST CURVE: P-384
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Certificate Sign, CRL Sign
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Subject Key Identifier: 
+                20:58:4F:86:56:F7:C8:E2:15:C0:DB:D5:6D:03:C6:C9:18:8C:99:B2
+            X509v3 Authority Key Identifier: 
+                keyid:4A:FE:F2:74:9C:E9:33:BD:EC:62:74:E6:62:9A:EF:4D:07:A1:C5:27
+
+            Authority Information Access: 
+                CA Issuers - URI:http://pki.bose.io/root-ca-ecc.cer
+
+            X509v3 CRL Distribution Points: 
+
+                Full Name:
+                  URI:http://pki.bose.io/root-ca-ecc.crl
+
+            X509v3 Certificate Policies: 
+                Policy: 1.3.6.1.4.1.6036.2018.0.1
+                Policy: 1.3.6.1.4.1.6036.2018.0.2
+
+    Signature Algorithm: ecdsa-with-SHA256
+         30:64:02:30:2e:5b:b5:ea:b0:a8:a9:17:92:26:8a:f0:4c:90:
+         e2:e8:24:54:31:fd:f5:a8:4b:8d:34:a7:83:20:ed:7e:84:87:
+         8e:44:01:4c:5d:3e:fa:5e:42:18:97:0c:5c:34:ed:04:02:30:
+         0b:c3:cf:1b:f9:dd:73:ab:a2:4b:d3:39:0e:20:1c:46:ae:df:
+         f5:43:2d:0b:0e:7f:d2:fb:0b:f8:c4:65:0c:64:8d:97:12:86:
+         80:1e:be:b6:f2:7d:65:86:5f:15:bf:66
+-----BEGIN CERTIFICATE-----
+MIIDJjCCAq2gAwIBAgIBBjAKBggqhkjOPQQDAjB0MQswCQYDVQQGEwJVUzEZMBcG
+A1UECgwQQm9zZSBDb3Jwb3JhdGlvbjEkMCIGA1UECwwbQm9zZSBQcm9kdWN0IFJv
+b3QgQ0EgLSBQU0UwMSQwIgYDVQQDDBtCb3NlIFByb2R1Y3QgUm9vdCBDQSAtIFBT
+RTAwHhcNMTgwMjAxMDAwMDAwWhcNMzgxMjMxMjM1OTU5WjCBgjELMAkGA1UEBhMC
+VVMxGTAXBgNVBAoMEEJvc2UgQ29ycG9yYXRpb24xKzApBgNVBAsMIkJvc2UgRGV2
+aWNlIEludGVybWVkaWF0ZSBDQSAtIFBTRTExKzApBgNVBAMMIkJvc2UgRGV2aWNl
+IEludGVybWVkaWF0ZSBDQSAtIFBTRTEwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAAQj
+KL0jHBlUAhQTjZpHqRyeezrYRyxK8npcoy62PnUpCBs1boFpv+82ZwsOfWxT3KLB
+P2ceU3ceeoBoW96hA6loanI2jhG3Ts06xOsJ6ei+JlW8/GndkcEZ95N2HYuz4dGj
+ggECMIH/MA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQW
+BBQgWE+GVvfI4hXA29VtA8bJGIyZsjAfBgNVHSMEGDAWgBRK/vJ0nOkzvexidOZi
+mu9NB6HFJzA+BggrBgEFBQcBAQQyMDAwLgYIKwYBBQUHMAKGImh0dHA6Ly9wa2ku
+Ym9zZS5pby9yb290LWNhLWVjYy5jZXIwMwYDVR0fBCwwKjAooCagJIYiaHR0cDov
+L3BraS5ib3NlLmlvL3Jvb3QtY2EtZWNjLmNybDAnBgNVHSAEIDAeMA0GCysGAQQB
+rxSPYgABMA0GCysGAQQBrxSPYgACMAoGCCqGSM49BAMCA2cAMGQCMC5bteqwqKkX
+kiaK8EyQ4ugkVDH99ahLjTSngyDtfoSHjkQBTF0++l5CGJcMXDTtBAIwC8PPG/nd
+c6uiS9M5DiAcRq7f9UMtCw5/0vsL+MRlDGSNlxKGgB6+tvJ9ZYZfFb9m
+-----END CERTIFICATE-----
+
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 5 (0x5)
+    Signature Algorithm: ecdsa-with-SHA256
+        Issuer: C=US, O=Bose Corporation, OU=Bose Product Root CA - PSE0, CN=Bose Product Root CA - PSE0
+        Validity
+            Not Before: Feb  1 00:00:00 2018 GMT
+            Not After : Dec 31 23:59:59 2038 GMT
+        Subject: C=US, O=Bose Corporation, OU=Bose Product Root CA - PSE0, CN=Bose Product Root CA - PSE0
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (384 bit)
+                pub: 
+                    04:35:90:70:5d:08:16:91:07:23:b4:04:c7:bb:e0:
+                    2e:72:7d:fd:3c:61:75:f0:8b:7d:9a:48:e8:d3:0e:
+                    b4:ae:fe:a0:ac:72:10:54:b6:4f:ff:56:2d:32:2d:
+                    de:c0:43:4b:c0:9b:98:6f:d5:fd:69:d3:2b:38:49:
+                    b9:5d:26:5d:32:36:24:71:32:b0:1c:9e:af:5b:5a:
+                    eb:3a:57:59:8b:bb:78:0a:ce:b8:38:72:10:3c:e1:
+                    08:8f:c9:1a:7d:67:63
+                ASN1 OID: secp384r1
+                NIST CURVE: P-384
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Certificate Sign, CRL Sign
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Subject Key Identifier: 
+                4A:FE:F2:74:9C:E9:33:BD:EC:62:74:E6:62:9A:EF:4D:07:A1:C5:27
+            X509v3 Authority Key Identifier: 
+                keyid:4A:FE:F2:74:9C:E9:33:BD:EC:62:74:E6:62:9A:EF:4D:07:A1:C5:27
+
+    Signature Algorithm: ecdsa-with-SHA256
+         30:64:02:30:12:a8:75:45:cf:17:37:26:13:61:dd:16:94:8b:
+         ad:e0:b4:61:86:db:d2:86:54:90:62:6f:9f:d4:26:f9:38:af:
+         2b:91:ec:bd:8c:fb:80:62:78:cc:01:b8:93:af:7a:f5:02:30:
+         7d:fa:7f:d6:e4:21:fe:8c:9c:73:d2:eb:98:f1:d2:08:fc:d8:
+         9f:b8:86:f5:83:c1:b6:f1:12:06:c8:d5:3f:99:ec:94:17:01:
+         8b:31:a9:92:ae:fb:d9:91:26:6c:b5:3e
+-----BEGIN CERTIFICATE-----
+MIICdjCCAf2gAwIBAgIBBTAKBggqhkjOPQQDAjB0MQswCQYDVQQGEwJVUzEZMBcG
+A1UECgwQQm9zZSBDb3Jwb3JhdGlvbjEkMCIGA1UECwwbQm9zZSBQcm9kdWN0IFJv
+b3QgQ0EgLSBQU0UwMSQwIgYDVQQDDBtCb3NlIFByb2R1Y3QgUm9vdCBDQSAtIFBT
+RTAwHhcNMTgwMjAxMDAwMDAwWhcNMzgxMjMxMjM1OTU5WjB0MQswCQYDVQQGEwJV
+UzEZMBcGA1UECgwQQm9zZSBDb3Jwb3JhdGlvbjEkMCIGA1UECwwbQm9zZSBQcm9k
+dWN0IFJvb3QgQ0EgLSBQU0UwMSQwIgYDVQQDDBtCb3NlIFByb2R1Y3QgUm9vdCBD
+QSAtIFBTRTAwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAAQ1kHBdCBaRByO0BMe74C5y
+ff08YXXwi32aSOjTDrSu/qCschBUtk//Vi0yLd7AQ0vAm5hv1f1p0ys4SbldJl0y
+NiRxMrAcnq9bWus6V1mLu3gKzrg4chA84QiPyRp9Z2OjYzBhMA4GA1UdDwEB/wQE
+AwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBRK/vJ0nOkzvexidOZimu9N
+B6HFJzAfBgNVHSMEGDAWgBRK/vJ0nOkzvexidOZimu9NB6HFJzAKBggqhkjOPQQD
+AgNnADBkAjASqHVFzxc3JhNh3RaUi63gtGGG29KGVJBib5/UJvk4ryuR7L2M+4Bi
+eMwBuJOvevUCMH36f9bkIf6MnHPS65jx0gj82J+4hvWDwbbxEgbI1T+Z7JQXAYsx
+qZKu+9mRJmy1Pg==
+-----END CERTIFICATE-----
+

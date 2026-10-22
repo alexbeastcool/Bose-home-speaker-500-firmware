@@ -1,0 +1,8 @@
+<ShepherdConfig>
+
+  <daemon name="NetManager"
+          exe="StartNetManager"
+          cpuset="7"
+          recovery="reboot"/>
+
+</ShepherdConfig>

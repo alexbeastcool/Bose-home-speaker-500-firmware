@@ -1,0 +1,7 @@
+{
+    "MultiroomVersions":
+    {
+        "Audio_Payload_Version": {"major_version":2, "minor_version":0},
+        "AudioControl_Protocol_Version": {"major_version":2, "minor_version":0}
+    }
+}

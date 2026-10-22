@@ -1,0 +1,75 @@
+#!/bin/bash
+# Utility for switching usb compositions between networking( p2p or client ) and adb.
+# adb is default on development builds. networking over usb is default on production,
+# to support demo. we also switch to point-to-point networking over usb on a key-combo,
+# to assist PTS folks in troubleshooting.
+
+export PATH=/opt/Bose/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+
+CONF_FILE=/tmp/udhcpd_usb.conf
+CLIENT_INTERFACE="rndis0"
+P2P_INTERFACE="rndis1"
+
+tag=${0##*/}-$$
+function log {
+    local pri="$1"; shift
+
+    # warning goes to stderr, too.  info does not.
+    local s=-s; [ "$pri" = info ] && s=
+
+    logger $s -t "$tag" -p "$pri" "$*"
+}
+
+function stop_udhcpd_usb {
+    log info "stopping dhcpd for usbnet"
+    killbyarg udhcpd "$CONF_FILE"
+}
+
+function device_toggle {
+    ip addr flush dev $1
+    ip link set $1 down
+    ip link set $1 name $2
+    ip link set $2 up
+}
+
+function do_p2p {
+    log info "Switching to USB p2p mode"
+
+    mkdir /run/udev/rules.d
+    cp /opt/Bose/etc/udev/rules.d/unlock-$P2P_INTERFACE.rules /run/udev/rules.d
+    udevadm control --reload
+
+    device_toggle $CLIENT_INTERFACE $P2P_INTERFACE
+    ip addr add 203.0.113.1/30 dev $P2P_INTERFACE
+
+    cat > "$CONF_FILE" <<-EOF
+	start 203.0.113.2
+	end   203.0.113.2
+	interface $P2P_INTERFACE
+	lease_file /dev/null
+	pidfile /var/run/udhcpd.$P2P_INTERFACE.pid
+	option subnet 255.255.255.0
+	option lease 600
+	EOF
+
+    log info "Starting dhcpd for usbnet"
+    udhcpd  -S "$CONF_FILE"
+}
+
+function do_client {
+    log info "Switching to USB client mode"
+    killwait dnsmasq 2> /dev/null
+
+    device_toggle $P2P_INTERFACE $CLIENT_INTERFACE
+}
+
+stop_udhcpd_usb
+
+if (( $# == 1 )) && [ "$1" = p2p ]; then
+    do_p2p
+elif (($# == 0)) || ( (( $# == 1 )) && [ "$1" = client ] ); then
+    do_client
+else
+    echo >&2 "usage: ${0##*/} [p2p|client]"
+    exit 1
+fi

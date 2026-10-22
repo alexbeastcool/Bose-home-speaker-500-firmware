@@ -1,0 +1,263 @@
+{
+    "cblAuthDelegate": {
+        "databaseFilePath": "DBPLACEHOLDER/cblAuthDelegate.db"
+    },
+    "oobe": {
+        "authFlowType": "CBL"
+    },
+    "deviceInfo": {
+        "originalDeviceSerialNumber": "ORIGINALDSNPLACEHOLDER",
+        "deviceSerialNumber": "DSNPLACEHOLDER",
+        "clientId": "CLIENTIDPLACEHOLDER",
+        "productId": "PRODUCTIDPLACEHOLDER",
+        "productIdBackUp": "PRODUCTIDBACKUPPLACEHOLDER",
+        "manufacturerName": "MANUFACTURERPLACEHOLDER",
+        "description": "DESCRIPTIONPLACEHOLDER",
+        "deviceType": "DEVICETYPEPLACEHOLDER",
+        "registrationKey": "REGISTRATIONKEYPLACEHOLDER",
+        "productIdKey": "PRODUCTIDKEYPLACEHOLDER",
+        "friendlyName": "FRIENDLYNAMEPLACEHOLDER"
+    },
+    "capabilitiesDelegate": {
+        "databaseFilePath": "DBPLACEHOLDER/capabilitiesDelegate.db"
+    },
+    "miscDatabase": {
+        "databaseFilePath": "DBPLACEHOLDER/miscDatabase.db"
+    },
+    "alertsCapabilityAgent": {
+        "databaseFilePath": "DBPLACEHOLDER/alerts.db"
+    },
+    "deviceSettings": {
+        "databaseFilePath": "DBPLACEHOLDER/deviceSettings.db",
+        "locales": [
+            "en-US",
+            "en-GB",
+            "de-DE",
+            "en-IN",
+            "en-CA",
+            "ja-JP",
+            "en-AU",
+            "fr-FR",
+            "it-IT",
+            "es-ES",
+            "es-MX",
+            "fr-CA",
+            "es-US",
+            "hi-IN",
+            "pt-BR"
+        ],
+        "defaultLocale": "DEFAULTLOCALEPLACEHOLDER",
+        "localeCombinations": [
+            [
+                "en-US",
+                "es-US"
+            ],
+            [
+                "es-US",
+                "en-US"
+            ],
+            [
+                "en-IN",
+                "hi-IN"
+            ],
+            [
+                "hi-IN",
+                "en-IN"
+            ],
+            [
+                "fr-CA",
+                "en-CA"
+            ],
+            [
+                "en-CA",
+                "fr-CA"
+            ],
+            [
+                "de-DE",
+                "en-GB"
+            ],
+            [
+                "de-DE",
+                "en-US"
+            ],
+            [
+                "de-DE",
+                "fr-FR"
+            ],
+            [
+                "de-DE",
+                "it-IT"
+            ],
+            [
+                "en-GB",
+                "de-DE"
+            ],
+            [
+                "en-GB",
+                "es-ES"
+            ],
+            [
+                "en-GB",
+                "fr-FR"
+            ],
+            [
+                "en-GB",
+                "hi-IN"
+            ],
+            [
+                "en-GB",
+                "it-IT"
+            ],
+            [
+                "en-US",
+                "de-DE"
+            ],
+            [
+                "en-US",
+                "es-ES"
+            ],
+            [
+                "en-US",
+                "es-MX"
+            ],
+            [
+                "en-US",
+                "es-US"
+            ],
+            [
+                "en-US",
+                "fr-FR"
+            ],
+            [
+                "en-US",
+                "hi-IN"
+            ],
+            [
+                "en-US",
+                "it-IT"
+            ],
+            [
+                "en-US",
+                "ja-JP"
+            ],
+            [
+                "en-US",
+                "pt-BR"
+            ],
+            [
+                "es-ES",
+                "en-GB"
+            ],
+            [
+                "es-ES",
+                "en-US"
+            ],
+            [
+                "es-MX",
+                "en-US"
+            ],
+            [
+                "fr-FR",
+                "de-DE"
+            ],
+            [
+                "fr-FR",
+                "en-GB"
+            ],
+            [
+                "fr-FR",
+                "en-US"
+            ],
+            [
+                "hi-IN",
+                "en-GB"
+            ],
+            [
+                "hi-IN",
+                "en-US"
+            ],
+            [
+                "it-IT",
+                "de-DE"
+            ],
+            [
+                "it-IT",
+                "en-GB"
+            ],
+            [
+                "it-IT",
+                "en-US"
+            ],
+            [
+                "ja-JP",
+                "en-US"
+            ],
+            [
+                "pt-BR",
+                "en-US"
+            ]
+        ],
+        "defaultTimezone": "America/Vancouver",
+        "displayedLocales": "DISPLAYEDLOCALESPLACEHOLDER"
+    },
+    "wakewordModelPath": {
+        "en-US": "X.en-CA+en-US.alexa.bin",
+        "de-DE": "X_OTG.de-DE.alexa.bin",
+        "en-AU": "X.en-CA+en-US.alexa.bin",
+        "en-CA": "X.en-CA+en-US.alexa.bin",
+        "fr-CA": "X_OTG.fr-CA+fr-FR.alexa.bin",
+        "en-GB": "X_OTG.en-GB.alexa.bin",
+        "en-IN": "X.en-IN.alexa.bin",
+        "hi-IN": "X.en-IN.alexa.bin",
+        "es-US": "X.es-MX+es-US.alexa.bin",
+        "es-ES": "X.es-ES.alexa.bin",
+        "es-MX": "X.es-MX+es-US.alexa.bin",
+        "fr-FR": "X_OTG.fr-CA+fr-FR.alexa.bin",
+        "it-IT": "X.it-IT.alexa.bin",
+        "pt-BR": "X.pt-BR.alexa.bin",
+        "ja-JP": "X.ja-JP.alexa.bin"
+    },
+    "bluetooth": {
+        "databaseFilePath": "DBPLACEHOLDER/bluetooth.db"
+    },
+    "certifiedSender": {
+        "databaseFilePath": "DBPLACEHOLDER/certifiedSender.db"
+    },
+    "notifications": {
+        "databaseFilePath": "DBPLACEHOLDER/notifications.db"
+    },
+    "externalMediaPlayer": {
+        "agentString": "EMPAGENTPLACEHOLDER"
+    },
+    "sampleApp": {
+        "displayCardsSupported": true
+    },
+    "equalizer": {
+        "enabled": false
+    },
+    "libcurlUtils": {
+        "CURLOPT_CAINFO": "CAINFOPLACEHOLDER"
+    },
+    "pkcs11Module": {
+        "libraryPath": "PKCS11MODULEPATHPLACEHOLDER",
+        "tokenName": "PKCS11TOKENNAMEPLACEHOLDER",
+        "userPin": "PKCS11USERPINPLACEHOLDER",
+        "defaultKeyName": "PKCS11KEYNAMEPLACEHOLDER"
+    },
+    "extendedDeviceAuthentication": {
+        "authUrl": "EDAAUTHURLPLACEHOLDER",
+        "iotThingName": {
+            "scheme": "EDAIOTTHINGSCHEMEPLACEHOLDER"
+        },
+        "libcurl": {
+            "sslCertType": "EDASSLCERTTYPEPLACEHOLDER",
+            "sslCertFile": "EDASSLCERTFILEPLACEHOLDER",
+            "sslPfxFile": "EDASSLPFXFILEPLACEHOLDER",
+            "sslPfxSecret": "EDASSLPFXSECRETPLACEHOLDER",
+            "sslKeyType": "EDASSLKEYTYPEPLACEHOLDER",
+            "sslKeyFile": "EDASSLKEYFILEPLACEHOLDER",
+            "sslEngine": "EDASSLENGINEPLACEHOLDER",
+            "sslCACert": "EDASSLCACERTPLACEHOLDER"
+        }
+    }
+}

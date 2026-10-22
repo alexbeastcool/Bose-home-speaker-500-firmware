@@ -1,0 +1,3 @@
+#!/bin/sh
+/opt/Bose/bin/SoundTouch stop "$@"
+exec /opt/Bose/bin/install stop "$@"

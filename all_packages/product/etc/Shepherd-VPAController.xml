@@ -1,0 +1,5 @@
+<ShepherdConfig>
+  <daemon name="VPAController"
+          recovery="reboot">
+  </daemon>
+</ShepherdConfig>

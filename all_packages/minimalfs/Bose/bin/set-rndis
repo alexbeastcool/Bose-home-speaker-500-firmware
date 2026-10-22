@@ -1,0 +1,56 @@
+#!/usr/bin/python2.7
+#
+# Enable or disable RNDIS mode.
+#
+# usage:
+# set-rndis           -- tell whether dual RNDIS/ADB mode is enabled
+# set-rndis off       -- disable RNDIS mode, enable ADB
+# set-rndis on        -- enable simultaneous RNDIS and ADB
+#
+import os
+import sys
+import subprocess
+
+script_name = "/etc/launch_adbd"
+script = open(script_name).read()
+
+enabled = "/sbin/usb/compositions/9059 n 2"
+disabled = "/sbin/usb/compositions/901D n"
+
+flag_file = '/mnt/nv/enable-rndis'
+
+this_script = os.path.basename(sys.argv.pop(0))
+
+if len(sys.argv) == 0:
+    if os.path.exists(flag_file):
+        print 'enabled'
+    else:
+        print 'disabled'
+    sys.exit()
+
+if len(sys.argv) == 1 and sys.argv[0] == "on":
+    if os.path.exists(flag_file):
+        # Already enabled.
+        sys.exit()
+    open(flag_file, 'a')
+    new = enabled
+elif len(sys.argv) == 1 and sys.argv[0] == "off":
+    if not os.path.exists(flag_file):
+        # Already disabled.
+        sys.exit()
+    os.remove(flag_file)
+    new = disabled
+else:
+    sys.exit("usage: {} [on|off]".format(this_script))
+
+# If we're running via `adb shell`, we're going to get a SIGHUP when we run
+# this next command.  We use `setsid` to ensure the SIGHUP isn't delivered to
+# the command (so the command is allowed to finish).  Also we discard stdout
+# and stderr otherwise the command would get a SIGPIPE if it tried to generate
+# any output.
+
+print "{}: running {}".format(this_script, new)
+devnull = open(os.devnull, 'w')
+subprocess.call(['setsid'] + new.split(), stdout=devnull, stderr=devnull)
+
+sys.exit()

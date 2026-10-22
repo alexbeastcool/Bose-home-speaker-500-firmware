@@ -1,0 +1,275 @@
+@font-face {
+  font-family: BoseText;
+  src: url(fonts/BoseText-Regular.otf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: BoseText;
+  src: url(fonts/BoseText-SemiBold.otf);
+  font-weight: bold;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+body {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: #fff;
+  color: #000;
+  font-family: BoseText, Helvetica, Verdana, sans-serif;
+  font-size: 15px;
+}
+
+#main {
+  position: relative;
+  display: block;
+  width: 800px;
+  min-height: 250px;
+  overflow: hidden;
+  margin: 0 auto;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  text-align: center;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.panes,
+#productInfoContainer {
+  display: none;
+}
+
+#productInfoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+}
+
+#productInfoContainer > * {
+  margin-bottom: 20px;
+  line-height: 14px;
+}
+
+#productInfoContainer:first-child {
+  margin-top: 24px;
+}
+
+#productInfoContainer:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Header styles */
+/* Header styles */
+#header {
+  margin-bottom: 60px;
+}
+
+#header #headerLogo img {
+  width: 130px;
+  height: 130px;
+  margin-bottom: 100px;
+}
+
+#header #headerText {
+  font-size: 24px;
+  color: #000;
+}
+
+.topRule,
+.bottomRule {
+  border: 1px solid #d8d8d8;
+  width: 800px;
+}
+
+hr.topRule {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+hr.bottomRule {
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 799px) {
+  .topRule,
+  .bottomRule {
+    width: 80%;
+  }
+}
+
+.pageTitle,
+.rowTitle {
+  color: #000;
+}
+
+.pageTitle {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.rowTitle {
+  font-size: 16px;
+}
+
+.productInfoRow {
+  font-size: 16px;
+  display: inline-flex;
+}
+
+/* Content styles */
+#content {
+  margin: 0 auto;
+  width: 480px;
+}
+
+#content .pageText {
+  margin-bottom: 50px;
+}
+
+#content .helpTitle {
+  margin: 16px 30px;
+  font-size: 16px;
+  line-height: 28px;
+  color: #666;
+}
+
+.uploadBox {
+  width: 100%;
+  border-radius: 6px;
+  background-color: #f2f2f2;
+  height: 280px;
+}
+
+#uploadBox_uploading {
+  height: 180px;
+}
+
+#uploadBox_finished {
+  height: 180px;
+}
+
+.uploadBoxMessage {
+  font-size: 19px;
+  color: #999;
+  margin-bottom: 40px;
+}
+
+#uploadBoxMessage_default {
+  margin-bottom: 40px;
+}
+
+#uploadBoxMessage_uploading {
+  color: #000;
+}
+
+.uploadBoxContent {
+  padding: 80px 10px;
+}
+
+#uploadBoxContent_uploading {
+  padding: 60px 10px;
+}
+
+#finishedImg {
+  width: 51.4px;
+}
+
+#pageTitle_error {
+  color: #d34547 !important;
+}
+
+#helpTitle_error {
+  color: #d34547 !important;
+}
+
+#btn_error {
+  background: #f2f2f2;
+  color: #000;
+}
+
+/* Input styles */
+/* the fakeContainer overlays the file input with the style we want
+because directly styling file inputs doesn't work across all browsers */
+#fileinputs {
+  display: block;
+}
+
+#fileupload {
+  opacity: 0;
+  position: absolute;
+  width: 60%;
+  height: 40px;
+}
+
+#filebox {
+  width: 155px;
+  height: 40px;
+  cursor: pointer;
+}
+
+button {
+  width: 155px;
+  height: 40px;
+  border-radius: 37px;
+  border: none;
+  font-family: BoseText, Helvetica, Verdana, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chooseFileButton {
+  background-color: #fff;
+  color: #000;
+}
+
+.fakeFile {
+  display: none;
+}
+
+#fakeFileInput {
+  border: none;
+  font-size: 19px;
+  color: #000;
+  width: 100%;
+  text-align: center;
+  background: none;
+  font-family: BoseText, Helvetica, Verdana, sans-serif;
+  margin-bottom: 15px;
+}
+
+#upload {
+  display: none;
+  margin-top: 20px;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Loading bar styles */
+#progressBarHolder {
+  margin: 0 auto;
+  margin-top: 20px;
+  height: 1px;
+  width: 340px;
+  background: #d8d8d8;
+}
+
+#uploadProgress {
+  width: 0%;
+  background: #000;
+  height: 1px;
+}

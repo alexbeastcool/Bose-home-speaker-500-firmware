@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Runs NetManager with the key directory configured; avoiding the need
+# to call `mkdir` within a privileged application
+
+PASSPHRASE_KEY_FILE=/mnt/nv/product-persistence/NetManagerSecurity/encryption.pem
+WIFI_CONFIG_FILE=/opt/Bose/etc/WiFiConfiguration.json
+NETWORK_CONFIG_FILE=/opt/Bose/etc/NetworkConfiguration.json
+mkdir -pm700 `dirname "$PASSPHRASE_KEY_FILE"`
+mkdir -p /var/run/NetManager
+
+OLD_PASSPHRASE_KEY_FILE=/mnt/nv/NetManagerSecurity/encryption.pem
+
+if [[ -f "$OLD_PASSPHRASE_KEY_FILE" ]]; then
+    mv "$OLD_PASSPHRASE_KEY_FILE" "$PASSPHRASE_KEY_FILE"
+    rmdir `dirname "$OLD_PASSPHRASE_KEY_FILE"`
+fi
+
+exec NetManager "$PASSPHRASE_KEY_FILE" "$WIFI_CONFIG_FILE" "$NETWORK_CONFIG_FILE"

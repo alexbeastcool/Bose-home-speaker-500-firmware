@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# An arbitrary collection of network status information to be
+# delivered via the /network.txt endpoint of the PtsServer.
+#
+
+if (( $# > 0 )); then
+    echo >&2 "$0: unexpected argument '$1'"
+    exit 1
+fi
+exec 2>&1 # stderr goes to stdout
+PS4='> '; set -x
+
+date
+uptime
+ifconfig -a
+ip route list
+wpa_cli status
+wpa_cli scan_results
+tap-command network status
+tap-command network wifi profiles info
+tap-command network wifi status
+nslookup www.bose.com 208.67.222.222
+nslookup www.bose.com 8.8.8.8
+wget -s -T 5 www.google.com
+curl http://ifconfig.me/ -v --connect-timeout 30
+guid=$(jq -r .guid /persist/mfg_data.json)
+curl https://services.api.bose.io/discovery/discover/product/$guid -v --connect-timeout 30
+curl http://iot-product-state-core/state/$guid -x localhost:8888 -v --connect-timeout 30

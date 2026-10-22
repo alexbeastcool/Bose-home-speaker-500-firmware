@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AmazonWuwConfigMsg model_map_path="/opt/Bose/etc/AmazonWuwModels.xml" preroll_time="0.5" enable_beam_select="true" num_beams="12" >
+  <threadCfg affinity="4" priority="42" />
+</AmazonWuwConfigMsg>

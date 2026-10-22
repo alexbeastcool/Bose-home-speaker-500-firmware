@@ -1,0 +1,181 @@
+#!/usr/bin/python2.7
+#
+# Invoked via pts-handler to display pages related to Microphone diagnostics.
+#
+import os
+import sys
+import re
+import json
+import datetime
+import subprocess
+
+min_real, max_offset = -12, -12 # dbFs (Eddie)
+
+# Output the table of microphone values, with the optional selected microphone highlighted and used to calculate offset values.
+def outputTable( values, selected = None ):
+
+    # HTTP Refresh header used to continuously poll data from the endpoint. Ensure users see up-to-date info.
+    print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/html\r
+Cache-Control: no-cache\r
+Refresh: 1\r
+\r
+<html>
+<head>
+<style type="text/css">
+    body {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        overflow: auto;
+    }
+    table, th, td {
+        border: 1px solid black;
+    }
+    td {
+        width: 8em;
+        text-align: center;
+    }
+    .pass {
+        background: green;
+    }
+    .fail {
+        color: darkred;
+        font-weight: bold;
+        background: pink;
+    }
+    .noaudio {
+        color: blue;
+        font-weight: bold;
+        background: yellow;
+    }
+    .hilite {
+        background: yellow;
+    }
+</style>
+</head>
+<body>"""
+
+    print datetime.datetime.now()
+    print "<table><tr>"
+    print "<th>Value Type</th>"
+    for i in range(0, len(values)):
+        if i == selected:
+            print """<th class'hilite'><a href="/diag/microphone/all">Mic {}</a></th>""".format(i+1)
+        else:
+            print """<th><a href="/diag/microphone/{}">Mic {}</a></th>""".format(i,i+1)
+    print "</tr>"
+
+    if selected is not None:
+        print "<tr>"
+        print "<td>Offset Values (< {})</td>".format(max_offset)
+        for i in range(0, len(values)):
+            value = values[i]
+            if value == -256:
+                print "<td class='noaudio'>No Audio</td>"
+                continue
+            value -= values[selected]
+            if i == selected:
+                print "<td>{}</td>".format(value)
+            elif value < max_offset:
+                print "<td class='pass'>{}<br>PASS</td>".format(value)
+            else:
+                print "<td class='fail'>{}<br>FAIL</td>".format(value)
+        print "</tr>"
+
+    print "<tr>"
+    print "<td>Real Values in dBF (> {})</td>".format(min_real)
+    for i in range(0, len(values)):
+        value = values[i]
+        if value == -256:
+            print "<td class='noaudio'>No Audio</td>"
+        elif i != selected:
+            print "<td>{}</td>".format(value)
+        elif value >= min_real:
+            print "<td class='pass'>{}<br>PASS</td>".format(value)
+        else:
+            print "<td class='fail'>{}<br>FAIL</td>".format(value)
+    print "</tr>"
+
+    print """
+</table>
+</body>
+</html>"""
+
+
+# If argument given, return mic data.
+if len(sys.argv) > 1:
+
+    output = subprocess.Popen(["frontdoorutil","/vfe/meters"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+
+    try:
+        data = json.loads(output[0])
+        mics = data['body']['micLevels']
+        raw = json.dumps(data['body'],indent=4)
+
+    # Catch error Parsing JSON, output error messages from utility.
+    except ValueError:
+        print output[1]
+        sys.exit()
+
+    # Catch Error finding specific fields, output message indicating that VFE is not enabled.
+    except KeyError:
+        print "The current software version does not support Microphone testing."
+        sys.exit()
+
+    # If "raw" argument, being asked for raw JSON data. 
+    if sys.argv[1]=="raw" or sys.argv[1]=="raw/":
+        print """HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\n\r"""
+        print raw
+
+    # If given a number, select that microphone as focus for offset.
+    elif sys.argv[1].isdigit():
+        outputTable(mics, int(sys.argv[1]))
+
+    # If given anything else, output values without offset.
+    else:
+        outputTable(mics)
+
+# Else, output main page.
+else:
+    print """
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Microphone Diagnostics</title>
+        <style type="text/css">
+            body {
+                font-family: Verdana, Arial, Helvetica, sans-serif;
+                overflow: auto;
+            }
+            hr {
+                border: 1px solid blue;
+                color: #fff;
+                background-color: #fff;
+                height: 1px;
+                width: 100%;
+            }
+            iframe {
+                background-color: lightgrey;
+                white-space: pre-wrap;
+                border: thin dotted;
+                position: relative;
+                height: 20em;
+                width: 98%;
+                margin: 1%;
+                padding 1em;
+                display: block;
+                overflow: scroll;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id='header'>Microphones</h1>
+        <hr>
+        <li>Microphone Values [dBF]
+        <iframe id="values" src="/diag/microphone/all"></iframe>   <!-- inline frame loads the microphone data, mic selection changes src of iframe -->
+        <hr>
+        <button onclick="location.href='/diag'">Done</button>
+    </body>
+</html>
+"""

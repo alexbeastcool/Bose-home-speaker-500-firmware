@@ -1,0 +1,11 @@
+<ShepherdConfig>
+
+  <daemon name="BoseFirewall"
+          cpuset="7"
+          recovery="restart">
+    <arg>-x/dev/null</arg>
+    <arg>--</arg>
+    <arg>update_iptables</arg>
+  </daemon>
+
+</ShepherdConfig>

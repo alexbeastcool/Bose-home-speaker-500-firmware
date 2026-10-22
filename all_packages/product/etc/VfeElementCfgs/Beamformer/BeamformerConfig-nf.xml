@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<BeamformerConfigMsg num_channels_in="9" num_channels_out="1" num_channels_to_ignore="1" >
+  <threadCfg affinity="4" priority="45" />
+</BeamformerConfigMsg>

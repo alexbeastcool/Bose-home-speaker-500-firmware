@@ -1,0 +1,45 @@
+#!/bin/bash
+#
+# Show basic information about this Riviera unit.
+#
+
+if (( $# > 0 )); then
+    echo >&2 "$0: unexpected argument '$1'"
+    exit 1
+fi
+
+set -- $(uptime)
+shift # discard current time
+echo $(date), $*
+
+(
+    name=$(cat /mnt/nv/product-persistence/SystemConfigurationDB.xml | \
+           grep DeviceName | sed "s/^.*>\(.*\)<.*$/\1/")
+    if [ "$name" ]; then
+        echo "Device name: \"$name\""
+    fi
+    jq -r '"Product version: \(.long)"' /opt/Bose/etc/BoseVersion.json
+) 2>/dev/null
+
+
+if [ -f /etc/coronado-version ]; then
+    awk '$1 == "HSP" {$1="Coronado-HSP:"; print}' /etc/coronado-version
+elif [ -f /etc/lamarr-version ]; then
+    awk '$1 == "HSP" {$1="Lamarr-HSP:"; print}' /etc/lamarr-version
+else
+    awk '$1 == "HSP" {$1="Riviera-HSP:"; print}' /etc/riviera-version
+fi
+
+if [ -f /sys/kernel/hsp/qfprom_secboot ]; then
+    # Riviera / Coronado platform
+    (( 1 == $(awk '{print $NF}' /sys/kernel/hsp/qfprom_secboot) )) ||
+        echo Secure boot: disabled
+elif [ -f /sys/class/efuse/secureboot_check ]; then
+    # Lamarr platform
+    [[ "encrypt" == $(cat /sys/class/efuse/secureboot_check) ]] ||
+        echo Secure boot: disabled
+else
+    echo "Secure boot: unknown"
+fi
+
+exit 0

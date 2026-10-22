@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# Base64 aiq trace data to be delivered via the /ptsAiq.txt
+# endpoint of the PtsServer
+#
+
+if (( $# > 0 )); then
+    echo >&2 "$0: unexpected argument '$1'"
+    exit 1
+fi
+exec 2>&1 # stderr goes to stdout
+
+(
+PS4='> '; set -x
+
+#VT - Only supports pt when we are in ON state
+# Can only get aiq trace data from VT if in ON state
+if tap-command "lpm pt sys" | grep -q "ON"; then
+    timeout -t 240 ReadVipertoothStatus aiqlog
+
+else
+    echo "VT IS IN SUSPEND - CANT GRAB LOGS!"
+fi
+
+)

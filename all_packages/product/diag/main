@@ -1,0 +1,140 @@
+#!/usr/bin/python2.7
+#
+# Invoked via pts-handler to display pages related to diagnostics.
+#
+import os
+import sys
+import re
+import json
+import subprocess
+import hashlib
+
+if len(sys.argv) != 1:
+    raise Exception("wrong usage " + str(sys.argv))
+
+def html_escape(text):
+    return re.sub(r'[<&>]', lambda x: { "<": "&lt;",
+                                        "&": "&amp;",
+                                        ">": "&gt;" }[x.group(0)], text)
+
+print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/html\r
+Cache-Control: no-cache\r
+\r"""
+
+print """
+<html>
+<head>
+<title>Diagnostics</title>
+<style type="text/css">
+ body {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+ }
+ hr {
+   border: 1px solid blue;
+   color: #fff;
+   background-color: #fff;
+   height: 1px;
+   width: 100%;
+ }
+ div.box {
+   background-color: lightgrey;
+   border: thin dotted;
+   padding: 1em;
+   margin: 1em;
+ }
+ .hilite {
+   background-color: yellow;
+ }
+</style>
+</head>
+<body>
+<h1>Diagnostics</h1>
+<hr>
+"""
+
+version_info = json.load(open("/opt/Bose/etc/BoseVersion.json"))
+print "<li>Software Version"
+print """<div class="box">"""
+print html_escape(version_info["long"])
+
+# ---------------------------------------------------------------------------
+hash = subprocess.check_output(['/opt/Bose/bin/get-pubkey-type']).strip()
+if hash == 'production':
+    env = '(production)'
+elif hash == 'development':
+    env = '<span class="hilite">(development)</span>'
+else:
+    env = '<span class="hilite">(unknown)</span>'
+print "</br>Software Update Environment: {}".format(env)
+
+# ---------------------------------------------------------------------------
+
+print "</div>"
+
+print "<li>LPM Versions"
+print "<div class='box'>"
+ph = subprocess.Popen("ReadLpmVersion blob user-app boot-loader psoc lightbar-anim-db".split(),
+                      stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+print "<table>"
+for line in ph.stdout:
+    print "<tr><td>", html_escape(line), "</td></tr>"
+print "</table>"
+print "</div>"
+
+hspVerFile = "/etc/riviera-version"
+version_info = open(hspVerFile, "rt")
+print "<li>HSP Version"
+print "<div class='box'>"
+print html_escape(version_info.readline())
+print "</div>"
+
+print "<li>Manufacturing Data [<a href='/diag/mfg-data'>all</a>]"
+mfg_data = json.load(open("/persist/mfg_data.json"))
+print """<div class="box">"""
+print "<table>"
+
+elem = "development"
+dev = mfg_data.get(elem, "false")
+if dev != "false":
+    print """<tr class="hilite"><td>{}</td><td>{}</td></tr>""" \
+        .format(elem, html_escape(dev))
+
+for elem in """country_code regionCode snSystem productType productName
+               productColor testflagLaunchAssurance guid""".split():
+    print "<tr><td>{}</td><td>{}</td></tr>" \
+        .format(elem, html_escape(mfg_data.get(elem, "(none)")))
+print "</table>"
+print "</div>"
+
+prod = mfg_data.get("productType")
+product_config = json.load(open("/opt/Bose/etc/ProductConfig.json"))['ProductConfig']
+lcdAvailable = None
+for detail in product_config['productDetails']:
+    if prod == detail['product']:
+        lcdAvailable = detail['lcdAvailable']
+
+print """
+  <li>Tests
+  <div class="box">
+"""
+
+if lcdAvailable:
+  print """<a href="/diag/display">Display</a><br>"""
+
+print """
+  <a href="/diag/microphone">Microphones</a><br>
+  <a href="/diag/wifi">Wi-Fi</a><br>
+  <a href="/diag/airplay2">AirPlay</a>
+  </div>
+"""
+
+print "<hr>"
+
+print "Remote:", os.environ.get("REMOTE_ADDRESS", "(oops)"), "via", os.environ.get("IFACE", "(oops)")
+
+print """
+</body>
+</html>
+"""

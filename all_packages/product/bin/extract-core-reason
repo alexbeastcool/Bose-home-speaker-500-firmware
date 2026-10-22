@@ -1,0 +1,115 @@
+#!/bin/sh
+# Bash version of extract-core-reason
+# Args: <exe> <sig> <pid> <user> <group> <comm> <corefile>
+
+EXE=$(echo "$1" | sed 's|!|/|g')
+SIG="$2"
+PID="$3"
+USER="$4"
+GROUP="$5"
+COMM="$6"
+COREFILE="$7"
+
+GDB_TMP="/tmp/extract-core-reason-gdb.$$".log
+DEBUG_LOG="/tmp/extract-core-reason-debug.$$".log
+
+log_debug() {
+    echo "$*" >> "$DEBUG_LOG"
+}
+
+log_debug "[DEBUG] EXE: $EXE"
+log_debug "[DEBUG] SIG: $SIG"
+log_debug "[DEBUG] COMM: $COMM"
+log_debug "[DEBUG] COREFILE: $COREFILE"
+
+# Check for gdb
+if ! command -v gdb >/dev/null 2>&1; then
+    echo "CrashSignature:$SIG:no-gdb"
+    exit 0
+fi
+
+# Get gdb mappings
+GDB_MAPPINGS=$(gdb -batch -ex "core $COREFILE" -ex "info proc mappings" "$EXE" 2>/dev/null)
+log_debug "[DEBUG] gdb_mappings: $GDB_MAPPINGS"
+
+BIN_NAME=$(basename "$EXE")
+app_base="unknown"
+app_ranges=()
+
+# Find all mappings for the main binary (ending with /COMM or /EXE)
+while IFS= read -r line; do
+    if echo "$line" | grep -Eq "\s*0x[0-9a-fA-F]+\s+0x[0-9a-fA-F]+\s+\S+\s+0x[0-9a-fA-F]+\s+.*$BIN_NAME"; then
+        set -- $line
+        start=$1; end=$2; offset=$4; objfile=$5
+        if [ "$offset" = "0x0" ]; then
+            app_ranges+=("$start:$end")
+            log_debug "[DEBUG] App mapping found: start=$start, end=$end, offset=$offset, objfile=$objfile"
+        fi
+    fi
+done <<EOF
+$GDB_MAPPINGS
+EOF
+
+# If not found, fallback to lowest r-xp mapping
+if [ ${#app_ranges[@]} -eq 0 ]; then
+    while IFS= read -r line; do
+        if echo "$line" | grep -q 'r-xp'; then
+            set -- $line
+            app_ranges+=("$1:$2")
+            log_debug "[DEBUG] Fallback r-xp mapping: start=$1, end=$2"
+            break
+        fi
+    done <<EOF
+$GDB_MAPPINGS
+EOF
+fi
+
+if [ ${#app_ranges[@]} -eq 0 ]; then
+    app_base="unknown"
+    log_debug "[DEBUG] No app mappings found. app_base: $app_base"
+else
+    app_base=$(echo ${app_ranges[0]} | cut -d: -f1)
+    log_debug "[DEBUG] app_base: $app_base, app_ranges: ${app_ranges[*]}"
+fi
+
+# Get gdb output for registers and backtrace
+GDB_OUT=$(gdb -batch -ex "core $COREFILE" -ex "info registers" -ex "bt" "$EXE" 2>/dev/null)
+echo "$GDB_OUT" > "$GDB_TMP"
+log_debug "[DEBUG] GDB backtrace output: $GDB_OUT"
+
+# Extract addresses from backtrace and sum offsets in app address space
+bt_offsets=()
+while IFS= read -r line; do
+    if echo "$line" | grep -Eq '^#([0-9]+)\s+0x[0-9a-fA-F]+'; then
+        addr=$(echo "$line" | awk '{print $2}')
+        addr_dec=$((addr))
+        for range in "${app_ranges[@]}"; do
+            start=$(echo $range | cut -d: -f1)
+            end=$(echo $range | cut -d: -f2)
+            start_dec=$((start))
+            end_dec=$((end))
+            if [ $addr_dec -ge $start_dec ] && [ $addr_dec -lt $end_dec ]; then
+                offset=$((addr_dec - start_dec))
+                bt_offsets+=("$offset")
+                log_debug "[DEBUG] BT addr in app space: $addr, offset: $offset"
+                break
+            fi
+        done
+    fi
+done <<EOF
+$GDB_OUT
+EOF
+
+if [ ${#bt_offsets[@]} -gt 0 ]; then
+    sum=0
+    for o in "${bt_offsets[@]}"; do sum=$((sum + o)); done
+    offset_sum=$(printf "0x%x" $sum)
+    log_debug "[DEBUG] offset_sum: $offset_sum"
+else
+    offset_sum="no-app-addrs"
+    log_debug "[DEBUG] offset_sum: $offset_sum"
+fi
+
+echo "CrashSignature:$SIG:$offset_sum"
+
+rm -f "$GDB_TMP"

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<BluetoothSourceConfig telemetry_enabled="true" min_delay_report_us="30000" fallback_delay_report_us="150000" />

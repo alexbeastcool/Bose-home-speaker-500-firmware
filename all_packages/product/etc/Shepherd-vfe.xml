@@ -1,0 +1,11 @@
+<ShepherdConfig>
+    <daemon name="Vfe"
+            recovery="reboot"
+            cpuset="6"
+            nice="-19">
+        <arg>-c</arg>
+        <arg>/opt/Bose/etc/VfeConfig.xml</arg>
+        <arg>--mic</arg>
+        <arg>/persist/mfg_data.json</arg>
+    </daemon>
+</ShepherdConfig>

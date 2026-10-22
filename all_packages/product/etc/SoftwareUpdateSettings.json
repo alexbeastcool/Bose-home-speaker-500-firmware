@@ -1,0 +1,11 @@
+{
+    "SoftwareUpdateSettings":
+    {
+        "softwareUpdateTimeSlot": { "startTimeHour":  2, "startTimeMin":  0,   "endTimeHour": 5, "endTimeMin": 0 },
+        "darkScreenTimeSlot"    : { "startTimeHour":  2, "startTimeMin":  0,   "endTimeHour": 5, "endTimeMin": 0 },
+        "idleToSoftwareUpdateInWindowTime" : 30,
+        "idleToSoftwareUpdateAfterWindowTime" : 5,
+        "noNtpSyncToSoftwareUpdateTime" : 720,
+        "rangeOfDelayOnWindowStart" : 179
+    }
+}

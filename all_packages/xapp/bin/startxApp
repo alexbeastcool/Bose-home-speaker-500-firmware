@@ -1,0 +1,40 @@
+#!/bin/bash
+# Runs xApp
+
+product_type=$(jq -r .productType /persist/mfg_data.json)
+if [ -z $product_type  ]; then
+    echo "product_type is empty"
+    exit 1
+else
+    CONFIG_FILE="/opt/Bose/etc/$product_type/xAppConfig.json"
+fi
+
+XAPP_DIR=/opt/Bose/xapp
+export LD_LIBRARY_PATH=$XAPP_DIR/boselib:$XAPP_DIR/lib:$XAPP_DIR/sdklib:$LD_LIBRARY_PATH
+export OPENSSL_CONF="$XAPP_DIR/config/openssl.cnf"
+
+mkdir -pm700 /mnt/nv/product-persistence/xapp
+mkdir -pm700 /mnt/nv/product-persistence/csdk-pkcs11
+
+cat <<EOF >/sys/fs/smackfs/load2
+AlexaxApp _ rwxat
+_ AlexaxApp wx
+EOF
+
+cat <<EOF > /sys/fs/smackfs/netlabel
+0.0.0.0/0 @ 
+EOF
+
+attr -S -s SMACK64 -V "AlexaxApp" /mnt/nv/product-persistence/xapp
+attr -S -s SMACK64TRANSMUTE -V TRUE /tmp
+IN=
+#IN="gdb --args"
+#IN="strace -f"
+
+echo "AlexaxApp" > /proc/self/attr/current
+if [ "$(cat /proc/self/attr/current)" != "AlexaxApp" ]; then
+    echo "smack label is not AlexaxApp"
+    exit 1
+fi
+
+exec $IN $XAPP_DIR/bin/xApp -c "$CONFIG_FILE"

@@ -1,0 +1,62 @@
+#!/bin/bash
+#
+# This script will cleanup software update pending IPKs and other data, in case of critical error or stuck updates
+# It is for the development devices
+
+this_file=$0
+
+if ! is-development; then
+    echo "$this_file : Script is not meant to run on production devices"
+    exit 1
+fi
+
+echo "$this_file : Software update cleanup started"
+echo "$this_file : Stopping all services"
+
+# stop all services so that we can mount /opt/Bose as rw
+/opt/Bose/bin/stop
+killall SoftwareUpdateService
+killall SWUpdateWebServer
+
+# mount /opt/Bose partition as rw
+/opt/Bose/bin/rw
+
+# clean component status file
+rm /mnt/nv/updateSwUpComponentStatus.dat
+rm /mnt/nv/updateSwUpDownloadStatus.dat
+
+# clean software update in-progress status
+rm /mnt/nv/update/install-status.dat
+rm /mnt/nv/update/install-in-progress
+rm /mnt/nv/update/force_vipertooth_update
+
+# remove unused component file
+rm /mnt/nv/update/unusedComponents.dat
+
+# remove ipks and signature files
+rm -rf /opt/Bose/.swUpdateCache/ipks/*
+rm -rf /opt/Bose/.swUpdateCache/localupdate/*
+rm -rf /opt/Bose/.swUpdateCache/opkgCache/*
+
+# remove software update backup if present
+rm -rf /opt/Bose/update/backup
+
+# remove hsp update file
+rm /opt/Bose/hsp/update_ext4.zip
+
+# remove lpm_updater files
+rm -rf /opt/Bose/lpm_updater/
+
+# remove vipertooth updater files if present
+rm -rf /opt/Bose/vipertooth/
+
+sync
+echo "$this_file : Software update cleanup completed"
+echo "$this_file : Rebooting device, Please wait!!"
+
+# reboot your device
+/opt/Bose/bin/ResetUtil SYSTEM
+
+sleep 20
+
+/sbin/reboot

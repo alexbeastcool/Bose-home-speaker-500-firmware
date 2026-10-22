@@ -1,0 +1,5 @@
+{
+  "type_prefix": "bose:amplifier:",
+  "primary_proxy": "amplifier",
+  "proxies": "amplifier,media_service"
+}

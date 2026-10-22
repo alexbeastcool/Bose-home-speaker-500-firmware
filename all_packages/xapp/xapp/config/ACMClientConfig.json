@@ -1,0 +1,18 @@
+{
+    "gammaUrlSuffix": ".api.av-gamma.com",
+    "prodUrlSuffix": ".api.amazonvideo.com",
+    "terminatorIds": [
+        {
+            "runtimeComponentsValues": {
+                "os-version": "1"
+            },
+            "terminatorId": "abm99nftr2sm"
+        },
+        {
+            "runtimeComponentsValues": {
+                "os-version": "2"
+            },
+            "terminatorId": "abcm5nk9y7k5"
+        }
+    ]
+}

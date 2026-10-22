@@ -1,0 +1,118 @@
+#!/bin/bash
+# 
+# This script starts Software Update related services which needs rw access to .swUpdateCache
+# 1. SoftwareUpdateService
+# 2. SWUpdateWebServer
+# 
+# It will also monitor these services and also try to recover them in production mode devices
+#
+# SWUpdateWebServer needs rw access to .swUpdateCache to store the uploaded ZIP file and UnZip IPKs from that
+# SoftwareUpdateService needs rw access to .swUpdateCache to install IPKs and maintain its status
+
+this_file=`basename "$0"`
+
+function process_crash {
+
+    # attempt to recover only if it is not stopped intetionally
+    if [ ! -e /tmp/SoftwareUpdateStopped ] && ! is-development; then
+
+        if ! ps -ef | grep SoftwareUpdateService | grep -v grep ; then
+            echo "$this_file : SoftwareUpdateService crash"
+            # Reboot if SoftwareUpdateService exit - i.e. if it crash
+            echo "$this_file : Rebooting device on SoftwareUpdate Crash"
+            reboot
+        fi
+
+        if ! ps -ef | grep SWUpdateWebServer | grep -v grep ; then
+            echo "$this_file : SWUpdateWebServer crash"
+            uptime=$(awk -F. '{print $1}' /proc/uptime)
+            if [ "$uptime" -lt 1800 ]; then
+                sleep 1
+                echo "$this_file : Attempt to Restart - SWUpdateWebServer"
+                /opt/Bose/bin/SWUpdateWebServer &
+            else
+                echo "$this_file : 30 minutes has passed since boot, no need to start SWUpdateWebServer"
+            fi
+        fi
+
+    fi
+
+    if is-development; then
+        echo "$this_file : Would recover but auto-recovery is disabled"
+    fi
+
+}
+
+if (( $# >= 1 )) && [ "$1" = start ]; then
+    shift
+
+    # CASTLE-22977 after we VIP any system, recovery files are not installed in /cache partition
+    # We shall run post install script to install all those files at /cache during first boot
+    ######################
+    # NOTICE NOTICE NOTICE
+    ###################### 
+    # Put below code block before mounting .swUpdateCache while merging this with master branch
+    if [ -e /opt/Bose/Bose_minimal.tar.gz ]; then
+        # mount /opt/Bose rw to move recovery related files to /cache
+        /opt/Bose/bin/pre_install
+
+        # move recovery files to /cache
+        /opt/Bose/.swUpdateCache/info/SoundTouchRecovery.postinst
+
+        /opt/Bose/bin/post_install
+    fi
+
+
+    # CASTLE-13906, From HSP 4.1 onwards .swUpdateCache will not be mounted as rw at boot time
+    # we will mount it from this script and this script will be run using unshare command so that no other processes
+    # can access .swUpdateCache directory, Only processes started from this script will be able to access
+    mount --bind /opt/Bose/.swUpdateCache /opt/Bose/.swUpdateCache || exit
+    mount -o remount,noexec,nosuid,nodev -w /opt/Bose/.swUpdateCache /opt/Bose/.swUpdateCache || exit
+
+    rm /tmp/SoftwareUpdateStopped
+    if is-development; then
+        systemctl start adbd.service
+    fi
+
+    CONFIG_FILE=/opt/Bose/etc/SoftwareUpdateConfiguration.xml
+    if [ -e /opt/Bose/bin/is-limited ] && /opt/Bose/bin/is-limited; then
+        CONFIG_FILE=/opt/Bose/etc/SoftwareUpdateConfiguration-lf.xml
+    fi
+
+    set -m
+    trap 'jobs -rp; process_crash;' CHLD
+
+    #This is required when we update from static library package to shareid library package.
+    #This is specifically for the services that we spawn from SoftwareUpdateService like opkg.
+    #
+    #once softwareupdate.ipk is installed we will have all the required shared libs in the /opt/Bose/update/lib directory.
+    #
+    #LD_LIBRARY_PATH appends the list of path given in RPATH. So for opkg service RPATH will be as follows
+    #/opt/Bose/lib32:/opt/Bose/lib:/opt/Bose/update/lib:/opt/Bose/update/backup
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/Bose/update/lib:/opt/Bose/update/backup
+
+    echo "$this_file : Starting SWUpdateWebServer"
+    /opt/Bose/bin/SWUpdateWebServer &
+    echo "$this_file : Starting SoftwwareUpdateService"
+    /opt/Bose/bin/SoftwareUpdateService -c$CONFIG_FILE &
+    
+    wait
+
+    # unreachable though reboot to recover
+    if [ ! -e /tmp/SoftwareUpdateStopped ] && ! is-development; then
+        echo "$this_file : Rebooting device on SoftwareUpdate Crash"
+        reboot
+    fi
+fi
+
+if (( $# == 1 )) && [ "$1" = stop ]; then
+
+    touch /tmp/SoftwareUpdateStopped
+    echo "$this_file : Stopping SoftwareUpdateService"
+    killall SoftwareUpdateService
+    echo "$this_file : Stopping SWUpdateWebServer"
+    killall SWUpdateWebServer
+
+    umount /opt/Bose/.swUpdateCache
+    exit 0
+fi

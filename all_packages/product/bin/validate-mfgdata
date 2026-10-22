@@ -1,0 +1,154 @@
+#!/usr/bin/python2.7
+#
+# Validate the manufacturing data to make sure it contains the information the
+# SoundTouch daemons require.  If invalid, show how to fix it.
+#
+# See also:
+# https://wiki.bose.com/display/BC/Riviera+Manufacturing+Data+Information
+#
+import sys
+import os
+import re
+import json
+import md5
+
+this_script = os.path.basename(sys.argv.pop(0))
+
+brief = False
+if sys.argv and sys.argv[0] == "--brief":
+    sys.argv.pop(0)
+    brief = True
+
+if sys.argv:
+    sys.exit("{}: unexpected argument '{}'".format(this_script, sys.argv[0]))
+
+def warn(*args):
+    msg = " ".join(map(lambda a: str(a), args))
+    if not brief:
+        msg = "{}: {}".format(this_script, msg)
+    print >>sys.stderr, msg
+
+def md5sig(text):
+    m = md5.new()
+    m.update(text)
+    return m.hexdigest()
+
+persist_dir = os.environ.get("BOSE_PERSIST_DIR", "/persist")
+with open(os.path.join(persist_dir, "mfg_data.json")) as fh:
+    json_text = fh.read()
+with open(os.path.join(persist_dir, "mfg_data.md5")) as fh:
+    expected_signature = fh.read().split()[0]
+actual_signature = md5sig(json_text)
+if expected_signature != actual_signature:
+    sys.exit("{}: Signature mismatch '{}' != '{}'".\
+             format(this_script, expected_signature, actual_signature))
+mfg_data = json.loads(json_text)
+
+def get(name):
+    return mfg_data.get(name)
+
+# GUID standard canonical form is described here:
+# https://en.m.wikipedia.org/wiki/Universally_unique_identifier
+guid = get("guid")
+if guid is None or not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', guid):
+    warn("Invalid guid:", guid)
+    warn("You must run the sadi command to give this unit a device identity")
+    warn("See: https://wiki.bose.com/pages/viewpage.action?pageId=42202819")
+    sys.exit(1)
+
+fixes = []
+
+dev = get("development")
+if dev is not None and dev != "true" and dev != "false":
+    warn("Suspicious development:", dev)
+
+cc = get("country_code")
+if cc is None or not re.match(r'^[A-Z][A-Z]$', cc):
+    warn("Invalid country_code", cc)
+    fixes.append("set country_code US")
+
+sn = get("snSystem")
+if not sn: # allow any non-empty string
+    warn("Invalid snSystem:", sn)
+    fixes.append("set snSystem RF000000000000000")
+elif not re.match(r'^\w{17}$', sn):
+    warn("Suspicious snSystem:", sn)
+
+pc = get("productColor")
+if pc is None or not re.match(r'^\d+$', pc): # allow any integer
+    warn("Invalid productColor:", pc)
+    fixes.append("set productColor 1  # 1=tripleBlack | 3=luxGray")
+
+vi = get("BMAPVariantID")
+if vi is None or not re.match(r'^\d+$', vi): # allow any integer
+    warn("Invalid BMAPVariantID:", vi)
+    fixes.append("set BMAPVariantID 1  # 0=NONE | 1=BLACK | 2=WHITE | 3=SILVER")
+elif int(vi) < 0 or int(vi) > 3:
+    warn("Suspicious BMAPVariantID:", vi)
+
+if pc != vi:
+    warn("Suspicious productColor ({}) and BMAPVariantID ({}) mismatch" \
+         .format(pc, vi))
+
+pi = get("BMAPProductID")
+if pi is None or not re.match(r'^0[xX][0-9a-fA-F]{4}$', pi): # allow hex value (2-bytes)
+    warn("Invalid BMAPProductID:", pi)
+    fixes.append("set BMAPProductID 0x4026 # Eddie")
+
+ai = get("BMAPBleProductID")
+if ai is None or not re.match(r'^\d+$', ai): # allow any integer
+    warn("Invalid BMAPBleProductID:", ai)
+    fixes.append("set BMAPBleProductID 16 # Eddie")
+
+pn = get("productName")
+if not pn: # allow any non-empty string
+    warn("Invalid productName:", pn)
+    fixes.append("set productName 'Bose Home Speaker 500'")
+
+pt = get("productType")
+if not pt: # allow any non-empty string
+    warn("Invalid productType:", pt)
+    fixes.append("set productType eddie")
+
+# Check for duplicate MAC addresses.
+addrs = [get("snMacWlan0"), get("snMacWlan1"), get("snMacBt"), get("snMacUSB")]
+addrs = [x for x in addrs if x is not None]
+if len(addrs) != len(set(addrs)):
+    sys.exit("{}: Duplicate MAC addresses".format(this_script))
+
+# Match floating point values.
+fpv = r'\s*[-+]?(\d+\.?\d*|\.\d+)\s*'
+
+dal = get("deviceAbsorptionLux")
+if dal is None \
+   or not re.match('^' + fpv + '$', dal) \
+   or float(dal) < 1.0 \
+   or float(dal) > 100.00:
+    warn("Suspicious deviceAbsorptionLux:", dal)
+
+# mic_gain is 8 floating point values separated by commas,
+# enclosed in square brackets.
+# Ex. "[-0.4056,0.2780,0.1743,0.1110,0.3240,0.3477,-0.0819,0.3959]"
+mg = get("mic_gain")
+if mg is None or not re.match('^\[' + fpv + '(,' + fpv + '){7}\]$', mg):
+    warn("Suspicious mic_gain:", mg)
+
+if not fixes:
+    # Validation successful.
+    sys.exit()
+
+if brief:
+    sys.exit(1)
+
+print """
+To set manufacturing data:
+
+  mount -oremount,rw /persist"""
+for fix in fixes:
+    print "  mfgdata", fix
+print """\
+  mount -oremount,ro /persist
+
+See also: https://wiki.bose.com/display/BC/Riviera+Manufacturing+Data+Information
+"""
+sys.exit(1)

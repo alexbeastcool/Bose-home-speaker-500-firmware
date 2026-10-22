@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<VfeConfigMsg product="Eddie" enableFrontDoor="true" lowPowerTimeout="1100" >
+  <aecConf num_mics="8" num_refs="2" num_control="1" num_comms="1" lib="./VfeElementLibs/AecElement/libVfeAecAndComms.so">
+    <threadCfg affinity="2" priority="49" />
+  </aecConf>
+  <alsaConf deviceName="hw:0,1" sampleRate="16000" periodSize="192" bufferSize="1536" numChannels="8" />
+  <timeAlignConf num_secondary_channels="3" num_sync_frames="12" timing_tolerance="2000" primary_buffer_size="1024000" secondary_buffer_size="1024000" >
+    <threadCfg affinity="2" priority="50" />
+  </timeAlignConf>
+  <meterConf num_channels_in="9" num_channels_out="9" mic_sensitivity="-29" lib="./libVfeMeteringElement.so" >
+    <threadCfg affinity="4" priority="48" />
+  </meterConf>
+  <vpaConfig wuwId="1" vpaName="Alexa" >
+    <elementCfg name="BeamformerNf" 
+                pathToLib="/opt/Bose/bin/VfeElementLibs/Beamformer/libVfeBeamformerNf.so"
+                createFuncSymbol="create_beam_former"
+                pathToConfig="/opt/Bose/etc/VfeElementCfgs/Beamformer/BeamformerConfig-nf.xml" />
+    <elementCfg name="AmazonWuw"
+                pathToLib="/opt/Bose/bin/VfeElementLibs/WuwElement/libAmazonWuw.so"
+                createFuncSymbol="create_amazon_wuw"
+                pathToConfig="/opt/Bose/etc/VfeElementCfgs/WuwElement/AmazonWuwConfig-nf.xml" />
+  </vpaConfig>
+  <vpaConfig wuwId="2" vpaName="Google" >
+    <elementCfg name="BeamformerRaw"
+                pathToLib="/opt/Bose/bin/VfeElementLibs/Beamformer/libVfeBeamformerRaw.so"
+                createFuncSymbol="create_beam_former"
+                pathToConfig="/opt/Bose/etc/VfeElementCfgs/Beamformer/BeamformerConfig-raw.xml" />
+    <elementCfg name="GoogleHotWord"
+                pathToLib="/opt/Bose/bin/VfeElementLibs/WuwElement/libGoogleHotWord.so"
+                createFuncSymbol="create_google_wuw"
+                pathToConfig="/opt/Bose/etc/VfeElementCfgs/WuwElement/GoogleHotWordConfig-raw.xml" />
+  </vpaConfig>
+  <vpaConfig wuwId="3" vpaName="Siri" >
+    <elementCfg name="Beamformer"
+                pathToLib="/opt/Bose/bin/VfeElementLibs/Beamformer/libVfeBeamformerNf.so"
+                createFuncSymbol="create_beam_former"
+                pathToConfig="/opt/Bose/etc/VfeElementCfgs/Beamformer/BeamformerConfig-nf.xml" />
+    <elementCfg name="SiriPtt"
+                pathToLib="/opt/Bose/bin/VfeElementLibs/WuwElement/libSiriPtt.so"
+                createFuncSymbol="create_siri_wuw"
+                pathToConfig="/opt/Bose/etc/VfeElementCfgs/WuwElement/SiriPttConfig-nf.xml" />
+  </vpaConfig>
+  <vpaConfig wuwId="4" vpaName="AlexaComms" >
+    <elementCfg name="AlexaComms"
+                pathToLib="/opt/Bose/bin/VfeElementLibs/WuwElement/libAlexaComms.so"
+                createFuncSymbol="create_alexa_comms"
+                pathToConfig="/opt/Bose/etc/VfeElementCfgs/WuwElement/AlexaComms.xml" />
+  </vpaConfig>
+  <vpaConfig wuwId="5" vpaName="xApp" >
+    <elementCfg name="BeamformerRaw" 
+                pathToLib="/opt/Bose/bin/VfeElementLibs/Beamformer/libVfeBeamformerRaw.so"
+                createFuncSymbol="create_beam_former"
+                pathToConfig="/opt/Bose/etc/VfeElementCfgs/Beamformer/BeamformerConfig-raw.xml" />
+    <elementCfg name="xAppAlexa"
+                pathToLib="/opt/Bose/bin/VfeElementLibs/WuwElement/libxAppAlexa.so"
+                createFuncSymbol="create_xApp_wuw"
+                pathToConfig="/opt/Bose/etc/VfeElementCfgs/WuwElement/xAppAlexaConfig-raw.xml" />
+  </vpaConfig>
+</VfeConfigMsg>

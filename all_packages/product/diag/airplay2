@@ -1,0 +1,81 @@
+#!/usr/bin/python2.7
+#
+# AirPlay Information
+#
+# For example, for the URL
+#
+#   http://203.0.113.1/diag/airplay2
+#
+# This invocation shows the airplay auth-chip information and outputs a
+# simple HTTP response, "OK".
+#
+import os
+import sys
+import re
+import subprocess
+import hashlib
+
+def html_escape(text):
+    return re.sub(r'[<&>]', lambda x: { "<": "&lt;",
+                                        "&": "&amp;",
+                                        ">": "&gt;" }[x.group(0)], text)
+
+if len(sys.argv) == 1:
+    print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/html\r
+Cache-Control: no-cache\r
+\r
+<html>
+<head>
+<title>AirPlay2</title>
+<style type="text/css">
+ body {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+ }
+ hr {
+   border: 1px solid blue;
+   color: #fff;
+   background-color: #fff;
+   height: 1px;
+   width: 100%;
+ }
+ div.box {
+   background-color: lightgrey;
+   border: thin dotted;
+   padding: 1em;
+   margin: 1em;
+ }
+ td.showimg {
+   background-color: lightgrey;
+   padding: 8px;
+   border-style: dotted;
+   border-width: 1px;
+ }
+ .hilite {
+   background-color: yellow;
+ }
+</style>
+<script>
+</script>
+</head>
+<body>
+<h1>AirPlay2</h1>
+<hr>
+"""
+    print "<div class='box'>"
+    ph = subprocess.Popen("tap-command airplay2 auth".split(),
+                      stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    print "<table>"
+    for line in ph.stdout:
+        print "<tr><td>", html_escape(line), "</td></tr>"
+    print "</table>"
+    print "</div>"
+    print """
+<hr>
+<button onclick="location.href='/diag'">Done</button>
+</body>
+</html>
+"""
+    sys.exit()
+

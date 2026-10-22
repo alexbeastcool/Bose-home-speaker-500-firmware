@@ -1,0 +1,2448 @@
+.bose-tile-art-panel {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-color: transparent;
+    max-height: 320px;
+    max-width: 240px;
+    width: 100%;
+    top: 0;
+}
+
+.bose-tile-art-panel__img {
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: scale-down;
+}
+
+.bose-tile-art-panel.now-playing,
+.bose-tile-art-panel.now-playing-aux {
+    height: 240px;
+    max-height: 240px;
+}
+
+.bose-tile-art-panel.now-playing-buffering,
+.bose-tile-art-panel.now-playing-buffering-unknown-src {
+    height: 240px;
+    width: 240px;
+}
+
+/* Regular Buffering Image (e.g. Spotify logo) */
+.bose-tile-art-panel.now-playing-buffering .bose-tile-art-panel__img {
+    margin-top: 70px;
+    max-height: 43px;
+    max-width: 130px;
+}
+
+/* Unknown Source Buffering Image (i.e. Musical Note symbol) */
+.bose-tile-art-panel.now-playing-buffering-unknown-src
+    .bose-tile-art-panel__img {
+    margin-top: 67px;
+    height: 69px;
+    width: 100%;
+}
+
+.bose-tile-art-panel.notification,
+.bose-tile-art-panel.with-title,
+.bose-tile-art-panel.now-playing-aux .bose-tile-art-panel__img,
+.tile.now-playing-chromecast .bose-tile-art-panel.default-image {
+    margin-top: 42px;
+}
+
+.bose-tile-art-panel.notification .bose-tile-art-panel__img,
+.bose-tile-art-panel.with-title .bose-tile-art-panel__img,
+.bose-tile-art-panel.now-playing-aux .bose-tile-art-panel__img,
+.tile.now-playing-chromecast
+    .bose-tile-art-panel.default-image
+    .bose-tile-art-panel__img {
+    height: 94px;
+    width: 94px;
+}
+
+.bose-tile-art-panel.volume {
+    margin-top: 70px;
+}
+
+.bose-tile-art-panel.volume .bose-tile-art-panel__img {
+    max-height: 112px;
+    max-width: 112px;
+}
+
+/** FullScreen **/
+
+.bose-tile-art-panel.notification.fullscreen-image,
+.bose-tile-art-panel.with-title.fullscreen-image,
+.bose-tile-art-panel.volume.fullscreen-image {
+    margin-top: 0;
+}
+
+.bose-tile-art-panel.notification.fullscreen-image .bose-tile-art-panel__img,
+.bose-tile-art-panel.with-title.fullscreen-image .bose-tile-art-panel__img,
+.bose-tile-art-panel.volume.fullscreen-image .bose-tile-art-panel__img {
+    max-height: 320px;
+    max-width: 240px;
+}
+
+.bose-tile-art-panel.fullscreen-image {
+    width: 100%;
+    height: 100%;
+}
+
+.tile.now-playing-chromecast
+    .bose-tile-art-panel.default-image
+    + .bose-tile-text-panel.art-tile-title {
+    width: 150px;
+    margin: 0 45px 70px 45px;
+}
+
+.tile.now-playing-chromecast
+    .bose-tile-art-panel.default-image
+    + .bose-tile-text-panel.art-tile-title.no-footer {
+    margin-bottom: 150px;
+}
+
+.tile.now-playing-chromecast
+    .bose-tile-art-panel.default-image
+    + .bose-tile-text-panel.art-tile-title
+    .bose-tile-text-panel__text {
+    white-space: normal;
+    overflow: visible;
+    line-height: 25px;
+}
+
+.tile.now-playing-chromecast
+    .bose-tile-art-panel.now-playing:not(.default-image)
+    + .bose-tile-text-panel.art-tile-title {
+    display: none;
+}
+
+.tile.now-playing-chromecast
+    .bose-tile-art-panel.now-playing:not(.default-image) {
+    margin-top: 0px;
+}
+
+.tile.now-playing-chromecast
+    .bose-tile-art-panel.now-playing:not(.default-image)
+    .bose-tile-art-panel__img {
+    object-fit: contain;
+    width: 320px;
+    height: 240px;
+}
+
+.tile.now-playing-chromecast
+    .bose-tile-art-panel.now-playing-buffering
+    .bose-tile-art-panel__img {
+    margin-top: 0px;
+    max-height: 94px;
+}
+
+.bose-tile-header {
+    margin: 1rem 0.5rem;
+    font-family: Avenir, Helvetica, sans-serif;
+    font-size: 1.5rem;
+    line-height: 1.3;
+    color: inherit;
+    text-align: center;
+}
+
+.bose-tile-msp-logo {
+    display: -webkit-flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-self: center;
+    flex-direction: row;
+    width: 100%;
+}
+
+.bose-tile-msp-logo * {
+    align-self: center;
+}
+
+.bose-tile-msp-logo__text-and-icon {
+    height: inherit;
+    width: 20px;
+    height: 20px;
+    padding-right: 0.6rem;
+}
+
+.bose-tile-msp-logo__banner {
+    max-width: 90%;
+    max-height: 100%;
+}
+
+/* Art Tile Footer Logo */
+
+.bose-tile-msp-logo.footer-msp-logo {
+    max-width: 100%;
+    max-height: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.bose-tile-msp-logo.footer-msp-logo > h1 {
+    white-space: normal;
+    font-size: 1rem;
+    letter-spacing: 1.8;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.bose-tile-msp-logo.footer-msp-logo img {
+    object-fit: scale-down;
+}
+
+.bose-tile-msp-logo.footer-msp-logo > .bose-tile-msp-logo__banner {
+    max-height: 33px;
+    max-width: 100px;
+}
+
+.bose-tile-text-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    min-height: 54px;
+    min-width: 54px;
+    max-width: 160px;
+    max-height: 160px;
+}
+
+.bose-tile-text-panel__text {
+    font-size: 30px;
+    line-height: 30px;
+    max-width: 95%;
+    max-height: 95%;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* Art Tile */
+
+.bose-tile-text-panel.footer-text {
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.bose-tile-text-panel.footer-text .bose-tile-text-panel__text {
+    /* autoprefixer: ignore next */
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    flex-direction: column;
+    font-size: 18px !important;
+    letter-spacing: 0;
+    line-height: 24px;
+    max-height: 64px;
+    min-width: 0;
+    max-width: 220px;
+    width: 100%;
+}
+
+.tile.withTitle .bose-tile-text-panel.footer-text {
+    display: -webkit-flex;
+    flex-flow: column;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 22rem;
+    margin: 10px;
+    height: 7rem;
+}
+
+.tile.withTitle
+    .bose-fade-wrapper.now-playing-footer
+    .bose-tile-text-panel.footer-text {
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    margin: 0;
+}
+
+.bose-tile-text-panel.art-tile-title {
+    min-width: 0px;
+    min-height: 0px;
+    max-width: 220px;
+    width: 220px;
+    height: 30px;
+    margin: 0 10px 70px;
+}
+
+.bose-tile-text-panel.art-tile-title .bose-tile-text-panel__text {
+    display: block;
+    max-width: 100%;
+    font-family: Gotham;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 2.8px;
+    -webkit-line-clamp: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #ffffff;
+}
+
+.bose-tile-text-panel.art-tile-title.no-footer {
+    margin-bottom: 150px;
+}
+
+/* Now Playing Buffering and Aux footer */
+
+.bose-tile-text-panel.footer-text-buffering,
+.bose-tile-text-panel.footer-text-aux {
+    display: -webkit-flex;
+    flex-flow: column;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 220px;
+    height: 80px;
+}
+
+.footer-sub-text {
+    width: 100%;
+    max-width: 100%;
+    padding-bottom: 23px;
+    min-height: 0;
+    margin-top: -30px;
+}
+
+.footer-sub-text .bose-tile-text-panel__text {
+    font-size: 17px;
+}
+
+.tile.withTitle.withSubTitle .bose-tile-text-panel.art-tile-title {
+    margin-bottom: 47px;
+}
+
+.bose-tile-text-panel.marquee .bose-tile-text-panel__text {
+    position: absolute;
+    left: 0;
+    -webkit-line-clamp: 1;
+    max-width: none;
+    min-width: 100%;
+    width: auto;
+    white-space: nowrap;
+    overflow: show;
+    -webkit-backface-visibility: hidden;
+
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.bose-tile-text-panel.marquee.post-marquee .bose-tile-text-panel__text {
+    left: auto !important;
+    right: 0 !important;
+}
+
+.bose-tile-text-panel.marquee.marquee-animation {
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+}
+
+@font-face {
+    font-family: 'bose';
+    src: url(../fonts/bose.ttf) format('truetype');
+}
+
+.bose-tile-icon-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    min-height: 54px;
+    min-width: 54px;
+    max-width: 160px;
+    max-height: 160px;
+}
+
+.bose-tile-icon-panel__text {
+    font-family: bose;
+    height: 54px;
+    width: 54px;
+    font-size: 54px;
+    line-height: 54px;
+}
+
+.bose-tile-instructional-text-panel {
+    width: calc(100% - 20px * 2);
+    min-height: 70px;
+    padding: 35px 20px 10px 20px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+.bose-tile-instructional-text-panel div {
+    display: -webkit-box !important;
+    /* autoprefixer: ignore next */
+    -webkit-box-orient: vertical;
+    height: 100%;
+    min-height: 70px;
+    max-height: 200px;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.33;
+    letter-spacing: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 9;
+}
+
+.bose-volume-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bose-volume-wrapper .bose-tile-art-panel.volume {
+    margin-top: 40px;
+}
+
+.bose-volume-wrapper .progress-container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    height: 0.3rem;
+    width: 100%;
+    margin-top: 17.4rem;
+}
+
+.bose-volume-wrapper .progress-container progress {
+    height: 0.3rem;
+    width: 17rem;
+    -webkit-appearance: none;
+    border-radius: 0.3rem;
+    vertical-align: middle;
+    position: relative;
+}
+
+.bose-volume-wrapper progress::-webkit-progress-value {
+    background-color: rgb(255, 255, 255);
+    border: 0;
+    border-radius: 0.3rem;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 1);
+}
+
+.bose-volume-wrapper progress::-webkit-progress-bar {
+    background-color: #3d3d3d;
+    border: 0;
+    border-radius: 0.3rem;
+    width: 100%;
+}
+
+.bose-volume-wrapper .bose-tile-instructional-text-panel.volume {
+    position: absolute;
+    margin-top: 20rem;
+}
+
+.bose-transition-overlay {
+    height: 32rem;
+    width: 24rem;
+    opacity: 1;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: 0 auto;
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.bose-now-playing-footer-wrapper {
+    display: -webkit-flex;
+    flex-flow: column;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 220px;
+    height: 80px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+:root {
+    --transition-duration: 0.5s;
+    --transparent-opacity: 0.9;
+}
+
+.bose-fade-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.bose-fade-wrapper > * {
+    opacity: 0;
+}
+
+.bose-fade-wrapper .transition {
+    -webkit-transition-property: opacity;
+    -webkit-transition-duration: var(--transition-duration);
+    transition-property: opacity;
+    transition-duration: var(--transition-duration);
+}
+
+.bose-fade-wrapper .opacity-0,
+.bose-fade-wrapper .transition-to-opacity-0 {
+    opacity: 0;
+}
+
+.bose-fade-wrapper .opacity-1,
+.bose-fade-wrapper .transition-to-opacity-1 {
+    opacity: 1;
+}
+
+.bose-fade-wrapper .transparent,
+.bose-fade-wrapper .transition-to-transparent {
+    opacity: var(--transparent-opacity);
+}
+
+.bose-fade-wrapper.now-playing-footer {
+    display: -webkit-flex;
+    flex-flow: column;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 220px;
+    height: 80px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.continuous-cross-fade-wrapper > * {
+    position: absolute;
+}
+
+:root {
+    --linear-fade-initial-transition-duration: 2s;
+}
+
+.bose-fade-wrapper .linear-fade-initial-transition {
+    transition-property: opacity;
+    transition-duration: var(--linear-fade-initial-transition-duration);
+    transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+    -webkit-transition-property: opacity;
+    -webkit-transition-duration: var(--linear-fade-initial-transition-duration);
+    -webkit-transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.footer-cross-fade-wrapper > * {
+    position: absolute;
+}
+
+.triggered-cross-fade-wrapper > * {
+    position: absolute;
+}
+
+.tile {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    max-height: 32rem;
+    max-width: 24rem;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+
+.tile .bose-tile-header {
+    font-size: 1.2rem;
+    letter-spacing: 0.28rem;
+    text-align: center;
+}
+
+.tile.bigArtwork {
+    display: -webkit-flex;
+    flex-flow: column;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-end;
+}
+
+.tile.withTitle {
+    display: -webkit-flex;
+    flex-flow: column;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-end;
+}
+
+@font-face {
+    font-family: 'BoseNumbers';
+    src: url(../fonts/BoseNumbers.otf);
+}
+
+.clock-tile {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    letter-spacing: 0;
+}
+
+.clock-tile--face {
+    display: flex;
+    flex-direction: column;
+}
+
+.clock-tile--time {
+    display: flex;
+    flex-direction: row;
+    font-family: 'BoseNumbers';
+    font-size: 64px;
+    height: 40px;
+    max-width: 180px;
+    min-width: 140px;
+    line-height: 40px;
+    margin-top: 73px;
+    justify-items: center;
+    font-variant-numeric: tabular-nums;
+    -moz-font-feature-settings: 'tnum';
+    -webkit-font-feature-settings: 'tnum';
+    font-feature-settings: 'tnum';
+}
+
+.clock-tile .hour,
+.clock-tile .minute {
+    letter-spacing: 0px;
+}
+
+.clock-tile .hour {
+    max-width: 75px;
+    min-width: 20px;
+    text-align: center;
+}
+
+.clock-tile .minute {
+    width: 75px;
+    text-align: center;
+}
+
+.clock-tile .separator {
+    width: 30px;
+    font-size: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-family: 'BoseNumbers';
+}
+
+.clock-tile--meridiem {
+    font-size: 16px;
+    height: 16px;
+    line-height: 16px;
+    letter-spacing: 2px;
+    margin-top: 20px;
+    width: 40px;
+    align-self: flex-end;
+    text-align: right;
+    text-transform: uppercase;
+}
+
+.tile .bose-tile-icon-panel {
+    font-size: 64px;
+    line-height: 64px;
+    margin: 3.3rem auto 0 auto;
+    text-align: center;
+}
+
+@font-face {
+    font-family: 'BoseNumbers';
+    src: url(../fonts/BoseNumbers.otf);
+}
+
+.number-tile {
+    display: flex;
+    flex-direction: column;
+}
+
+.number-tile .bose-number-tile-num-container {
+    margin: 0;
+    height: 136px;
+    width: 240px;
+    align-self: flex-start;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.number-tile .bose-number-tile-num {
+    font-size: 64px;
+    height: 94px;
+    width: 94px;
+    line-height: 94px;
+    margin-top: 42px;
+    font-family: 'BoseNumbers';
+    text-align: center;
+}
+
+.number-tile .bose-number-tile-art {
+    margin: auto;
+    width: 22rem;
+    text-align: center;
+}
+
+.number-tile .bose-number-tile-art img {
+    max-width: 118px;
+}
+
+.number-tile .bose-tile-text-panel {
+    display: -webkit-flex;
+    flex-flow: column;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 220px;
+    height: 90px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/** Countdown Styles **/
+
+.number-tile.countdown .bose-number-tile-num {
+    font-size: 47px;
+}
+
+/** Preset Styles **/
+
+.number-tile.preset .bose-tile-instructional-text-panel {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.number-tile.preset .bose-tile-instructional-text-panel div {
+    min-height: auto;
+}
+
+.number-tile.preset .bose-number-tile-art {
+    height: 90px;
+    width: 240px;
+
+    display: -webkit-flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.number-tile.preset .bose-tile-msp-logo {
+    margin-top: 94px;
+    align-self: flex-end;
+}
+
+.number-tile.preset .bose-number-tile-art img {
+    height: 30px;
+    object-fit: scale-down;
+    align-self: center;
+}
+
+.number-tile.preset .bose-number-tile-num {
+    font-size: 47px;
+    text-align: center;
+    align-content: center;
+    font-weight: normal;
+}
+
+/** Number Tile NowPlaying Styles, including FooterFadeWrapper **/
+
+.number-tile .now-playing-footer {
+    position: absolute;
+    bottom: 0;
+}
+
+.number-tile .now-playing-footer .bose-tile-text-panel {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.number-tile .now-playing-footer .bose-tile-msp-logo {
+    margin-top: auto;
+    align-self: auto;
+}
+
+.number-tile .now-playing-footer .bose-number-tile-art {
+    height: 100%;
+}
+
+.tile.notification {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+
+.tile.notification .bose-tile-instructional-text-panel {
+    max-height: 142px;
+    min-height: 142px;
+    height: 142px;
+}
+
+.tile.notification.rotating .bose-cross-fade-wrapper {
+    position: relative;
+    display: block;
+    width: 240px;
+    height: unset;
+    margin: 10px 0;
+}
+
+.tile.notification.rotating
+    .bose-cross-fade-wrapper
+    .bose-tile-instructional-text-panel {
+    width: 220px;
+}
+
+.tile.notification.rotating .bose-tile-instructional-text-panel {
+    height: unset;
+    max-height: 180px;
+    align-items: flex-start;
+}
+
+.notification.number-tile .bose-number-tile-num-container {
+    margin: 0;
+    height: 11.3rem;
+    width: 11.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification.number-tile .bose-number-tile-num {
+    font-size: 100px;
+    line-height: 1;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 2.1px;
+}
+
+/** Countdown Styles **/
+.notification.number-tile.countdown .bose-number-tile-num-container {
+    height: 8rem;
+    width: 8rem;
+}
+
+.notification.number-tile.countdown .bose-number-tile-num {
+    font-size: 54px;
+    font-weight: normal;
+}
+
+/** Preset Styles **/
+
+.notification.number-tile.preset .bose-number-tile-num-container {
+    height: 8rem;
+    width: 8rem;
+}
+
+.notification.number-tile.preset .bose-number-tile-num {
+    font-size: 54px;
+    font-weight: normal;
+}
+
+.tile-wrapper {
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    display: block;
+}
+
+.tile-wrapper .hideAllImages img {
+    display: none !important;
+}
+
+.bose-screen-overlay {
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: -webkit-flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.bose-screen-overlay img {
+    background-color: rgba(256, 256, 256, 0.7);
+    border-radius: 20px;
+    margin: auto;
+    margin-top: 70px;
+    height: 128px;
+    width: 128px;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+@font-face {
+    font-family: 'bose';
+    src: url(../fonts/bose.ttf);
+    font-weight: normal;
+    font-style: normal;
+}
+.bose {
+    display: inline-block;
+    font-family: 'bose';
+    font-size: 40px;
+}
+
+.thumbU-icon::before {
+    content: '\e147';
+}
+
+.thumbD-icon::before {
+    content: '\e148';
+}
+
+.loop-icon::before {
+    content: '\e11b';
+}
+
+.shuffle-icon::before {
+    content: '\e11d';
+}
+
+.favoriteP-icon::before {
+    content: '\e1b8';
+}
+
+.favoriteH-icon::before {
+    content: '\e155';
+}
+
+@font-face {
+    font-family: 'bose';
+    src: url(../fonts/bose.ttf);
+    font-weight: normal;
+    font-style: normal;
+}
+.bose {
+    display: inline-block;
+    font-family: 'bose';
+    font-size: 28px;
+}
+.play-icon::before {
+    content: '\e102';
+}
+
+.pause-icon::before {
+    content: '\e104';
+}
+
+.stop-icon::before {
+    content: '\e112';
+}
+
+.back-icon::before {
+    content: '\e108';
+}
+
+.skip-icon::before {
+    content: '\e10e';
+}
+
+.tuneIn.clickable {
+    cursor: pointer;
+}
+
+.tuneIn.nonclickable {
+    cursor: auto;
+}
+
+/* Ribbon Item */
+
+.tuneIn.ribbonItem {
+    display: inline-block;
+    margin-right: 7px;
+    margin-top: 2px;
+    width: 200px;
+    height: 250px;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 1px #cccccc;
+}
+
+.tuneIn.ribbonItem .item-text {
+    width: 100%;
+    height: 50px;
+    float: left;
+}
+
+.tuneIn.ribbonItem .item-text .item-name {
+    font-size: 1rem;
+    width: calc(100% - 10px);
+    margin-left: 5px;
+    margin-right: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.tuneIn.ribbonItem .item-text .item-subtitle {
+    font-size: 0.8rem;
+    width: calc(100% - 10px);
+    margin-left: 5px;
+    margin-right: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.tuneIn.ribbonItem .item-image {
+    height: 200px;
+    width: 100%;
+    float: left;
+}
+
+.tuneIn.ribbonItem .item-image img {
+    max-height: 200px;
+    width: 200px;
+}
+
+/* Responsive Grid Item */
+
+.tuneIn.responsiveGridItem {
+    display: inline-block;
+    width: 12.3rem;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 1px #cccccc;
+    margin: 0 1% 21px 1%;
+}
+
+.tuneIn.responsiveGridItem .item-image {
+    width: 12.3rem;
+    height: 12.3rem;
+}
+
+.tuneIn.responsiveGridItem .item-image img {
+    width: 100%;
+    height: 100%;
+}
+
+.tuneIn.responsiveGridItem .item-text {
+    height: 3.5rem;
+    padding: 0.5rem 2rem 0 0.5rem;
+}
+
+.tuneIn.responsiveGridItem .item-text .item-name {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.tuneIn.responsiveGridItem .item-text .item-subtitle {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+
+/* List Item */
+
+.tuneIn.listItem {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    min-height: 3.5rem;
+    padding: 0.5rem 0 0.5rem 1rem;
+}
+
+.tuneIn.listItem:hover {
+    background-color: #ffffff;
+}
+
+.tuneIn.listItem .item-image {
+    float: left;
+    height: 3.875rem;
+    min-height: 3.875rem;
+    width: 3.875rem;
+    min-width: 3.875rem;
+    margin-right: 1rem;
+}
+
+.tuneIn.listItem .item-image img {
+    height: 100%;
+}
+
+.tuneIn.listItem .item-text {
+    float: left;
+    width: calc(100% - 5.875rem);
+}
+
+.tuneIn.listItem .item-text .item-name {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: bold;
+    width: 100%;
+}
+
+.tuneIn.listItem .item-text .item-subtitle {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 1rem;
+    width: 100%;
+}
+
+/* Short List Item */
+
+.tuneIn.shortListItem {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    min-height: 3.5rem;
+    padding: 0.5rem 0 0.5rem 1rem;
+}
+
+.tuneIn.shortListItem:hover {
+    background-color: #ffffff;
+}
+
+.tuneIn.shortListItem .item-image {
+    float: left;
+    height: 3.875rem;
+    min-height: 3.875rem;
+    width: 3.875rem;
+    min-width: 3.875rem;
+    margin-right: 1rem;
+}
+
+.tuneIn.shortListItem .item-image img {
+    height: 100%;
+}
+
+.tuneIn.shortListItem .item-text {
+    float: left;
+    width: calc(100% - 5.875rem);
+}
+
+.tuneIn.shortListItem .item-text .item-name {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: bold;
+    width: 100%;
+}
+
+.tuneIn.shortListItem .item-text .item-subtitle {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 1rem;
+    width: 100%;
+}
+
+/* Hero Item */
+
+.tuneIn.heroItem {
+    width: 100%;
+    height: 100%;
+}
+
+.tuneIn.heroItem .item-image {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    padding: 3rem 0 0 0;
+}
+
+.tuneIn.heroItem .item-image img {
+    width: 15rem;
+    min-width: 15rem;
+    height: 15rem;
+    min-height: 15rem;
+}
+
+.tuneIn.heroItem .item-text {
+    display: flex;
+    justify-content: center;
+}
+
+.tuneIn.heroItem .item-text .item-name {
+    font-size: 1rem;
+    color: #ffffff;
+    padding: 2rem 0;
+}
+
+.tuneIn.heroItem .item-text .item-subtitle {
+    display: none;
+}
+
+/* Default Layout Item */
+
+.tuneIn.defaultLayoutItem {
+    width: 100%;
+    height: 80px;
+    padding: 10px 0px 10px 0px;
+}
+
+.tuneIn.defaultLayoutItem:hover {
+    background-color: #ffffff;
+}
+
+.tuneIn.defaultLayoutItem .item-text {
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.tuneIn.defaultLayoutItem .item-text .item-name {
+    float: left;
+    margin-left: 1rem;
+}
+
+.tuneIn.defaultLayoutItem .item-image {
+    float: left;
+    height: 60px;
+    width: 60px;
+    background-color: #ffffff;
+    margin-left: 1rem;
+}
+
+.tuneIn.defaultLayoutItem .item-image img {
+    height: 100%;
+}
+
+.bose-item.clickable {
+    cursor: pointer;
+}
+
+.bose-item.nonclickable {
+    cursor: auto;
+}
+
+/* Ribbon Item */
+
+.bose-item.ribbonItem {
+    display: inline-block;
+    margin-right: 7px;
+    margin-top: 2px;
+    width: 200px;
+    height: 250px;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 1px #cccccc;
+}
+
+.bose-item.ribbonItem .item-text {
+    width: 100%;
+    height: 50px;
+    float: left;
+}
+
+.bose-item.ribbonItem .item-text .item-name {
+    font-size: 1rem;
+    width: calc(100% - 10px);
+    margin-left: 5px;
+    margin-right: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.bose-item.ribbonItem .item-text .item-subtitle {
+    font-size: 0.8rem;
+    width: calc(100% - 10px);
+    margin-left: 5px;
+    margin-right: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.bose-item.ribbonItem .item-image {
+    height: 200px;
+    width: 100%;
+    float: left;
+}
+
+.bose-item.ribbonItem .item-image img {
+    max-height: 200px;
+    width: 200px;
+}
+
+/* Responsive Grid Item */
+
+.bose-item.responsiveGridItem {
+    display: inline-block;
+    width: 12.3rem;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 1px #cccccc;
+    margin: 0 1% 21px 1%;
+}
+
+.bose-item.responsiveGridItem .item-image {
+    width: 12.3rem;
+    height: 12.3rem;
+}
+
+.bose-item.responsiveGridItem .item-image img {
+    width: 100%;
+    height: 100%;
+}
+
+.bose-item.responsiveGridItem .item-text {
+    height: 3.5rem;
+    padding: 0.5rem 2rem 0 0.5rem;
+}
+
+.bose-item.responsiveGridItem .item-text .item-name {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.bose-item.responsiveGridItem .item-text .item-subtitle {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+
+/* List Item */
+
+.bose-item.listItem {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    min-height: 3.5rem;
+    padding: 0.5rem 0 0.5rem 1rem;
+}
+
+.bose-item.listItem:hover {
+    background-color: #ffffff;
+}
+
+.bose-item.listItem .item-image {
+    float: left;
+    height: 3.875rem;
+    min-height: 3.875rem;
+    width: 3.875rem;
+    min-width: 3.875rem;
+    margin-right: 1rem;
+}
+
+.bose-item.listItem .item-image img {
+    height: 100%;
+}
+
+.bose-item.listItem .item-text {
+    float: left;
+    width: calc(100% - 5.875rem);
+}
+
+.bose-item.listItem .item-text .item-name {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: bold;
+    width: 100%;
+}
+
+.bose-item.listItem .item-text .item-subtitle {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 1rem;
+    width: 100%;
+}
+
+/* Short List Item */
+
+.bose-item.shortListItem {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    min-height: 3.5rem;
+    padding: 0.5rem 0 0.5rem 1rem;
+}
+
+.bose-item.shortListItem:hover {
+    background-color: #ffffff;
+}
+
+.bose-item.shortListItem .item-image {
+    float: left;
+    height: 3.875rem;
+    min-height: 3.875rem;
+    width: 3.875rem;
+    min-width: 3.875rem;
+    margin-right: 1rem;
+}
+
+.bose-item.shortListItem .item-image img {
+    height: 100%;
+}
+
+.bose-item.shortListItem .item-text {
+    float: left;
+    width: calc(100% - 5.875rem);
+}
+
+.bose-item.shortListItem .item-text .item-name {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: bold;
+    width: 100%;
+}
+
+.bose-item.shortListItem .item-text .item-subtitle {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 1rem;
+    width: 100%;
+}
+
+/* Hero Item */
+
+.bose-item.heroItem {
+    width: 100%;
+    height: 100%;
+}
+
+.bose-item.heroItem .item-image {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    padding: 3rem 0 0 0;
+}
+
+.bose-item.heroItem .item-image img {
+    width: 15rem;
+    min-width: 15rem;
+    height: 15rem;
+    min-height: 15rem;
+}
+
+.bose-item.heroItem .item-text {
+    display: flex;
+    justify-content: center;
+}
+
+.bose-item.heroItem .item-text .item-name {
+    font-size: 1rem;
+    color: #ffffff;
+    padding: 2rem 0;
+}
+
+.bose-item.heroItem .item-text .item-subtitle {
+    display: none;
+}
+
+/* Default Layout Item */
+
+.bose-item.defaultLayoutItem {
+    width: 100%;
+    height: 80px;
+    padding: 10px 0px 10px 0px;
+}
+
+.bose-item.defaultLayoutItem:hover {
+    background-color: #ffffff;
+}
+
+.bose-item.defaultLayoutItem .item-text {
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.bose-item.defaultLayoutItem .item-text .item-name {
+    float: left;
+    margin-left: 1rem;
+}
+
+.bose-item.defaultLayoutItem .item-image {
+    float: left;
+    height: 60px;
+    width: 60px;
+    background-color: #ffffff;
+    margin-left: 1rem;
+}
+
+.bose-item.defaultLayoutItem .item-image img {
+    height: 100%;
+}
+
+.NAS.listItem {
+    width: 100%;
+    cursor: pointer;
+    padding: 10px 0px 10px 0px;
+    position: relative;
+}
+
+.NAS.listItem h1 {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.settings.buttonItem {
+    max-width: 40rem;
+    margin: 0px auto 0px auto;
+}
+
+.settings.buttonItem .itemContent {
+    padding: 1rem 0px 1rem 1rem;
+}
+
+.settings.buttonItem .itemContent button {
+    cursor: pointer;
+}
+
+.settings.navigationItem {
+    max-width: 40rem;
+    margin: 0px auto 0px auto;
+    cursor: pointer;
+}
+
+.settings.navigationItem:hover {
+    background-color: #ffffff;
+}
+
+.settings.navigationItem .itemContent {
+    padding: 1rem 0px 1rem 1rem;
+}
+
+.settings.navigationItem p {
+    font-size: 1rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.settings.textInputItem {
+    max-width: 40rem;
+    margin: 0px auto 0px auto;
+}
+
+.settings.textInputItem .itemContent {
+    padding: 1rem 0px 1rem 1rem;
+}
+
+.settings.textItem {
+    max-width: 40rem;
+    margin: 0px auto 0px auto;
+}
+
+.settings.textItem .itemContent {
+    padding: 1rem 0px 1rem 1rem;
+}
+
+.settings.textItem .itemContent h1 {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.settings.textItem .itemContent p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.sourcelist-item {
+    width: 100%;
+    height: 3.75rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+    cursor: pointer;
+}
+
+.sourcelist-item:hover {
+    background-color: #f0f0f0;
+}
+
+.sourcelist-item img {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    left: calc(calc(3.75rem - 32px) / 2);
+    width: 32px;
+}
+
+.sourcelist-item .source-name {
+    position: absolute;
+    left: 3.75rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    font-size: 1.5rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.sourcelist-item.active {
+    border-width: 0;
+    border-left-width: 1rem;
+}
+
+.sourcelist-item.inactive {
+    border-left-width: 0;
+    border-style: none;
+}
+
+.bose-section-header {
+    display: inline-block;
+    margin-left: 1rem;
+}
+
+.bose-section-header.clickable {
+    cursor: pointer;
+}
+
+.bose-section-header.nonclickable {
+    cursor: auto;
+}
+
+.bose-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.bose-overlay.active {
+    display: block;
+}
+
+.bose-overlay.inactive {
+    display: none;
+}
+
+.bose-page-header-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 10%;
+    font-size: 1.5em;
+    font-weight: bold;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.bose-page-header-button.right {
+    margin-left: 90%;
+}
+
+.bose-page-header-button.left {
+    margin-left: 0;
+}
+
+.bose-page-header-button:hover {
+    background-color: #f0f0f0;
+}
+
+.bose-page-header-title {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 80%;
+    left: 10%;
+}
+
+.bose-page-header-title .title-image {
+    max-height: 40px;
+    margin-right: 10px;
+    float: left;
+}
+
+.bose-page-header-title .title-text {
+    float: left;
+}
+
+.bose-page-header {
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.bose-settings-list {
+    list-style: none;
+    padding-top: 1rem;
+}
+
+.bose-search-bar {
+    float: left;
+    clear: both;
+    width: calc(100% - 2rem);
+    margin: 1rem 0px 0px 1rem;
+}
+
+.bose-search-bar input {
+    width: 90%;
+    height: 50px;
+}
+
+.bose-search-bar button {
+    width: 10%;
+    height: 50px;
+    margin-left: 0px;
+}
+
+.bose-search-bar button:hover {
+    box-shadow: 0 0 0.3em 0.03em black;
+}
+
+.bose-navigation-section {
+    float: left;
+    clear: both;
+    width: 100%;
+    margin: 1rem 0px 1rem 0px;
+}
+
+.bose-navigation-section .defaultLayout {
+    list-style: none;
+}
+
+.bose-navigation-section .ribbon {
+    overflow: scroll;
+    overflow-y: hidden;
+    list-style: none;
+    white-space: nowrap;
+    height: 268px;
+    padding: 0px 1rem 0px 1rem;
+}
+
+.bose-navigation-section .responsiveGrid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    flex-direction: row;
+    width: 100%;
+    list-style: none;
+}
+
+.bose-navigation-section .hero {
+    list-style: none;
+    white-space: nowrap;
+    background-color: #202020;
+    margin-top: -1rem;
+    height: 375px;
+}
+
+.bose-navigation-section .list {
+    list-style: none;
+}
+
+.bose-navigation-section .shortList {
+    list-style: none;
+}
+
+.page {
+    padding-top: 60px;
+}
+
+.bose-page {
+    float: left;
+    width: 100%;
+    height: 100vh;
+    overflow-x: none;
+    overflow-y: scroll;
+}
+
+.bose-page-default h1 {
+    margin: 1rem;
+}
+
+.bose-page-loading {
+    float: left;
+    width: 100%;
+    height: calc(100vh - 6rem);
+    overflow-x: none;
+    overflow-y: none;
+}
+
+.bose-page-loading h1 {
+    text-align: center;
+    margin-top: calc(50vh - 60px);
+}
+
+.bose-page-invalid-search h1 {
+    margin: 1rem 0px 0px 1rem;
+}
+
+.bose-page-navigation.classic {
+    float: left;
+    width: 100%;
+    height: calc(100vh - 6rem);
+    overflow-x: none;
+    overflow-y: scroll;
+}
+
+.login-content {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.login-title {
+    margin-top: 5rem;
+    font-size: 2rem;
+}
+
+.login-buttons {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    top: calc(100vh - 10rem);
+}
+
+.login-button {
+    float: left;
+    clear: both;
+    width: 10rem;
+    height: 3rem;
+    margin: 1rem 0;
+    cursor: pointer;
+}
+
+.login-gigya-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.login-gigya-container.active {
+    display: block;
+}
+
+.login-gigya-container.inactive {
+    display: none;
+}
+
+.gigya-frame {
+    width: 100%;
+    height: 100%;
+}
+
+.bose-loading-overlay {
+    background-color: #f8f8f8;
+}
+
+.bose-settings-overlay {
+    background-color: #f8f8f8;
+}
+
+.bose-sourcelist-overlay {
+}
+
+.bose-sourcelist-overlay .bose-source-list {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30rem;
+    height: 100%;
+    padding: 1rem;
+    list-style: none;
+    background-color: #ffffff;
+}
+
+.bose-sourcelist-overlay .bose-source-list hr {
+    width: 100%;
+}
+
+.bose-sourcelist-overlay .blur {
+    position: absolute;
+    top: 0;
+    left: 30rem;
+    width: calc(100% - 30rem);
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.bose-login-overlay {
+    background-color: #f8f8f8;
+}
+
+#nowPlayingPanel,
+#overlayPanel,
+#notificationsPanel,
+#volumePanel {
+    position: absolute;
+}
+
+#nowPlayingPanel {
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: auto;
+}
+
+#overlayPanel {
+    z-index: 2;
+}
+
+#notificationsPanel {
+    z-index: 3;
+}
+
+#volumePanel {
+    z-index: 4;
+}
+
+#But > * {
+    z-index: 30000;
+}
+
+h1 {
+    text-align: center;
+}
+
+.hwAccel {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+.animate {
+    transition: all 0.3s cubic-bezier(0, 0.4, 0.4, 1) 0s;
+    -webkit-transition: all 0.3s cubic-bezier(0, 0.4, 0.4, 1) 0s;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+@font-face {
+    font-family: 'BoseTextRegular';
+    src: url(../fonts/BoseText-Regular.otf) format('truetype');
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: 'ArabicBold';
+    src: url(../fonts/UniversNextArabic-Bold.ttf);
+}
+
+@font-face {
+    font-family: 'Arabic';
+    src: url(../fonts/UniversNextArabic-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'ChineseSimplifiedBold';
+    src: url(../fonts/MYingHeiPRC-W7.ttf);
+}
+
+@font-face {
+    font-family: 'ChineseSimplified';
+    src: url(../fonts/MYingHei_18030-M_C.ttf);
+}
+
+@font-face {
+    font-family: 'ChineseTraditionalBold';
+    src: url(../fonts/MYingHeiHK-W7.ttf);
+}
+
+@font-face {
+    font-family: 'ChineseTraditional';
+    src: url(../fonts/MYingHei_B5HK-M_C.ttf);
+}
+
+@font-face {
+    font-family: 'HebrewBold';
+    src: url(../fonts/HelveticaHebrew-Bold.ttf);
+}
+
+@font-face {
+    font-family: 'Hebrew';
+    src: url(../fonts/HelveticaHebrew-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'HindiBold';
+    src: url(../fonts/NeueFrutigerDevanagari-Bd.ttf);
+}
+
+@font-face {
+    font-family: 'Hindi';
+    src: url(../fonts/NeueFrutigerDevanagari-Rg.ttf);
+}
+
+@font-face {
+    font-family: 'JapaneseBold';
+    src: url(../fonts/MTXc5kp.ttf);
+}
+
+@font-face {
+    font-family: 'Japanese';
+    src: url(../fonts/MTXc3kp.ttf);
+}
+
+@font-face {
+    font-family: 'KoreanBold';
+    src: url(../fonts/YDGothic550.ttf);
+}
+
+@font-face {
+    font-family: 'Korean';
+    src: url(../fonts/YDGothic530.ttf);
+}
+
+@font-face {
+    font-family: 'ThaiBold';
+    src: url(../fonts/NeueFrutigerThaiTrad-Bold.ttf);
+}
+
+@font-face {
+    font-family: 'Thai';
+    src: url(../fonts/NeueFrutigerThaiTrad-Rg.ttf);
+}
+
+@font-face {
+    font-family: 'VietnameseBold';
+    src: url(../fonts/AvenirNext-Bold.ttf);
+}
+
+@font-face {
+    font-family: 'Vietnamese';
+    src: url(../fonts/AvenirNext.ttf);
+}
+
+html {
+    font-size: 10px;
+    font-family: 'BoseTextRegular', sans-serif;
+    color: #fff;
+}
+
+/* BoseTextRegular supported | Latin characters */
+
+html[lang='en'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='cs'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='da'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='de'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='el'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='es'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='fi'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='fr'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='hu'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='it'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='nb'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='nl'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='no'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='pl'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='pt'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='ro'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='ru'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='sl'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='sv'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='tr'] {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+/* BoseTextRegular unsupported | Non-latin characters*/
+
+html[lang='ar'] {
+    font-family: 'Arabic', 'BoseTextRegular', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='ar'] b {
+    font-family: 'ArabicBold', 'BoseTextRegular', 'ChineseSimplifiedBold', 'ChineseTraditionalBold', 'HebrewBold', 'HindiBold',
+        'JapaneseBold', 'KoreanBold', 'ThaiBold', 'VietnameseBold', sans-serif;
+}
+
+html[lang='zh-Hant'] {
+    font-family: 'ChineseTraditional', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='zh-Hant'] b {
+    font-family: 'ChineseTraditionalBold', 'BoseTextRegular', 'ArabicBold', 'ChineseSimplifiedBold', 'HebrewBold', 'HindiBold',
+        'JapaneseBold', 'KoreanBold', 'ThaiBold', 'VietnameseBold', sans-serif;
+}
+
+html[lang='zh-Hans'] {
+    font-family: 'ChineseSimplified', 'BoseTextRegular', 'Arabic', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='zh-Hans'] b {
+    font-family: 'ChineseSimplifiedBold', 'BoseTextRegular', 'ArabicBold', 'ChineseTraditionalBold', 'HebrewBold', 'HindiBold',
+        'JapaneseBold', 'KoreanBold', 'ThaiBold', 'VietnameseBold', sans-serif;
+}
+
+html[lang='he'] {
+    font-family: 'Hebrew', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='he'] b {
+    font-family: 'HebrewBold', 'BoseTextRegular', 'ArabicBold', 'ChineseSimplifiedBold', 'ChineseTraditionalBold', 'HindiBold',
+        'JapaneseBold', 'KoreanBold', 'ThaiBold', 'VietnameseBold', sans-serif;
+}
+
+html[lang='hi'] {
+    font-family: 'Hindi', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='hi'] b {
+    font-family: 'HindiBold', 'BoseTextRegular', 'ArabicBold', 'ChineseSimplifiedBold', 'ChineseTraditionalBold', 'HebrewBold',
+        'JapaneseBold', 'KoreanBold', 'ThaiBold', 'VietnameseBold', sans-serif;
+}
+
+html[lang='ja'] {
+    font-family: 'Japanese', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='ja'] b {
+    font-family: 'JapaneseBold', 'BoseTextRegular', 'ArabicBold', 'ChineseSimplifiedBold', 'ChineseTraditionalBold', 'HebrewBold',
+        'HindiBold', 'KoreanBold', 'ThaiBold', 'VietnameseBold', sans-serif;
+}
+
+html[lang='ko'] {
+    font-family: 'Korean', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+html[lang='ko'] b {
+    font-family: 'KoreanBold', 'BoseTextRegular', 'ArabicBold', 'ChineseSimplifiedBold', 'ChineseTraditionalBold', 'HebrewBold',
+        'HindiBold', 'JapaneseBold', 'ThaiBold', 'VietnameseBold', sans-serif;
+}
+
+html[lang='th'] {
+    font-family: 'Thai', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese',
+        'Korean', 'Vietnamese', sans-serif;
+}
+
+html[lang='th'] b {
+    font-family: 'ThaiBold', 'BoseTextRegular', 'ArabicBold', 'ChineseSimplifiedBold', 'ChineseTraditionalBold', 'HebrewBold',
+        'HindiBold', 'JapaneseBold', 'KoreanBold', 'VietnameseBold', sans-serif;
+}
+
+html[lang='vi'] {
+    font-family: 'Vietnamese', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi',
+        'Japanese', 'Korean', 'Thai', sans-serif;
+}
+
+html[lang='vi'] b {
+    font-family: 'VietnameseBold', 'BoseTextRegular', 'ArabicBold', 'ChineseSimplifiedBold', 'ChineseTraditionalBold',
+        'HebrewBold', 'HindiBold', 'JapaneseBold', 'KoreanBold', 'ThaiBold', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/**
+
+Special styles to display each text panel in rotating language tiles (setup) appropriately
+Using the correct font
+
+**/
+
+.tile .bose-tile-text-panel.footer-text-en,
+.tile .bose-tile-instructional-text-panel.footer-text-en {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-ja,
+.tile .bose-tile-instructional-text-panel.footer-text-ja {
+    font-family: 'Japanese', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-ko,
+.tile .bose-tile-instructional-text-panel.footer-text-ko {
+    font-family: 'Korean', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-th,
+.tile .bose-tile-instructional-text-panel.footer-text-th {
+    font-family: 'Thai', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese',
+        'Korean', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-zh-Hant,
+.tile .bose-tile-instructional-text-panel.footer-text-zh-Hant {
+    font-family: 'ChineseTraditional', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-zh-Hans,
+.tile .bose-tile-instructional-text-panel.footer-text-zh-Hans {
+    font-family: 'ChineseSimplified', 'BoseTextRegular', 'Arabic', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-cs,
+.tile .bose-tile-instructional-text-panel.footer-text-cs {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-da,
+.tile .bose-tile-instructional-text-panel.footer-text-da {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-de,
+.tile .bose-tile-instructional-text-panel.footer-text-de {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-el,
+.tile .bose-tile-instructional-text-panel.footer-text-el {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-fi,
+.tile .bose-tile-instructional-text-panel.footer-text-fi {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-fr,
+.tile .bose-tile-instructional-text-panel.footer-text-fr {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-hu,
+.tile .bose-tile-instructional-text-panel.footer-text-hu {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-it,
+.tile .bose-tile-instructional-text-panel.footer-text-it {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-nb,
+.tile .bose-tile-instructional-text-panel.footer-text-nb {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-nl,
+.tile .bose-tile-instructional-text-panel.footer-text-nl {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-no,
+.tile .bose-tile-instructional-text-panel.footer-text-no {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-pl,
+.tile .bose-tile-instructional-text-panel.footer-text-pl {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-pt,
+.tile .bose-tile-instructional-text-panel.footer-text-pt {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-ro,
+.tile .bose-tile-instructional-text-panel.footer-text-ro {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-ru,
+.tile .bose-tile-instructional-text-panel.footer-text-ru {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-sl,
+.tile .bose-tile-instructional-text-panel.footer-text-sl {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-sv,
+.tile .bose-tile-instructional-text-panel.footer-text-sv {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-tr,
+.tile .bose-tile-instructional-text-panel.footer-text-tr {
+    font-family: 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-ar,
+.tile .bose-tile-instructional-text-panel.footer-text-ar {
+    font-family: 'Arabic', 'BoseTextRegular', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-he,
+.tile .bose-tile-instructional-text-panel.footer-text-he {
+    font-family: 'Hebrew', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hindi', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-hi,
+.tile .bose-tile-instructional-text-panel.footer-text-hi {
+    font-family: 'Hindi', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Japanese', 'Korean',
+        'Thai', 'Vietnamese', sans-serif;
+}
+
+.tile .bose-tile-text-panel.footer-text-vi,
+.tile .bose-tile-instructional-text-panel.footer-text-vi {
+    font-family: 'Vietnamese', 'BoseTextRegular', 'Arabic', 'ChineseSimplified', 'ChineseTraditional', 'Hebrew', 'Hindi',
+        'Japanese', 'Korean', 'Thai', sans-serif;
+}
+
+html,
+body,
+#root,
+.App,
+#panelContainer,
+#panelContainer > * {
+    height: 100%;
+    width: 100%;
+}
+

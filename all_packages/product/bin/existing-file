@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cat /mnt/nv/product-persistence/DFTempFile.txt
+

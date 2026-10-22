@@ -1,0 +1,14 @@
+
+{
+    "communications": {
+        "inputDevice": {
+            "driverName": "INPUTDRIVERNAMEPLACEHOLDER",
+            "deviceName": "INPUTDEVICENAMEPLACEHOLDER"
+        },
+        "outputDevice": {
+            "driverName": "OUTPUTDRIVERNAMEPLACEHOLDER",
+            "deviceName": "OUTPUTDEVICENAMEPLACEHOLDER"
+        },
+        "sipCertificateFilePath": "SIPCERTIFICATEFILEPATHPLACEHOLDER"
+    }
+}

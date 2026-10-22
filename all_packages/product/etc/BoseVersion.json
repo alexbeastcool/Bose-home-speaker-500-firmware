@@ -1,0 +1,15 @@
+{
+  "abbrev_commit": "bee1753",
+  "branch": "swu19-mt",
+  "build_number": "47",
+  "commit": "bee1753dd1a8a2cc8a17a4aff3c1d3fdf7310b42",
+  "host": "ip-10-141-255-142",
+  "localtime": "2026-04-02T12:45:56",
+  "long": "25.0.40.47 jenkins@ip-10-141-255-142 2026-04-02T12:45:56 bee1753",
+  "major": "25",
+  "minor": "0",
+  "patch": "40",
+  "short": "25.0.40",
+  "time": 1775133956,
+  "user": "jenkins"
+}

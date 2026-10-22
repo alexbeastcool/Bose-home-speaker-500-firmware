@@ -1,0 +1,71 @@
+#!/bin/bash
+
+this_script=`basename "$0"`
+
+cd "$(dirname "$0")" || exit
+
+if (( $# > 0 )); then
+    echo >&2 "${0##*/}: unexpected argument '$1'"
+    exit 1
+fi
+
+FB_FILE_SYS_DIR=/sys/devices/soc/7af6000.spi/spi_master/spi6/spi6.1/graphics/fb1
+
+if [ ! -e "/etc/directfbrc" ] || [ ! -e "$FB_FILE_SYS_DIR" ]; then
+	echo "$this_script aborting. SPI device not present."
+	exit 0
+fi
+
+FRONT_BACK_PORCH_MIN=b2,01,01,00,01,01
+FRONT_BACK_PORCH_MAX=b2,FF,FF,00,FF,FF
+FRONT_BACK_PORCH=${FRONT_BACK_PORCH_MAX}
+LINE_ADDRESS_ORDER_TOP_BOTTOM=36,C0
+LINE_ADDRESS_ORDER_BOTTOM_TOP=36,10
+LINE_ADDRESS_ORDER=${LINE_ADDRESS_ORDER_TOP_BOTTOM}
+HARDWARE_ROTATION=36,D0
+SOFTWARE_ROTATION=180
+ETH0_IP_ADDRESS=$(ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
+WLAN0_IP_ADDRESS=$(ifconfig wlan0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
+IP_ADDRESS=${WLAN0_IP_ADDRESS}
+product_version=$(jq -r .short /opt/Bose/etc/BoseVersion.json)
+
+if ! [ "$IP_ADDRESS" ]; then
+    IP_ADDRESS=${ETH0_IP_ADDRESS}
+fi
+
+if ! [ "$IP_ADDRESS" ]; then
+    IP_ADDRESS="NO:NETWORK"
+fi
+
+TE_SPEED_MAX=c6,00 ## 119 Hz
+TE_SPEED_MIN=c6,1f ## 38  Hz
+TE_SPEED_45=c6,19
+TE_SPEED_40=c6,1e
+TE_SPEED=${TE_SPEED_40}
+
+DEBUG=0      ## 7 full debug
+TE_ON_OFF=1  ## 1->on, i->off
+
+if [ ! -e /etc/directfbrc ]; then
+    ln -s /opt/Bose/etc/directfbrc /etc/directfbrc
+fi
+
+echo "================================================ ${0##*/}"
+echo "TE SPEED          : ${TE_SPEED}"
+echo "TE ON/OFF         : ${TE_ON_OFF}"
+echo "ROTATION          : ${SOFTWARE_ROTATION}"
+#echo "ROTATION          : ${HARDWARE_ROTATION}"
+echo "IP ADDRESS        : ${IP_ADDRESS}"
+echo "PRODUCT VERSION   : ${product_version}"
+#echo "DEBUG             : ${DEBUG}"
+#echo "FRONT/BACK PORCH  : ${FRONT_BACK_PORCH}"
+#echo "LINE ADDRESS ORDER: ${LINE_ADDRESS_ORDER}"
+echo "================================================"
+
+echo ${TE_ON_OFF}          > ${FB_FILE_SYS_DIR}/te
+echo ${TE_SPEED}           > ${FB_FILE_SYS_DIR}/send_command
+echo ${SOFTWARE_ROTATION}  > ${FB_FILE_SYS_DIR}/rotation
+#echo ${HARDWARE_ROTATION}  > ${FB_FILE_SYS_DIR}/send_command
+#echo ${DEBUG}              > ${FB_FILE_SYS_DIR}/debug
+#echo ${FRONT_BACK_PORCH}   > ${FB_FILE_SYS_DIR}/send_command
+#echo ${LINE_ADDRESS_ORDER} > ${FB_FILE_SYS_DIR}/send_command

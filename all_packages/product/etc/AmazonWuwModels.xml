@@ -1,0 +1,42 @@
+<AmazonWuwModelList>
+    <amazonModel wuw_locale="de-DE">
+        <wuwMsg model="ALEXA" path="/opt/Bose/etc/wuw_models/de-DE/ALEXA/pryon.manifest" />
+    </amazonModel>
+
+    <amazonModel wuw_locale="en-GB">
+        <wuwMsg model="ALEXA" path="/opt/Bose/etc/wuw_models/en-GB/ALEXA/pryon.manifest" />
+    </amazonModel>
+
+    <amazonModel wuw_locale="en-IN">
+        <wuwMsg model="ALEXA" path="/opt/Bose/etc/wuw_models/en-IN/ALEXA/pryon.manifest" />
+    </amazonModel>
+
+    <amazonModel wuw_locale="en-US">
+        <wuwMsg model="ALEXA" path="/opt/Bose/etc/wuw_models/en-US/ALEXA/pryon.manifest" />
+    </amazonModel>
+
+    <amazonModel wuw_locale="ja-JP">
+        <wuwMsg model="ALEXA" path="/opt/Bose/etc/wuw_models/ja-JP/ALEXA/pryon.manifest" />
+    </amazonModel>
+
+    <amazonModel wuw_locale="fr-FR">
+        <wuwMsg model="ALEXA" path="/opt/Bose/etc/wuw_models/fr-FR/ALEXA/pryon.manifest" />
+    </amazonModel>
+
+    <amazonModel wuw_locale="it-IT">
+        <wuwMsg model="ALEXA" path="/opt/Bose/etc/wuw_models/it-IT/ALEXA/pryon.manifest" />
+    </amazonModel>
+
+    <!--Remapping India-Hindi IN-HI to IN-EN -->
+    <amazonModel wuw_locale="hi-IN">
+        <wuwMsg model="ALEXA" path="/opt/Bose/etc/wuw_models/en-IN/ALEXA/pryon.manifest" />
+    </amazonModel>
+    <!--Remapping US-Spanish US-ES to US-EN -->
+    <amazonModel wuw_locale="es-US">
+        <wuwMsg model="ALEXA" path="/opt/Bose/etc/wuw_models/en-US/ALEXA/pryon.manifest" />
+    </amazonModel>
+    <!--Remapping Brazi-Portuguese BR-PT to IT-IT -->
+    <amazonModel wuw_locale="pt-BR">
+        <wuwMsg model="ALEXA" path="/opt/Bose/etc/wuw_models/it-IT/ALEXA/pryon.manifest" />
+    </amazonModel>
+</AmazonWuwModelList>

@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# True if limited features flag is enabled.
+#
+# Example:
+#
+#   if is-limited; then
+#      echo limited features is enabled.
+#   fi
+#
+[ "$(mfgdata get limitedFeatures false)" = true ]

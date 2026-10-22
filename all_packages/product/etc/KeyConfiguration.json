@@ -1,0 +1,646 @@
+{
+  "keyTable": [
+    {
+      "origin": 0,
+      "keyEvent": 1,
+      "keyList": [
+        4
+      ],
+      "timeOutList": [
+        20
+      ],
+      "action": 1,
+      "comment": "Console: MFB release within 1750ms -> Play/pause"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        3,
+        4
+      ],
+      "timeOutList": [
+        5020
+      ],
+      "action": 54,
+      "comment": "Console: Diag Upload: Press&Hold VolumeUp and Play/pause"
+    },    
+    {
+      "origin": 0,
+      "keyEvent": 4,
+      "keyList": [
+        4,
+        4
+      ],
+      "timeOutList": [
+        500
+      ],
+      "action": 2,
+      "comment": "Console: MFB repeat release twice within 500ms -> Next track"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 4,
+      "keyList": [
+        4,
+        4,
+        4
+      ],
+      "timeOutList": [
+        500
+      ],
+      "action": 3,
+      "comment": "Console: MFB repeat release thrice within 500ms -> Previous track"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        4
+      ],
+      "timeOutList": [
+        1750
+      ],
+      "action": 4,
+      "comment": "Console: MFB press+hold for 1750ms -> Network standby"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        2,
+        4
+      ],
+      "timeOutList": [
+        5020
+      ],
+      "action": 5,
+      "comment": "Console: AUX+MFB press+hold for 5020ms -> Manual setup mode"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        1,
+        5
+      ],
+      "timeOutList": [
+        10020
+      ],
+      "action": 6,
+      "comment": "Console: Bluetooth+VolumeDown press+hold for 10020ms -> Manual software update"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        1,
+        4
+      ],
+      "timeOutList": [
+        5020
+      ],
+      "action": 7,
+      "comment": "Console: Bluetooth+MFB press+hold for 5020ms -> Toggle Wi-Fi"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        2,
+        5
+      ],
+      "timeOutList": [
+        10020
+      ],
+      "action": 8,
+      "comment": "Console: AUX+VolumeDown press+hold for 10020ms -> Factory default"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 1,
+      "keyList": [
+        1
+      ],
+      "timeOutList": [
+        20
+      ],
+      "action": 20,
+      "comment": "Console: Bluetooth release -> CarouselList-Discoverable-ConnectToLast"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        1
+      ],
+      "timeOutList": [
+        750
+      ],
+      "action": 21,
+      "comment": "Console: Bluetooth press+hold -> Become discoverable for Bluetooth"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        1
+      ],
+      "timeOutList": [
+        10020
+      ],
+      "action": 22,
+      "comment": "Console: Bluetooth press+hold -> Clear Bluetooth pairing List"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 1,
+      "keyList": [
+        3
+      ],
+      "timeOutList": [
+        20
+      ],
+      "action": 23,
+      "comment": "Console: VolumeUp release -> Increase volume"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 3,
+      "keyList": [
+        3
+      ],
+      "timeOutList": [
+        300,
+        100
+      ],
+      "action": 39,
+      "comment": "Console: VolumeUp press+hold -> Ramp up volume"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 1,
+      "keyList": [
+        5
+      ],
+      "timeOutList": [
+        20
+      ],
+      "action": 24,
+      "comment": "Console: VolumeUp release -> Decrease volume"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 3,
+      "keyList": [
+        5
+      ],
+      "timeOutList": [
+        300,
+        100
+      ],
+      "action": 40,
+      "comment": "Console: VolumeUp press+hold -> Ramp down volume"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 1,
+      "keyList": [
+        2
+      ],
+      "timeOutList": [
+        20
+      ],
+      "action": 25,
+      "comment": "Console: AUX release -> Select AUX"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 1,
+      "keyList": [
+        6
+      ],
+      "timeOutList": [
+        20
+      ],
+      "action": 26,
+      "comment": "Console: Action release -> Activate voice assistant (e.g. Alexa)"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        6
+      ],
+      "timeOutList": [
+        1750
+      ],
+      "action": 53,
+      "comment": "Console: Action long press -> T2J"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        8
+      ],
+      "timeOutList": [
+        1750
+      ],
+      "action": 27,
+      "comment": "Console: Preset 1 press+hold for 1000ms -> Store currently playing into Preset 1"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        9
+      ],
+      "timeOutList": [
+        1750
+      ],
+      "action": 28,
+      "comment": "Console: Preset 2 press+hold for 1000ms -> Store currently playing into Preset 2"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        10
+      ],
+      "timeOutList": [
+        1750
+      ],
+      "action": 29,
+      "comment": "Console: Preset 3 press+hold for 1000ms -> Store currently playing into Preset 3"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        11
+      ],
+      "timeOutList": [
+        1750
+      ],
+      "action": 30,
+      "comment": "Console: Preset 4 press+hold for 1000ms -> Store currently playing into Preset 4"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        12
+      ],
+      "timeOutList": [
+        1750
+      ],
+      "action": 31,
+      "comment": "Console: Preset 5 press+hold for 1000ms -> Store currently playing into Preset 5"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        13
+      ],
+      "timeOutList": [
+        1750
+      ],
+      "action": 32,
+      "comment": "Console: Preset 6 press+hold for 1000ms -> Store currently playing into Preset 6"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 1,
+      "keyList": [
+        8
+      ],
+      "timeOutList": [
+        20
+      ],
+      "action": 33,
+      "comment": "Console: Preset 1 release -> Select Preset 1"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 1,
+      "keyList": [
+        9
+      ],
+      "timeOutList": [
+        20
+      ],
+      "action": 34,
+      "comment": "Console: Preset 2 release -> Select Preset 2"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 1,
+      "keyList": [
+        10
+      ],
+      "timeOutList": [
+        20
+      ],
+      "action": 35,
+      "comment": "Console: Preset 3 release -> Select Preset 3"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 1,
+      "keyList": [
+        11
+      ],
+      "timeOutList": [
+        20
+      ],
+      "action": 36,
+      "comment": "Console: Preset 4 release -> Select Preset 4"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 1,
+      "keyList": [
+        12
+      ],
+      "timeOutList": [
+        20
+      ],
+      "action": 37,
+      "comment": "Console: Preset 5 release -> Select Preset 5"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 1,
+      "keyList": [
+        13
+      ],
+      "timeOutList": [
+        20
+      ],
+      "action": 38,
+      "comment": "Console: Preset 6 release -> Select Preset 6"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        3
+      ],
+      "timeOutList": [],
+      "action": 50,
+      "comment": "Console: VolumeUp release -> End volume ramp up"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        5
+      ],
+      "timeOutList": [],
+      "action": 51,
+      "comment": "Console: VolumeDown release -> End volume ramp down"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 2,
+      "keyList": [
+        3,
+        5
+      ],
+      "timeOutList": [
+        5020
+      ],
+      "action": 52,
+      "comment": "Console: VolumeUp+VolumeDown press+release during countdown -> System info (PTS)"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 3,
+      "keyList": [
+        2,
+        5
+      ],
+      "timeOutList": [
+        5,
+        1000
+      ],
+      "action": 112,
+      "comment": "Console: AUX+VolumeDown press+hold (at 5ms then every 1000ms) -> Factory default countdown"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        2
+      ],
+      "timeOutList": [],
+      "action": 122,
+      "comment": "Console: AUX release -> Cancel factory default"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        5
+      ],
+      "timeOutList": [],
+      "action": 122,
+      "comment": "Console: VolumeDown release -> Cancel factory default"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 3,
+      "keyList": [
+        3,
+        4
+      ],
+      "timeOutList": [
+        5,
+        1000
+      ],
+      "action": 118,
+      "comment": "Console: VolumeUp+Play/pause press&hold (at 5ms then every 1000ms) -> Diag File Upload countdown"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        3
+      ],
+      "timeOutList": [],
+      "action": 128,
+      "comment": "Console: VolumeUp release -> Cancel Diag File Upload"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        4
+      ],
+      "timeOutList": [],
+      "action": 128,
+      "comment": "Console: Play/Pause release -> Cancel Diag File Upload"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 3,
+      "keyList": [
+        2,
+        4
+      ],
+      "timeOutList": [
+        5,
+        1000
+      ],
+      "action": 113,
+      "comment": "Console: Aux+MFB press+hold (at 5ms then every 1000ms) -> Manual setup countdown"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        2
+      ],
+      "timeOutList": [],
+      "action": 123,
+      "comment": "Console: AUX release -> Cancel manual setup"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        4
+      ],
+      "timeOutList": [],
+      "action": 123,
+      "comment": "Console: MFB release -> Cancel manual setup"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 3,
+      "keyList": [
+        1,
+        4
+      ],
+      "timeOutList": [
+        5,
+        1000
+      ],
+      "action": 114,
+      "comment": "Console: Bluetooth+MFB press+hold (at 5ms then every 1000ms) -> Toggle Wi-Fi countdown"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        1
+      ],
+      "timeOutList": [],
+      "action": 124,
+      "comment": "Console: Bluetooth release -> Cancel toggling Wi-Fi"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        4
+      ],
+      "timeOutList": [],
+      "action": 124,
+      "comment": "Console: MFB release -> Cancel toggling Wi-Fi"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 3,
+      "keyList": [
+        3,
+        5
+      ],
+      "timeOutList": [
+        5,
+        1000
+      ],
+      "action": 115,
+      "comment": "Console: VolumeUp+VolumeDown press+hold (at 5ms then every 1000ms) -> System info countdown"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 3,
+      "keyList": [
+        1
+      ],
+      "timeOutList": [
+        5000,
+        1000
+      ],
+      "action": 116,
+      "comment": "Console: Bluetooth press+hold (at 5000ms then every 1000ms) -> Clear Bluetooth pairing list countdown"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        3
+      ],
+      "timeOutList": [],
+      "action": 125,
+      "comment": "Console: VolumeUp release -> Cancel system info"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        5
+      ],
+      "timeOutList": [],
+      "action": 125,
+      "comment": "Console: VolumeDown release -> Cancel system info"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        1
+      ],
+      "timeOutList": [],
+      "action": 126,
+      "comment": "Console: Bluetooth release -> Cancel clearing Bluetooth pairing"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 3,
+      "keyList": [
+        1,
+        5
+      ],
+      "timeOutList": [
+        5,
+        1000
+      ],
+      "action": 117,
+      "comment": "Console: Bluetooth+VolumeDown press+hold (at 5ms then every 1000ms) -> Software update countdown"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        1
+      ],
+      "timeOutList": [],
+      "action": 127,
+      "comment": "Console: Bluetooth release -> Cancel software update"
+    },
+    {
+      "origin": 0,
+      "keyEvent": 5,
+      "keyList": [
+        5
+      ],
+      "timeOutList": [],
+      "action": 127,
+      "comment": "Console: VolumeDown release -> Cancel software update"
+    }
+  ]
+}

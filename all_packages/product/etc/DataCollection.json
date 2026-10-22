@@ -1,0 +1,29 @@
+{
+    "DataCollectionConfig" : {
+        "properties" :
+        [
+            {
+                "name" : "UDC",
+                "http_endpoint" : "rivieraudc",
+                "fd_endpoint" : "/datacollection/udc",
+                "fd_state_endpoint" : "/datacollection/udc/state",
+                "message_q_depth" : 10,
+                "message_q_time_ms" : 15000,
+                "http_retry_interval_ms" : 960000,
+                "ipc_address" : "DataCollectionUDCService",
+                "message_q_maxdatalen" : 10240
+            },
+            {
+                "name" : "NDC",
+                "http_endpoint" : "rivierandc",
+                "fd_endpoint" : "/datacollection/ndc",
+                "fd_state_endpoint" : "/datacollection/ndc/state",
+                "message_q_depth" : 1,
+                "message_q_time_ms" : 15000,
+                "http_retry_interval_ms" : 960000,
+                "ipc_address" : "DataCollectionNDCService",
+                "message_q_maxdatalen" : 28672
+            }
+        ]
+    }
+}

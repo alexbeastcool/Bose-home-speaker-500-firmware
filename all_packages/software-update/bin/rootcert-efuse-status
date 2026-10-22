@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Function to read the status of a specific fuse
+get_fuse_status() {
+    echo get FEAT_DISABLE_NORMAL_DEVICE_ROOTCERT_$1 > /sys/class/efuse/efuse_obj
+    cat /sys/class/efuse/efuse_obj
+}
+
+# Initialize an empty string to hold the result
+result=""
+
+# Loop through fuses 0 to 3 and get their statuses
+for i in {0..3}; do
+    status=$(get_fuse_status $i)
+    if [[ "$status" == "00" ]]; then
+        result="${result}1"  # Active
+    elif [[ "$status" == "01" ]]; then
+        result="${result}0"  # Revoked
+    else
+        echo "Unexpected status for fuse $i: $status"
+        exit 1
+    fi
+done
+
+# Output the result
+echo "$result"

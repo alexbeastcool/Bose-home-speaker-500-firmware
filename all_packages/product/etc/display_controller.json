@@ -1,0 +1,40 @@
+{
+    "killUIOnHeartBeatLossPidFile" : "/var/run/local-ui.pid",
+    "uiHeartBeatLossWarnMS" : 30000,
+    "uiHeartBeatLossErrorMS" : 60000,
+    
+    "DisplayController": {
+        "BackLightLevelsPercent": [  100.0,   80.0,  60.00,  40.00,  30.00,  20.00,   2.0 ],
+        "LoweringThresholdLux"  : [ 1350.0,  540.0, 180.00,  58.50,  18.00,   0.09,   0.0 ],
+        "RisingThresholdLux"    : [ 1650.0,  660.0, 220.00,  71.50,  22.00,   0.11,   0.1 ]
+    },
+
+    "lcdStandbyBrightnessCap" : 50,
+
+    "lcdInactivityBacklightOffDebounceTime" : 10.0,
+    "lcdInactivityBacklightOffTime": 10.0,
+    "lcdInactivityBacklightOnTime": 0.5,
+
+    "lcdBrightness": {
+		"mode": "AUTOMATIC",
+		"value": 0,
+		"properties": {
+			"min": 0,
+			"max": 100,
+			"step": 10,
+			"supportedModes": ["AUTOMATIC", "MANUAL", "DEFAULT"]
+		}
+	},
+
+	"lightbarBrightness": {
+		"mode": "MANUAL",
+		"value": 100,
+		"properties": {
+			"min": 100,
+			"max": 100,
+			"step": 10,
+			"supportedModes": ["AUTOMATIC", "MANUAL", "DEFAULT"]
+		}
+	}
+}
+

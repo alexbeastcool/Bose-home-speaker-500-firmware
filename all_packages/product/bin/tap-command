@@ -1,0 +1,82 @@
+#!/usr/bin/python
+# updating to /usr/bin/python as this script is compatible to python2.7 as well as python 3.8.
+# Riviera and Coronado have python2.7 while Lamarr has python3.8 and hence it uses only python.
+#
+# Send a single command to the CLI server and display the resulting output.
+#
+# Example:
+#
+#  # tap-command softwareupdate status
+#  SwUpStateURLQueryPending
+#  # tap-command lpm pt \"lb history\"
+#
+#  Timestamp: 662, Animation Id: 38, Animation Name: SW_UPDATE, STARTED
+#  Timestamp: 36400, Animation Id: 38, Animation Name: SW_UPDATE, STOPPED
+#
+#  #
+#
+import os
+import sys
+import argparse
+import subprocess
+import select
+
+parser = argparse.ArgumentParser(description="""
+Send a single command to the CLI server and display the resulting output.
+""")
+parser.add_argument("--timeout", "-t", type=float, default=5.0, metavar="SEC",
+                    help="""
+Maximum time to wait for the second prompt.
+""")
+parser.add_argument("--debug",
+                    help="Enable debug logging",
+                    action="store_true")
+parser.add_argument("command", nargs="+",
+                    help="The command")
+opts = parser.parse_args()
+del parser
+
+# ----------------------------------------------------------------------------
+
+command = " ".join(opts.command)
+if opts.debug:
+    print ("command", repr(command))
+
+ph = subprocess.Popen("telnet localhost 17000".split(),
+                      stdin=subprocess.PIPE,
+                      stdout=subprocess.PIPE)
+ph.stdin.write(command.encode() + "\r".encode())
+ph.stdin.flush()
+fh = ph.stdout
+end_marker = "->OK\n"
+out = ""
+trouble = False
+while True:
+    rfds, _, _ = select.select([ fh ], [], [], opts.timeout)
+    if not rfds:
+        if opts.debug:
+            print("Timeout")
+        trouble = True
+        break
+
+    c = os.read(fh.fileno(), 1).decode()
+    if c == "":
+        if opts.debug:
+            print("EOF")
+        trouble = True
+        break
+    out += c
+    if opts.debug:
+        print("out", repr(out))
+    if out.endswith(end_marker):
+        out = out[:-len(end_marker)]
+        break
+
+if out.startswith("->"):
+    out = out[2:]
+
+if out:
+    print(out)
+
+if trouble:
+    sys.exit(1)

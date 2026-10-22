@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+# Make sure the file system where we store core files and logs is not too
+# close to being full.  Remove log files and core files if necessary.
+#
+this=${0##*/} # this script's name
+
+if [ $# -gt 0 ]; then
+    echo >&2 "$this: unexpected argument '$1'"
+    exit 1
+fi
+
+minkb=$(( 4 * 1024 )) # minimum free space we'd like to have on the file system
+
+# This code is written not to care if the file system is compressed.  In
+# particular, df isn't accurate for UBI file systems.  "Instead, it reports
+# [the] minimum amount of free space, which [is] usually less than the real
+# amount."
+#
+# http://www.linux-mtd.infradead.org/doc/ubifs.html#L_spaceacc
+
+cd "/mnt/nv/BoseLog" || exit
+
+# If the file system is too full, remove the oldest core and log files.
+#
+# The core file names sometimes contain spaces, like
+#   "core-Async Task-0-0-1476-1461592019-11"
+# and so this code needs to carefully handle these cases.
+save_ifs=$IFS
+IFS="
+"
+set -- $(ls -rt)
+IFS=$save_ifs
+
+while :; do
+    freekb=$(df -P . | awk 'NR == 2 { print $4 }')
+    echo "$this: Free in $PWD: ${freekb}KB"
+    [ "$freekb" -lt "$minkb" ] || break
+    removed=false
+    while [ $# -gt 0 ]; do
+        f=$1; shift
+        case "$f" in
+          (core* | log*)
+            rm -f "$f"
+            if ! [ -e "$f" ]; then
+                echo "rm $PWD/$f"
+                removed=true
+                break
+            fi
+            echo "$this: Could not remove $PWD/$f"
+            ;;
+        esac
+    done
+    if ! $removed; then
+        echo "$this: Couldn't find any more files to remove in $PWD"
+        break
+    fi
+done
+
+exit 0

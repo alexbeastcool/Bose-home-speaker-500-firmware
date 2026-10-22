@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Runs GVA with the key directory configured; avoiding the need
+# to call `mkdir` within a privileged application
+
+cfg=/opt/Bose/etc/GvaConfig.json
+while getopts c: opt
+do
+	case $opt in
+		(c) cfg=$OPTARG ;;
+		(-) break ;;
+	esac
+done
+if [ -f "$cfg" ] ; then
+	persistence_path=$(jq -r .persistence_path < "$cfg")
+	#this does not fix the mode of an existing dir
+	mkdir -pm700 "$persistence_path"
+	#this fixes the mode if the dir already existed
+	chmod 0700 "$persistence_path"
+else
+	echo "the config file does not exist: $cfg" 1>&2
+	exit 1
+fi
+exec GVA "$@"

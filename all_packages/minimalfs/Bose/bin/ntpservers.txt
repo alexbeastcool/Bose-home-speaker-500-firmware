@@ -1,0 +1,4 @@
+0.bose.pool.ntp.org
+1.bose.pool.ntp.org
+0.pool.ntp.org
+time.nist.gov

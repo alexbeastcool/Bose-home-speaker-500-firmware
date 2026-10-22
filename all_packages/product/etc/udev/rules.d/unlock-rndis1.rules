@@ -1,0 +1,1 @@
+KERNEL=="rndis1", ACTION=="remove", SUBSYSTEM=="net", RUN+="/bin/systemctl stop unlock.service"

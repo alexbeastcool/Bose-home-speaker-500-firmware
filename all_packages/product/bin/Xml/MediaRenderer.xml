@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0" xmlns:bose="http://www.bose.com">
+    <specVersion>
+        <major>1</major>
+        <minor>0</minor>
+    </specVersion>
+    <device>
+        <deviceType>urn:schemas-upnp-org:device:MediaRenderer:1</deviceType>
+        <friendlyName>Bose Speaker</friendlyName>
+	<manufacturer>Bose</manufacturer>
+        <manufacturerURL>http://www.bose.com</manufacturerURL>
+        <modelName></modelName>
+        <modelURL>http://www.bose.com</modelURL>
+        <UDN></UDN>
+        <bose:X_MAC></bose:X_MAC>
+        <bose:X_ecoSystem>ECO2</bose:X_ecoSystem>
+        <bose:X_productType></bose:X_productType>
+        <bose:X_productColor></bose:X_productColor>
+        <bose:X_softwareVersion></bose:X_softwareVersion>
+        <bose:X_multiroomVersions>
+            <NowPlaying_Version><major_version></major_version><minor_version></minor_version></NowPlaying_Version>
+            <PlaybackRequest_Version><major_version></major_version><minor_version></minor_version></PlaybackRequest_Version>
+            <ZoneControl_Version><major_version></major_version><minor_version></minor_version></ZoneControl_Version>
+            <Audio_Payload_Version><major_version></major_version><minor_version></minor_version></Audio_Payload_Version>
+            <AudioControl_Protocol_Version><major_version></major_version><minor_version></minor_version></AudioControl_Protocol_Version>
+            <ClockSync_Protocol_Version><major_version></major_version><minor_version></minor_version></ClockSync_Protocol_Version>
+        </bose:X_multiroomVersions>
+        <serviceList>
+            <service>
+                <serviceType>urn:schemas-upnp-org:service:AVTransport:1</serviceType>
+                <serviceId>urn:upnp-org:serviceId:AVTransport</serviceId>
+                <SCPDURL>/Xml/AVTransport3.xml</SCPDURL>
+                <controlURL>/AVTransport/Control</controlURL>
+                <eventSubURL>/AVTransport/Event</eventSubURL>
+            </service>
+            <service>
+                <serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType>
+                <serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId>
+                <SCPDURL>/Xml/ConnectionManager3.xml</SCPDURL>
+                <controlURL>/ConnectionManager/Control</controlURL>
+                <eventSubURL>/ConnectionManager/Event</eventSubURL>
+            </service>
+            <service>
+                <serviceType>urn:schemas-upnp-org:service:RenderingControl:1</serviceType>
+                <serviceId>urn:upnp-org:serviceId:RenderingControl</serviceId>
+                <SCPDURL>/Xml/RenderingControl3.xml</SCPDURL>
+                <controlURL>/RenderingControl/Control</controlURL>
+                <eventSubURL>/RenderingControl/Event</eventSubURL>
+            </service>
+	</serviceList>
+    </device>
+</root>

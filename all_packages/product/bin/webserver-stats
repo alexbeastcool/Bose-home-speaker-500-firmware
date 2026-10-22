@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Show information about WebServer activity.
+# This script implements CLI commands for the WebServer daemon.
+#
+this=${0##*/}
+
+if (( $# == 0 )); then
+    echo >&2 "usage: $this <reqhist|resphist>"
+    exit 1
+fi
+cmd=$1; shift
+
+if (( $# > 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    exit 1
+fi
+
+function do_reqhist {
+    echo "REQUEST HISTORY"
+    echo "======================"
+    logread | sed -n 's/^\(... .. ..:..:..\) .*:WebServer:.* {REQ} /\1 /p'
+}
+
+function do_resphist {
+    echo "RESPONSE HISTORY"
+    echo "======================"
+    logread | sed -n 's/^\(... .. ..:..:..\) .*:WebServer:.* {RESP} /\1 /p'
+}
+
+if [ "$(type -t "do_$cmd")" != function ]; then
+    echo >&2 "$this: invalid argument '$cmd'"
+    exit 1
+fi
+"do_$cmd"
+exit 0

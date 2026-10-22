@@ -1,0 +1,402 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Bose&#153; Wi-Fi&reg; Setup</title>
+    <!-- set meta content width to the widest centered div it forces the
+    iPhone screen to be that wide and doesn't mess the div centering up -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+
+    <style>
+        .panes {
+            position: absolute;
+            width: 100%;
+        }
+
+        #loading {
+            margin: 0 auto;
+        }
+
+        .text_left {
+            text-align: left;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            background: #fff;
+            color: #000;
+            margin: 0 auto;
+            font-family: Verdana, sans-serif;
+            text-align: center;
+            min-width: 20em;
+            max-width: 30em;
+        }
+
+        #container {
+            max-width: 70%;
+            height: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 200px;
+        }
+
+        .unsecured-icon {
+            width: 140px;
+            margin: 40px 0;
+        }
+
+        .error {
+            background: #D33B3A;
+            height: 0px;
+            line-height: 33px;
+            font-size: 11px;
+            color: white;
+            margin: 0 auto;
+        }
+
+        h4 {
+            color: #111;
+            font-size: 17px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        p {
+            color: #666;
+            font-size: 12px;
+            line-height: 20px;
+        }
+
+        label {
+            vertical-align: middle;
+            background: transparent;
+            height: 40px;
+            width: 40px;
+        }
+
+        label img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            height: 24px;
+            width: 24px;
+        }
+
+        input, select, option {
+            background: #f2f2f2;
+            color: #111;
+            border: 0;
+            overflow: hidden;
+            font-family: Verdana, sans-serif;
+            font-weight: bold;
+            font-size: 12px;
+            flex-grow: 2;
+        }
+
+        input[type="text"]::-ms-clear {
+            display: none;
+        }
+
+        .input_row {
+            position: relative;
+            margin: 0 0 0.75em;
+            padding: 0;
+            display: flex;
+        }
+
+        .input_entry {
+            background: #f2f2f2;
+            height: 40px;
+        }
+
+        .btn {
+            height: 40px;
+            background: #111;
+            color: white;
+            border-radius: 37px;
+            border: none;
+            width: 100%;
+            font-family: Verdana, sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .btn_warning {
+            background: #D33B3A;
+        }
+
+        #SUCCESS_BUTTON {
+            margin: 50px auto 0 auto;
+            width: 80%;
+        }
+
+        ::-ms-reveal {
+            display: none;
+        }
+
+        .toggle_icon {
+            background: transparent;
+            width: 24px;
+            height: 24px;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .text_box {
+            margin: 20px 0;
+        }
+
+        img.icon {
+            width: 5em;
+            height: 5em;
+        }
+
+        img.security {
+            width: .6em;
+            height: .6em;
+        }
+
+        @keyframes rotation {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .text_link a {
+            text-decoration: underline;
+            color: #666;
+        }
+
+        p.text_link {
+            margin-top: 40px;
+        }
+
+        .text_link:hover {
+            cursor: pointer;
+        }
+
+        /* Fix inputs bleeding over edge of form on small screens */
+        @media screen and (max-width: 400px) {
+            select {
+                max-width: 80%;
+            }
+        }
+
+        @media screen and (max-width: 599px) {
+            select {
+                max-width: 90%;
+            }
+
+            input {
+                width: 76%;
+            }
+        }
+
+        /* loading spinner */
+        @-webkit-keyframes spin {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes spin {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        .spinner {
+            margin: 0 auto;
+            padding-top: 30%;
+            width: 54px;
+        }
+
+        .spinner__circle {
+            position: relative;
+            width: 54px;
+            height: 54px;
+            overflow: hidden;
+            background-color: #000;
+            border-radius: 100%;
+            -webkit-animation: spin 1s infinite linear;
+            animation: spin 1s infinite linear;
+        }
+
+        .spinner__circle-inner, .spinner__circle-gradient {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .spinner__circle-inner {
+            top: 50%;
+            left: 50%;
+            background-color: #fff;
+            border-radius: 100%;
+        }
+
+        .spinner__circle-gradient {
+            top: -24px;
+            left: 6px;
+            background-color: #000;
+            background-image: -webkit-gradient(linear, left bottom, left top, from(#fff), color-stop(50%, #eee));
+            background-image: linear-gradient(0deg, #000 0%, #666 50%);
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+        }
+
+        .show {
+            display: block;
+        }
+
+        .input_row.show {
+            display: flex;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .fade {
+            -webkit-transition-property: opacity;
+            -webkit-transition-duration: 0.5s;
+            transition-property: opacity;
+            transition-duration: 0.5s;
+        }
+
+        .opacity-0 {
+            opacity: 0;
+        }
+
+        .opacity-1 {
+            opacity: 1;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="container">
+
+        <div class="panes hide" id="loading">
+            <div class="loading icon">
+                <div class="spinner">
+                    <div class="spinner__circle">
+                        <div class="spinner__circle-gradient"></div>
+
+                        <div class="spinner__circle-inner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panes hide" id="connecting">
+            <div id="connecting-img" class="product-image"></div>
+            <div class="text_box">
+                <p id="CONNECTING" style="font-size: 13px"></p>
+                <h4 id="NETWORK_NAME"></h4>
+            </div>
+        </div>
+
+        <div class="panes hide" id="success">
+            <div class="text_box">
+                <p id="SUCCESS_DESCRIPTION" style="font-size: 13px"></p>
+                <h4 id="SUCCESS_HEADER"></h4>
+            </div>
+            <div id="success-img" class="product-image"></div>
+            <button id="SUCCESS_BUTTON" class="btn hide" onclick="navigateBackToApp()"></button>
+        </div>
+
+        <div class="panes hide" id="unsecured">
+            <img src="images/unsecured_network.svg" class="unsecured-icon" />
+            <div class="text_box">
+                <h4 style="font-size: 19px" id="UNSECURED_WARNING_HEADER"></h4>
+                <p id="UNSECURED_WARNING_DESCRIPTION"></p>
+            </div>
+            <div class="input_row" style="margin-top: 80px">
+                <button class="btn" onClick="showPane('setup')" id="UNSECURED_WARNING_BACK"></button>
+            </div>
+            <div class="input_row">
+                <button class="btn btn_warning" onClick="submitNetworkCreds(sendProfileObj); showPane('connecting');"
+                    id="UNSECURED_WARNING_CONTINUE"></button>
+            </div>
+        </div>
+
+        <div class="panes hide" id="setup" for="pane">
+
+            <div class="error" id="ERROR_MESSAGE"></div>
+
+            <div id="setup-img" class="product-image"></div>
+
+            <div class="text_box text_left">
+                <h4 id="WIFI_SETUP_HEADER"></h4>
+                <p id="WIFI_SETUP_DESCRIPTION"></p>
+            </div>
+
+            <form id="default_form" class="show" onChange="hideErrorMessage()">
+                <div id="section_ssid" class="input_row input_entry">
+                    <label for="ssids"><img src="images/wifi.svg"></label>
+                    <select name="ssids" id="ssids" onChange="hidePasswordIfUnsecured()"></select>
+                </div>
+
+                <div id="section_password" class="input_row input_entry show">
+                    <label for="password"><img src="images/lock.svg"></label>
+                    <input type="password" name="password" id="password_default" class="password" />
+                    <img id="toggle_password_default" class="eye toggle_icon" src="images/blind.svg" onclick="toggleShowPassword('default');" />
+                </div>
+            </form>
+
+            <form id="manual_form" class="hide" onChange="hideErrorMessage()">
+                <div id="section_netName" class="input_row input_entry">
+                    <label for="netName"><img src="images/wifi.svg"></label>
+                    <input type="text" name="ssids" id="netName" />
+                </div>
+
+                <div id="security_selection" class="input_row input_entry">
+                    <label for="security"><img src="images/wifi.svg"><img src="images/lock.svg" name="security_img"
+                            class="security"></label>
+                    <select name="security" id="security" onchange="showPasswordManual();">
+                        <option value="none" id="none">--</option>
+                        <option value="wep" id="wep">WEP</option>
+                        <option value="wpa_or_wpa2" id="wpa_or_wpa2">WPA/WPA2</option>
+                    </select>
+                </div>
+
+                <div id="section_password_manual" class="input_row input_entry hide">
+                    <label for="password"><img src="images/lock.svg"></label>
+                    <input type="password" name="password" id="password_manual" class="password" />
+                    <img id="toggle_password_manual" class="eye toggle_icon" src="images/blind.svg" onclick="toggleShowPassword('manual');" />
+                </div>
+            </form>
+
+            <button class="btn" onClick="parseSubmitWifiForm()">Submit</button>
+
+            <p class="text_link"><a onclick="toggleManual()" id="TO_MANUAL_SETUP" class="text_link show"></a></p>
+            <p class="text_link"><a onclick="toggleManual()" id="TO_DEFAULT_SETUP" class="text_link hide"></a></p>
+
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="js/app.js"></script>
+</body>
+
+</html>

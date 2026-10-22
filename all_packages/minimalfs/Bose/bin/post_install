@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [[ $(mount -t ext4 | grep /opt/bose_images) ]]; then
+    mount -oremount,ro /opt/bose_images
+fi
+
+if [[ $(mount -t ext4 | grep /opt/Bose) ]]; then
+    mount -oremount,ro /opt/Bose
+fi
+
+if [[ $(mount | grep swUpdateCache) ]]; then
+    if [ ! -e /usr/bin/unshare ]; then
+        # in case if the HSP is lesser than 4.1
+        mount -oremount,rw /opt/Bose/.swUpdateCache
+    else
+        # remount swUpdateCache as noexec again after installation is done
+        mount -o remount,noexec,nosuid,nodev -w /opt/Bose/.swUpdateCache /opt/Bose/.swUpdateCache
+    fi
+else
+    mount -o remount,noexec /data
+fi

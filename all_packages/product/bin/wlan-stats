@@ -1,0 +1,214 @@
+#!/bin/sh
+#
+# Gather statistics from /sys about the wlan0 Wi-Fi interface.  The
+# NetworkDataCollector compresses this information and adds it to
+# PDO_NETWORK_DATA_COLLECTION.
+#
+
+if [ $# -ne 0 ]; then
+    echo >&2 "${0##*/}: unexpected argument '$1'"
+    exit 1
+fi
+
+exec 2>&1 # capture any errors, too
+
+scalar () {
+    local name="$1"
+    set -- $(cat "$name")
+    printf "%s\t%s\n" "$name" "$*"
+}
+
+table () {
+    local name="$1"
+    set -- $(awk '/=/ {print $NF}' "$name")
+    printf "%s\t%s\n" "$name" "$*"
+}
+
+scalar /sys/class/net/wlan0/statistics/collisions
+scalar /sys/class/net/wlan0/statistics/multicast
+scalar /sys/class/net/wlan0/statistics/rx_bytes
+scalar /sys/class/net/wlan0/statistics/rx_compressed
+scalar /sys/class/net/wlan0/statistics/rx_crc_errors
+scalar /sys/class/net/wlan0/statistics/rx_dropped
+scalar /sys/class/net/wlan0/statistics/rx_errors
+scalar /sys/class/net/wlan0/statistics/rx_fifo_errors
+scalar /sys/class/net/wlan0/statistics/rx_frame_errors
+scalar /sys/class/net/wlan0/statistics/rx_length_errors
+scalar /sys/class/net/wlan0/statistics/rx_missed_errors
+scalar /sys/class/net/wlan0/statistics/rx_over_errors
+scalar /sys/class/net/wlan0/statistics/rx_packets
+scalar /sys/class/net/wlan0/statistics/tx_aborted_errors
+scalar /sys/class/net/wlan0/statistics/tx_bytes
+scalar /sys/class/net/wlan0/statistics/tx_carrier_errors
+scalar /sys/class/net/wlan0/statistics/tx_compressed
+scalar /sys/class/net/wlan0/statistics/tx_dropped
+scalar /sys/class/net/wlan0/statistics/tx_errors
+scalar /sys/class/net/wlan0/statistics/tx_fifo_errors
+scalar /sys/class/net/wlan0/statistics/tx_heartbeat_errors
+scalar /sys/class/net/wlan0/statistics/tx_packets
+scalar /sys/class/net/wlan0/statistics/tx_window_errors
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/last_beacon
+for mac in $(ls /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations); do
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/beacon_loss_count
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/connected_time
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/last_rx_rate
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/last_signal
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/rx_bytes
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/rx_dropped
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/rx_duplicates
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/rx_fragments
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/rx_packets
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/tx_bytes
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/tx_filtered
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/tx_fragments
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/tx_packets
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/tx_retry_count
+scalar /sys/kernel/debug/ieee80211/phy0/netdev:wlan0/stations/$mac/tx_retry_failed
+done
+scalar /sys/kernel/debug/ieee80211/phy0/statistics/failed_count
+scalar /sys/kernel/debug/ieee80211/phy0/statistics/frame_duplicate_count
+scalar /sys/kernel/debug/ieee80211/phy0/statistics/multicast_received_frame_count
+scalar /sys/kernel/debug/ieee80211/phy0/statistics/multicast_transmitted_frame_count
+scalar /sys/kernel/debug/ieee80211/phy0/statistics/multiple_retry_count
+scalar /sys/kernel/debug/ieee80211/phy0/statistics/received_fragment_count
+scalar /sys/kernel/debug/ieee80211/phy0/statistics/retry_count
+scalar /sys/kernel/debug/ieee80211/phy0/statistics/transmitted_fragment_count
+scalar /sys/kernel/debug/ieee80211/phy0/statistics/transmitted_frame_count
+scalar /sys/kernel/debug/ieee80211/phy0/statistics/tx_latency
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/excessive_retries
+table  /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/aggr_size_rx_size
+table  /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/aggr_size_tx_agg_len
+table  /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/aggr_size_tx_agg_rate
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/calib_calib_count
+table  /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/calib_fail_count
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_bar_retry
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_burst_mismatch
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_elp_while_nvic_pending
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_elp_while_rx_exch
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_elp_while_tx
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_elp_while_tx_exch
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_error_frame_ctrl
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_error_frame_during_protection
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_error_frame_non_ctrl
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_null_frame_cts_start
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_null_frame_tx_start
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_num_frame_cts_nul_flid
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_rx_cmplt_db_overflow_cnt
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_rx_excessive_frame_len
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_tbc_exch_mismatch
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_tx_abort_failure
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/error_tx_resume_failure
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/isr_irqs
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/mem_fw_gen_free_mem_blks
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/mem_fwlog_free_mem_blks
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/mem_rx_free_mem_blks
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/mem_tx_free_mem_blks
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_cs_rx_packet_in
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_cs_rx_packet_out
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_csum_to_rx_xfer_swi
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_dec_packet_in
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_dec_packet_in_fifo_full
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_dec_packet_out
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_defrag_to_csum_swi
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_enc_rx_stat_fifo_int
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_enc_tx_stat_fifo_int
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_hs_tx_stat_fifo_int
+table  /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_pipeline_fifo_full
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_post_proc_swi
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_pre_proc_swi
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_pre_to_defrag_swi
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_rx_complete_stat_fifo_int
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_sec_frag_swi
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_tcp_rx_stat_fifo_int
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pipeline_tcp_tx_stat_fifo_int
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/ps_poll_ps_poll_max_ap_turn
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/ps_poll_ps_poll_timeouts
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/ps_poll_ps_poll_utilization
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/ps_poll_upsd_max_ap_turn
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/ps_poll_upsd_timeouts
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/ps_poll_upsd_utilization
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pwr_connection_out_of_sync
+table  /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pwr_cont_miss_bcns_spread
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pwr_missing_bcns_cnt
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pwr_rcvd_awake_bcns_cnt
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/pwr_rcvd_bcns_cnt
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/roaming_rssi_level
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_decrypt_key_not_found
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_defrag_called
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_defrag_decrypt_failed
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_defrag_in_process_called
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_defrag_init_called
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_defrag_need_decrypt
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_defrag_need_defrag
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_defrag_tkip_called
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_filter_accum_arp_pend_requests
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_filter_arp_filter
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_filter_beacon_filter
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_filter_data_filter
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_filter_dup_filter
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_filter_ibss_filter
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_filter_max_arp_queue_dep
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_filter_mc_filter
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_filter_protection_filter
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rate_rx_frames_per_rates
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_beacon_early_term
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_cmplt
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_cmplt_task
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_defrag
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_defrag_end
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_done
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_dropped_frame
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_hdr_overflow
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_out_of_mpdu_nodes
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_phy_hdr
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_pre_complt
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_rts_timeout
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_timeout
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_timeout_wa
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_tkip_replays
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_wa_ba_not_expected
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_wa_density_dropped_frame
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/rx_rx_xfr
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/thermal_adc_source_unexpected
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/thermal_false_irq
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/thermal_irq_thr_high
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/thermal_irq_thr_low
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/thermal_tx_resume
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/thermal_tx_stop
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_frag_bad_mblk_num
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_frag_cache_hit
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_frag_cache_miss
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_frag_called
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_frag_failed
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_frag_in_process_called
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_frag_init_called
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_frag_key_not_found
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_frag_mpdu_alloc_failed
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_frag_need_fragmentation
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_frag_tkip_called
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_burst_programmed
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_cfe1
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_cfe2
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_cmplt
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_data_prepared
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_data_programmed
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_done_data
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_done_int_template
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_done_template
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_exch
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_exch_expiry
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_exch_pending
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_imm_resp
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_prepared_descs
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_retry_data
+table  /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_retry_per_rate
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_retry_template
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_start_data
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_start_fw_gen
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_start_int_templates
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_start_null_frame
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_start_templates
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_starts
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_stop
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_template_prepared
+scalar /sys/kernel/debug/ieee80211/phy0/wlcore/wl18xx/fw_stats/tx_tx_template_programmed

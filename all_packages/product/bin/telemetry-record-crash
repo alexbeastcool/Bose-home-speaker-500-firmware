@@ -1,0 +1,92 @@
+#!/usr/bin/python
+# updating to /usr/bin/python as this script is compatible to python2.7 as well as python 3.8.
+# Riviera and Coronado have python2.7 while Lamarr has python3.8 and hence it uses only python.
+#
+# Record information about a daemon that has ended unexpectedly.
+#
+# This script is invoked from a product's shepherd-pre-recovery script
+# which Shepherd invokes if a daemon dies unexpectedly.
+
+import os
+import json
+import argparse
+from shutil import copyfile
+from datetime import datetime
+
+parser = argparse.ArgumentParser(description="""
+Record a crash to Telemetry by passing in the service name,crash signal and recovery method.
+""")
+
+parser.add_argument("service")
+parser.add_argument("reason")
+parser.add_argument("version")
+
+parser.add_argument("--crashFile",
+                    default="/mnt/nv/product-persistence/telemetry/Shepherd_Crashes.json",
+                    help="Path of a file where crashes are persisted and incremented")
+parser.add_argument("--telemetryFile",
+                    default="/mnt/nv/product-persistence/telemetry/Shepherd_Telemetry.json",
+                    help="Path to a copy the crash-file that is read and then deleted by Telemetry Service ")
+
+opts = parser.parse_args()
+del parser
+
+processName = opts.service
+crashReason = opts.reason
+version = opts.version
+
+crashFilePath = opts.crashFile
+telemetryFilePath = opts.telemetryFile
+
+#Update crash file
+#----------------------------------------------------------------------------------------------
+timeStamp = datetime.utcnow().strftime("20%y-%m-%dT%H:%M:%SZ")
+crashEntry = "Shepherd:Crash:" + processName + ":" + crashReason + ":" + version
+crashFile = {}
+
+def createNewEntry():
+    entry = {}
+    entry['metricType'] = crashEntry
+    entry['metricValue'] = 1
+    entry['time'] = timeStamp
+    return entry
+
+def findEntry(base):
+    for entry in base:
+        if entry['metricType'] == crashEntry:
+            return entry
+    return None
+
+def store_json(filename, obj):
+    txt = json.dumps(obj, indent=2, sort_keys=True)
+    txt = txt.replace(" \n", "\n")
+    with open(filename, "w") as fh:
+        fh.write(txt + "\n")
+
+exists = os.path.isfile(crashFilePath)
+if exists:
+    try:
+        with open(crashFilePath) as fh:
+            crashFile = json.loads(fh.read())
+        #If there is a existing entry update the date and incement the count
+        base = crashFile["ShepherdMetrics"]["metrics"]
+        entry = findEntry(base)
+        if entry == None:
+            base.append(createNewEntry())
+        else:
+            entry["metricValue"] += 1
+            entry["time"] = timeStamp
+    except:
+        print("Existing " + crashFilePath + " is corrupted, a new file will be created" )
+        exists = False
+
+if not exists:
+    crashFile = {'ShepherdMetrics' : {"metrics" : [ createNewEntry()]} }
+
+store_json(crashFilePath,crashFile)
+
+#Report to Telemetry
+#----------------------------------------------------------------------------------------------
+tmp = crashFilePath + ".tmp"
+copyfile(crashFilePath, tmp)
+os.rename(tmp, telemetryFilePath)

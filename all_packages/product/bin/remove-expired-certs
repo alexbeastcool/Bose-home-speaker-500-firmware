@@ -1,0 +1,17 @@
+#!/bin/bash
+# 
+# This script removes one known expired root certificate during boot.
+# In the future, this script may run at scheduled intervals and search
+# for and remove any expired root certificates at the time it is run.
+# The certificates are supplied as part of an ext4 filesystem by the
+# HSP build, so it's not trivial to remove expired certificates at
+# build time, so we do it at run time instead.
+
+if [ -e /etc/ssl/certs/AddTrust_External_Root.pem ]; then
+    unshare -m sh -c 'mount -o remount -w / &&
+    cd /etc/ssl/certs &&
+    rm AddTrust_External_Root.pem &&
+    cat *.pem > .ca-certificates.crt &&
+    mv .ca-certificates.crt ca-certificates.crt
+    sync'
+fi

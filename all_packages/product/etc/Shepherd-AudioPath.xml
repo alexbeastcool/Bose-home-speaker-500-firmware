@@ -1,0 +1,13 @@
+<ShepherdConfig>
+
+  <!-- cpuset is a bitmask of the CPUs we're allowed to run on.
+       For example, 8 = the 4th CPU.  12 = the 3rd and 4th. -->
+  <daemon name="APServer"
+          recovery="reboot"
+          cpuset="8"
+          nice="-19">
+    <arg>-c</arg>
+    <arg>/opt/Bose/etc/APConfig.xml</arg>
+  </daemon>
+
+</ShepherdConfig>

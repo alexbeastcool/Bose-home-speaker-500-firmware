@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+BOSE_PUB='-----BEGIN PUBLIC KEY-----
+MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEXTon28oBsqJ9ralPeZRb3rt3yWuzXurZ
+sPQUv0af6YQx2R8lHNOqQ7SFgN2v9z1xL+3i8bpQF96p3N0nHG4ZlCQUHLjKUFFo
+ALw19yibvYq4ZEnBdMseu/7W354Y9wr3
+-----END PUBLIC KEY-----'
+
+CIPHER=aes-256-cbc
+DIGEST=sha384
+COMPRESS=bzip2
+
+EC_CURVE=$(openssl ec -pubin -text -noout -in <(echo "$BOSE_PUB") 2>/dev/null | awk '$1$2=="ASN1OID:" { print $3 }')
+RIV_PRIV=$(openssl ecparam -genkey -name $EC_CURVE -noout 2>/dev/null)
+SHARED=$(openssl pkeyutl -inkey <(echo "$RIV_PRIV") -peerkey <(echo "$BOSE_PUB") -derive 2>/dev/null | base64)
+
+md5sum <<<"$BOSE_PUB" | awk "{print \"$CIPHER $DIGEST $COMPRESS \" \$1}"
+openssl ec -pubout <<<"$RIV_PRIV" 2>/dev/null
+"$@" | $COMPRESS | openssl enc -$CIPHER -a -nosalt -md $DIGEST -k "$SHARED" 2>/dev/null

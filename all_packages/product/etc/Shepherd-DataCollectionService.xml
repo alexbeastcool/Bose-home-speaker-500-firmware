@@ -1,0 +1,6 @@
+<ShepherdConfig>
+  <daemon name="DataCollectionService">
+    <arg>-c</arg>
+    <arg>/opt/Bose/etc/DataCollection.json</arg>
+  </daemon>
+</ShepherdConfig>

@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# Reboot the product.
+#
+# PlatformReset requires LPMService or AOCPUService to be running.  If PlatformReset fails,
+# try ResetUtil which talks directly to the LPM.  If ResetUtil fails, try
+# /sbin/reboot which will affect only the APQ.
+#
+# If any arguments are given, we assume the invoker is doing something like
+# `reboot bootloader` and we then skip PlatformReset/ResetUtil and just invoke
+# /sbin/reboot.
+#
+
+function warn {
+    logger -s -t "product/reboot[$$]" -p warning "$*"
+}
+
+# Wait for the log to be read
+if [ -e /mnt/nv/delay_for_log ]; then
+    sleep 2
+fi
+
+if (( $# > 0 )); then
+    warn "/sbin/reboot $* [$#]"
+    exec /sbin/reboot "$@"
+fi
+
+if [ -f /etc/lamarr-version ]; then
+    LPMApp=AOCPUService
+else
+    LPMApp=LPMService
+fi
+
+if [ -f /opt/Bose/bin/PlatformReset ]; then
+    warn PlatformReset...
+    if ! { killall -0 $LPMApp && /opt/Bose/bin/PlatformReset; }; then
+        warn Fallback to ResetUtil...
+        /opt/Bose/bin/ResetUtil SYSTEM
+    fi
+    sleep 20
+fi
+warn Fallback to /sbin/reboot...
+/sbin/reboot

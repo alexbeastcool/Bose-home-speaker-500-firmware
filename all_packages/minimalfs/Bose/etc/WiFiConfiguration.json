@@ -1,0 +1,52 @@
+{
+    "wifiConfiguration" : {
+        "STAModeInterface" : "wlan0",
+        "STAModeControlPath" : "/var/run/NetManager/wpa_supplicant/wlan0",
+        "APModeInterface" : "wlan1",
+        "APModeIp" : "192.0.2.1",
+        "APModeSubnet" : "255.255.255.0",
+        "APModeControlPath" : "/var/run/NetManager/hostapd/wlan1",
+        "wpaSupplicantOptions": [
+            { "paramName" : "p2p_go_max_inactivity=60" },
+            { "paramName" : "p2p_go_ht40=1" },
+            { "paramName" : "p2p_ignore_shared_freq=1" },
+            { "paramName" : "disassoc_low_ack=1" },
+            { "paramName" : "ctrl_interface=/var/run/NetManager/wpa_supplicant" },
+            { "paramName" : "ap_scan=1" },
+            { "paramName" : "bss_max_count=400" }
+        ],
+        "hostapdOptions" : [
+            { "paramName" : "interface=wlan1" },
+            { "paramName" : "driver=nl80211" },
+            { "paramName" : "ctrl_interface=/var/run/NetManager/hostapd" },
+            { "paramName" : "channel=0" },
+            { "paramName" : "max_num_sta=255" },
+            { "paramName" : "preamble=1" },
+            { "paramName" : "dtim_period=2" },
+            { "paramName" : "beacon_int=100" },
+            { "paramName" : "logger_syslog=-1" },
+            { "paramName" : "logger_syslog_level=2" },
+            { "paramName" : "logger_stdout=-1" },
+            { "paramName" : "logger_stdout_level=2" },
+            { "paramName" : "macaddr_acl=0" },
+            { "paramName" : "auth_algs=3" },
+            { "paramName" : "uapsd_advertisement_enabled=1" },
+            { "paramName" : "wep_rekey_period=0" },
+            { "paramName" : "eap_server=0" },
+            { "paramName" : "disassoc_low_ack=1" },
+            { "paramName" : "ap_max_inactivity=3600" },
+            { "paramName" : "ieee80211n=1" }
+        ],
+        "udhcpdOptions" : [
+            { "paramName" : "start 192.0.2.2" },
+            { "paramName" : "end 192.0.2.254" },
+            { "paramName" : "interface wlan1" },
+            { "paramName" : "lease_file /dev/null" },
+            { "paramName" : "option subnet 255.255.255.0" },
+            { "paramName" : "option router 192.0.2.1" },
+            { "paramName" : "option dns 192.0.2.1" },
+            { "paramName" : "option lease 600" }
+        ]
+    }
+}
+

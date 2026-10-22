@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# config-key-forcefetch - Force fetch latest configuration and schema from cloud
+#
+# This script triggers the ConfigService to immediately fetch the latest
+# configuration and schema from the cloud/URLs, bypassing any cache.
+# It provides a convenient command-line interface to the /configkey/forcefetch endpoint.
+#
+
+# Check for help flag
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    cat << EOF
+Usage: config-key-forcefetch [OPTIONS]
+
+Force the ConfigService to fetch the latest configuration and schema from the cloud.
+This is an asynchronous operation with a 2-second timeout.
+
+OPTIONS:
+    -h, --help    Show this help message and exit
+
+EXAMPLES:
+    config-key-forcefetch                 # Trigger immediate config refresh
+    
+DESCRIPTION:
+    This script calls the /configkey/forcefetch endpoint via frontdoorutil to force
+    the ConfigService to fetch the latest configuration and schema from cloud URLs.
+    This bypasses any cached data and ensures the service has the most up-to-date
+    configuration available.
+    
+    Common use cases:
+    - After deploying new configuration to the cloud
+    - During testing when immediate config updates are needed
+    - As part of system maintenance scripts
+    - When troubleshooting configuration issues
+
+EOF
+    exit 0
+fi
+
+# Execute the force fetch command
+frontdoorutil /configkey/forcefetch

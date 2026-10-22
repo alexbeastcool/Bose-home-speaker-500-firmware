@@ -1,0 +1,115 @@
+#!/bin/sh
+
+# udhcpc script edited by Tim Riker <Tim@Rikers.org>
+
+[ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
+
+RESOLV_CONF="/etc/resolv.conf"
+[ -e $RESOLV_CONF ] || touch $RESOLV_CONF
+[ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+[ -n "$subnet" ] && NETMASK="netmask $subnet"
+
+case "$1" in
+	deconfig)
+		/sbin/ifconfig $interface up
+		/sbin/ifconfig $interface 0.0.0.0
+
+		# drop info from this interface
+		# resolv.conf may be a symlink to /tmp/, so take care
+		TMPFILE=$(mktemp)
+		grep -vE "# $interface\$" $RESOLV_CONF > $TMPFILE
+		cat $TMPFILE > $RESOLV_CONF
+		rm -f $TMPFILE
+
+		if [ -x /opt/Bose/bin/avahi-autoipd ]; then
+			# For Coronado, As we are running NetManager with non root user this command needs to be run using privileged handler
+			# if there is any change in command, make sure to update the same in privileged-event-handler (repo : Product-Common)
+			if [ -p /var/run/privileged-run ]; then
+				echo "avahi-autoipd $interface" > /var/run/privileged-run
+			else
+				/opt/Bose/bin/avahi-autoipd -k $interface
+			fi
+		fi
+		;;
+
+	leasefail|nak)
+		#CASTLE-52123: Only run avahi-autoipd on "public" interfaces: eth0, wlan0.
+		if [ "$interface" = "eth0" ] || [ "$interface" = "wlan0" ]
+		then
+			if [ -x /opt/Bose/bin/avahi-autoipd ]; then
+				linkup=`cat /sys/class/net/$interface/carrier`
+				if [ "$linkup" = 1 ]; then
+					# For Coronado, As we are running NetManager with non root user this command needs to be run using privileged handler
+					# if there is any change in command, make sure to update the same in privileged-event-handler (repo : Product-Common)
+					if [ -p /var/run/privileged-run ]; then
+						echo "avahi-autoipd-linkup $interface" > /var/run/privileged-run
+					else
+						/opt/Bose/bin/avahi-autoipd -wD --script=/opt/Bose/bin/avahi-autoipd.action $interface
+					fi
+				else
+					# For Coronado, As we are running NetManager with non root user this command needs to be run using privileged handler
+					# if there is any change in command, make sure to update the same in privileged-event-handler (repo : Product-Common)
+					if [ -p /var/run/privileged-run ]; then
+						echo "avahi-autoipd $interface" > /var/run/privileged-run
+					else
+						/opt/Bose/bin/avahi-autoipd -k $interface
+					fi
+				fi
+			fi
+		fi
+		;;
+
+	renew|bound)
+		if [ -x /opt/Bose/bin/avahi-autoipd ]; then
+			# For Coronado, As we are running NetManager with non root user this command needs to be run using privileged handler
+			# if there is any change in command, make sure to update the same in privileged-event-handler (repo : Product-Common)
+			if [ -p /var/run/privileged-run ]; then
+				echo "avahi-autoipd $interface" > /var/run/privileged-run
+			else
+				/opt/Bose/bin/avahi-autoipd -k $interface
+			fi
+		fi
+		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+
+		if [ -n "$router" ] ; then
+			echo "deleting routers"
+			while route del default gw 0.0.0.0 dev $interface 2> /dev/null; do
+				:
+			done
+
+			for i in $router ; do
+				route add default gw $i dev $interface
+			done
+		fi
+
+		# drop info from this interface
+		# resolv.conf may be a symlink to /tmp/, so take care
+		TMPFILE=$(mktemp)
+		grep -vE "# $interface\$" $RESOLV_CONF > $TMPFILE
+		cat $TMPFILE > $RESOLV_CONF
+		rm -f $TMPFILE
+
+		# prefer rfc3359 domain search list (option 119) if available
+		if [ -n "$search" ]; then
+			search_list=$search
+		elif [ -n "$domain" ]; then
+			search_list=$domain
+		fi
+
+		[ -n "$search_list" ] &&
+			echo "search $search_list # $interface" >> $RESOLV_CONF
+
+		for i in $dns ; do
+			echo adding dns $i
+			echo "nameserver $i # $interface" >> $RESOLV_CONF
+		done
+		;;
+esac
+
+HOOK_DIR="$0.d"
+for hook in "${HOOK_DIR}/"*; do
+    [ -f "${hook}" -a -x "${hook}" ] || continue
+    "${hook}" "${@}"
+done
+
+exit 0

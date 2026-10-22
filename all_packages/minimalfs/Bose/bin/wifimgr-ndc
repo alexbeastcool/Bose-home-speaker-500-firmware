@@ -1,0 +1,90 @@
+#!/usr/bin/python
+# updating to /usr/bin/python as this script is compatible to python2.7 as well as python 3.8.
+# Riviera and Coronado have python2.7 while Lamarr has python3.8 and hence it uses only python.
+#
+# Python script called by the WiFiManager during boot and during pts key combo press
+# to capture router information for NDC(Network Data Collection)
+#
+import sys
+import os
+import subprocess
+import re
+import json
+
+this_script = os.path.basename(sys.argv.pop(0))
+
+if len(sys.argv) != 1:
+    raise Exception("wrong usage, include country as argument")
+
+bssidRe = re.compile(r"^BSS\s*(?P<oui>.+):..:..:..\s*\(on wlan0\).*$")
+regexps = [
+    re.compile(r"^freq:\s*(?P<frequency>.*)$"),
+    re.compile(r"^SSID:\s*(?P<ssid>.*)$"),
+    re.compile(r"^last\sseen:\s*(?P<lastSeen>.*)\sms\sago$"),
+    re.compile(r"^Country:\s*(?P<country>.*)\tEnvironment:\s.*$"),
+    re.compile(r"^\*\s*Manufacturer:\s*(?P<manufacturer>.*)$"),
+    re.compile(r"^\*\s*Model:\s*(?P<model>.*)$"),
+    re.compile(r"^\*\s*Model\s+Number:\s*(?P<modelNumber>.*)$"),
+    re.compile(r"^\*\s*Device\s+name:\s*(?P<deviceName>.*)$"),
+]
+
+charegexps = [
+    re.compile(r"^Channels\s*(?P<channels>.*)$"),
+]
+
+# Perform a site scan and save the results in a file.  This information
+# can can be uploaded later to the data collection server via
+# NetworkDataCollection.
+# Runs the comnmand to scan the list of networks.
+def scan():
+    cmd = ["iw", "wlan0", "scan"]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    result = proc.stdout.read()
+    return result
+
+# Parses the response from the command "iw wlan0 scan"
+def parse(content):
+    cells = []
+    channel = []
+    lines = content.decode('utf-8').split('\n')
+    for line in lines:
+        line = line.strip()
+        bssid = bssidRe.search(line)
+        if bssid is not None:
+            cells.append(bssid.groupdict())
+            cells[-1].update({'supportsN': False})
+            cells[-1].update({'supportsAC': False})
+            continue
+        for expression in regexps:
+            result = expression.search(line)
+            if result is not None:
+                cells[-1].update(result.groupdict())
+                continue
+            elif line in { "HT capabilities:"}:
+                cells[-1].update({'supportsN': True})
+                continue
+            elif line in {"VHT capabilities:" }:
+                cells[-1].update({'supportsAC': True})
+                continue
+        for expression in charegexps:
+            result = expression.search(line)
+            if result is not None:
+                channel.append(result.group(1))
+                cells[-1].update({'channels':channel})
+                continue
+            channel = []
+    cells = json.dumps(cells, indent=4)
+    return cells
+
+subprocess.call(["ifconfig", "wlan0", "up"])
+country = sys.argv[0]
+subprocess.call(["iw", "reg", "set", country])
+
+output = scan()
+cells = parse(output)
+
+finalJson = {}
+finalJson["apInfo"] = json.loads(cells)
+
+with open("/tmp/wifi-mgr-ndc.json", "w") as f:
+    json.dump(finalJson, f)

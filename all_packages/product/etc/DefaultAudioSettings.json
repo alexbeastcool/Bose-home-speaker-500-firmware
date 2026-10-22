@@ -1,0 +1,89 @@
+{
+	"version": {
+        "major": 3,
+        "minor": 0
+	},
+	"supportedAudioSettings": {
+		"contentItemSensitive": ["audioBassLevel", "audioCenterLevel", "audioMode", "audioTrebleLevel"]
+    },
+	"audioSettingValues": {
+		"audioBassLevel": {		
+			"persistenceLevel": {
+				"currentPersistenceLevel": "GLOBAL",
+				"persistenceSession": false
+			},
+			"values": {
+				"GLOBAL": 0,
+				"SESSION": 0,
+				"CONTENT_ITEM": {
+					"default": 0
+				}
+			},
+			"defaultValue":0,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 10,
+				"supportedPersistence": ["SESSION", "GLOBAL", "CONTENT_ITEM"]
+			}
+		},
+		"audioCenterLevel": {		
+			"persistenceLevel": {
+				"currentPersistenceLevel": "GLOBAL",
+				"persistenceSession": false
+			},
+			"defaultValue":0,
+			"values": {
+				"GLOBAL": 0,
+				"SESSION": 0,
+				"CONTENT_ITEM": {
+					"default": 0
+				}
+			},
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 10,
+				"supportedPersistence": ["SESSION", "GLOBAL", "CONTENT_ITEM"]
+			}
+		},
+		"audioMode": {		
+			"persistenceLevel": {
+				"currentPersistenceLevel": "CONTENT_ITEM",
+				"persistenceSession": false
+			},
+			"values": {
+				"GLOBAL": "NORMAL",
+				"SESSION": "NORMAL",
+				"CONTENT_ITEM": {
+					"default": "NORMAL"
+				}
+			},
+			"defaultValue":"NORMAL",
+			"properties": {
+                "supportedValues": ["DIALOG", "NORMAL"],
+				"supportedPersistence": ["SESSION", "GLOBAL", "CONTENT_ITEM"]
+			}
+		},
+		"audioTrebleLevel": {		
+			"persistenceLevel": {
+				"currentPersistenceLevel": "GLOBAL",
+				"persistenceSession": false
+			},
+			"values": {
+				"GLOBAL": 0,
+				"SESSION": 0,
+				"CONTENT_ITEM": {
+					"default": 0
+				}
+			},
+			"defaultValue":0,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 10,
+				"supportedPersistence": ["SESSION", "GLOBAL", "CONTENT_ITEM"]
+			}
+		}
+	}
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AlexaCommsConfigMsg num_channels_in="9" channel_num_out="8">
+  <threadCfg affinity="2" priority="46" />
+</AlexaCommsConfigMsg>

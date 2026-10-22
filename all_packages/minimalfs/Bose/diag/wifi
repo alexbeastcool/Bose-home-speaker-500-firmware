@@ -1,0 +1,52 @@
+#!/usr/bin/python2.7
+#
+# Invoked via pts-handler to show Wi-Fi status.
+#
+import sys
+import json
+import datetime
+import subprocess
+
+if len(sys.argv) != 1:
+    raise Exception("wrong usage " + str(sys.argv))
+
+def dump(obj):
+    return json.dumps(obj, indent=2)
+
+out, err = subprocess.Popen(["frontdoorutil", "/network/wifi/status"],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE).communicate()
+
+print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/plain\r
+Cache-Control: no-cache\r
+Refresh: 1\r
+\r"""
+
+print datetime.datetime.now()
+
+try:
+    rsp = json.loads(out)
+
+    status = rsp["header"]["status"]
+    if status != 200:
+        print "Status:", status
+
+    error = rsp.get("error")
+    if error:
+        print "Error:", dump(error)
+
+    body = rsp.get("body")
+    if not body:
+        print "Wi-Fi not connected."
+    else:
+        print dump(body)
+
+except Exception, exc:
+    print "exception:", repr(exc)
+    print
+    print out
+
+if err:
+    print "error:", err

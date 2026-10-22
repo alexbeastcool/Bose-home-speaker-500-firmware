@@ -1,0 +1,477 @@
+{
+    "id": "cloud-config-keys.json#",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Cloud Config Keys",
+    "description": "Schema defining the keys and value types for the cloud driven config service.",
+    "version": "0.0.1",
+    "date" : "2025-5-13",
+    "type": "object",
+    "properties": {
+        "version": {
+            "type": "string",
+            "description": "Version of the config schema.",
+            "default": "0.0.0",
+            "additionalProperties": false
+        },
+        "last_updated": {
+            "type": "string",
+            "description": "Date and time the config was last updated.",
+            "default": "today",
+            "additionalProperties": false
+        },
+        "udc.accessories-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the accessories-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.alexa-comms-event": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the alexa-comms-event event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.art-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the art-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.audio-format-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the audio-format-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.audio-presence-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the audio-presence-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.avsync-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the avsync-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.balance-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the balance-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.bass-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the bass-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.bass-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the bass-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.bluetooth-remote-state-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the bluetooth-remote-state-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.button-pressed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the button-pressed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.cec-state-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the cec-state-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.center-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the center-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.center-level-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the center-level-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.connection-test": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the connection-test event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.contenttype-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the contenttype-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.control-integration-start": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the control-integration-start event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.deviceInfo": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the deviceInfo event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.dualmonoselect-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the dualmonoselect-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.earc-status-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the earc-status-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.eedid-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the eedid-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.eqselect-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the eqselect-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.favorite-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the favorite-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.gainoffset-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the gainoffset-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.height-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the height-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.item-started": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the item-started event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.language-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the language-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.lpm-throttling-state-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the lpm-throttling-state-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.microphone-state-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the microphone-state-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.midrange-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the midrange-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.mode-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the mode-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.mode-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the mode-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.mountorientation-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the mountorientation-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.play-item": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the play-item event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.play-state-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the play-state-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.power-macro-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the power-macro-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.preset-assigned": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the preset-assigned event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.presets-assigned": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the presets-assigned event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.presets-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the presets-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.press-to-join-event": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the press-to-join-event event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.quicksimplesync-connection-failure": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the quicksimplesync-connection-failure event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.quicksimplesync-connection-success": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the quicksimplesync-connection-success event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.quicksimplesync-session-end": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the quicksimplesync-session-end event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.quicksimplesync-session-start": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the quicksimplesync-session-start event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.rating-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the rating-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.repeat-state-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the repeat-state-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.shuffle-state-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the shuffle-state-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.simplesync-capability": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the simplesync-capability event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.simplesync-connection-failure": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the simplesync-connection-failure event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.simplesync-session-end": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the simplesync-session-end event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.simplesync-session-start": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the simplesync-session-start event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.simplesync-settings": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the simplesync-settings event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.simplesync-settings-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the simplesync-settings-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.sink-product-info": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the sink-product-info event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.source-state-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the source-state-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.standby-timer-settings-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the standby-timer-settings-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.subwoofergain-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the subwoofergain-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.subwooferpolarity-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the subwooferpolarity-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.surround-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the surround-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.surrounddelay-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the surrounddelay-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.system-source-registry-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the system-source-registry-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.system-state-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the system-state-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.treble-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the treble-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.treble-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the treble-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.upmixer-audio-parameters-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the upmixer-audio-parameters-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.volume-change": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the volume-change event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "udc.zone-state-changed": {
+            "type": "boolean",
+            "description": "Enable or disable collection of the zone-state-changed event.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "diagnostics.store-cores": {
+            "type": "boolean",
+            "description": "Enable or disable storing of core dumps for diagnostics. Is ignored if mfg_data developer mode is enabled.",
+            "default": false,
+            "additionalProperties": false
+        },
+        "diagnostics.upload-cores": {
+            "type": "boolean",
+            "description": "Enable or disable uploading of core dumps for diagnostics.",
+            "default": false,
+            "additionalProperties": false
+        },
+        "diagnostics.dev-keep-cores": {
+            "type": "boolean",
+            "description": "In development mode, enable or disable keeping core dumps instead of deleting them. Only applies when in development mode.",
+            "default": true,
+            "additionalProperties": false
+        },
+        "config.schema-url": {
+            "type": "string",
+            "description": "URL or file path to the configuration schema.",
+            "default": ""
+        },
+        "config.config-url": {
+            "type": "string",
+            "description": "URL or file path to the configuration file.",
+            "default": ""
+        },
+        "config.fetch-cadence": {
+            "type": "integer",
+            "description": "Cadence for fetching the configuration file, in seconds.",
+            "default": 86400
+        }
+    },
+    "patternProperties": {
+        "^telemetry\\..*$": {
+            "type": "boolean",
+            "description": "Enable/disable telemetry boolean property. Allows dynamic addition of telemetry.* keys. Will match with metric type up to first semicolon or end of string.",
+            "default": true
+        },
+        "^ndc\\..*$": {
+            "type": "boolean",
+            "description": "Enable/disable ndc boolean property. Allows dynamic addition of ndc.* keys.",
+            "default": true
+        },
+        "^test\\..*$": {
+            "type": "string",
+            "description": "Allows dynamic addition of test.* keys that are of string type.",
+            "default": "?"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["version"]
+}

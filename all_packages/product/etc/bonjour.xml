@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<INDEX REVISION="02.11.00">
+  <!-- SoundTouch 20 -->
+  <DEVICE ID="0x0923" PRODUCTNAME="SoundTouch 20">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="92200023" CRC="0x4052d97f" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- SoundTouch 30 -->
+  <DEVICE ID="0x0924" PRODUCTNAME="SoundTouch 30">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="92200023" CRC="0x4052d97f" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- SoundTouch Portable -->
+  <DEVICE ID="0x0925" PRODUCTNAME="SoundTouch Portable">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="92200023" CRC="0x4052d97f" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- Wave SoundTouch -->
+  <DEVICE ID="0x0932" PRODUCTNAME="Wave SoundTouch">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="93468059" CRC="0x8bd441e9" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- VideoWave (Developer Keys) -->
+  <DEVICE ID="0x0944" PRODUCTNAME="VideoWave">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="196044443" CRC="0xf1833a17" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- Lifestyle (Developer Keys) -->
+  <DEVICE ID="0x0945" PRODUCTNAME="Lifestyle">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="196044443" CRC="0xf1833a17" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- SoundTouch Stereo JC -->
+  <DEVICE ID="0x0935" PRODUCTNAME="SoundTouch Stereo JC">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="92200023" CRC="0x4052d97f" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- SoundTouch SA-4 -->
+  <DEVICE ID="0x0936" PRODUCTNAME="SoundTouch SA-4">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="92200023" CRC="0x4052d97f" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- Cinemate -->
+  <DEVICE ID="0x0938" PRODUCTNAME="Cinemate">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="95228315" CRC="0x6a3bbf7a" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- SoundTouch 10 -->
+  <DEVICE ID="0x0939" PRODUCTNAME="SoundTouch 10">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="75804907" CRC="0xbcf35b17" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- SoundTouch SA-5 -->
+  <DEVICE ID="0x093A" PRODUCTNAME="SoundTouch SA-5">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="77212530" CRC="0x992c784f" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- SoundTouch 20 -->
+  <DEVICE ID="0x093B" PRODUCTNAME="SoundTouch 20">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="75804907" CRC="0xbcf35b17" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- SoundTouch 30 -->
+  <DEVICE ID="0x093C" PRODUCTNAME="SoundTouch 30">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="75804907" CRC="0xbcf35b17" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- Wave SoundTouch -->
+  <DEVICE ID="0x093D" PRODUCTNAME="Wave SoundTouch">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="77072943" CRC="0x965d7853" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- VideoWave (Developer Keys) -->
+  <DEVICE ID="0x0946" PRODUCTNAME="VideoWave">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="180294447" CRC="0x1c0a201a" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- Lifestyle (Developer Keys) -->
+  <DEVICE ID="0x0947" PRODUCTNAME="Lifestyle">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="180294447" CRC="0x1c0a201a" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- SoundTouch Stereo JC -->
+  <DEVICE ID="0x0940" PRODUCTNAME="SoundTouch Stereo JC">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="75804907" CRC="0xbcf35b17" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- SoundTouch SA-4 -->
+  <DEVICE ID="0x0941" PRODUCTNAME="SoundTouch SA-4">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="75804907" CRC="0xbcf35b17" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- Cinemate -->
+  <DEVICE ID="0x0942" PRODUCTNAME="Cinemate">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="79478319" CRC="0xc0395b29" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- VideoWave (Production Keys) -->
+  <DEVICE ID="0x0933" PRODUCTNAME="VideoWave">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="196044443" CRC="0x109e76b0" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- Lifestyle (Production Keys) -->
+  <DEVICE ID="0x0934" PRODUCTNAME="Lifestyle">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="196044443" CRC="0x109e76b0" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- VideoWave (Production Keys) -->
+  <DEVICE ID="0x093E" PRODUCTNAME="VideoWave">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="180294447" CRC="0xfd176cbd" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- Lifestyle (Production Keys) -->
+  <DEVICE ID="0x093F" PRODUCTNAME="Lifestyle">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="180294447" CRC="0xfd176cbd" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- Bardeen -->
+  <DEVICE ID="0x0948" PRODUCTNAME="Bardeen">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="93468059" CRC="0x8bd441e9" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- Ginger -->
+  <DEVICE ID="0x0949" PRODUCTNAME="Ginger">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="93468059" CRC="0x8bd441e9" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+  <!-- Binky -->
+  <DEVICE ID="0x094A" PRODUCTNAME="Binky">
+    <HARDWARE REVISION="00.01.00">
+      <RELEASE REVISION="9.0.29.22741.1342681" HTTPHOST="bonjour" URLPATH="">
+        <IMAGE SUBID="0" LENGTH="93468059" CRC="0x8bd441e9" FILENAME="" />
+      </RELEASE>
+    </HARDWARE>
+  </DEVICE>
+
+</INDEX>

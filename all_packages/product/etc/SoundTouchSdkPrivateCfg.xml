@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SoundTouchSdkPrivateCfg>
+    <margeServerUrl>https://streamingint.bose.com</margeServerUrl>
+    <statsServerUrl>https://eventsdev.api.bosecm.com</statsServerUrl>
+    <swUpdateUrl>@SWUPDATEURL@</swUpdateUrl>
+    <usePandoraProductionServer>true</usePandoraProductionServer>
+    <isZeroconfEnabled>true</isZeroconfEnabled>
+    <saveMargeCustomerReport>false</saveMargeCustomerReport>
+    <bmxRegistryUrl>https://bose-test.apigee.net/bmx/integration/eco2-registry/v1/services</bmxRegistryUrl>
+</SoundTouchSdkPrivateCfg>

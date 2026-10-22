@@ -1,0 +1,13 @@
+#!/bin/bash
+set -- telnet localhost 17000 "$@"
+
+# rlwrap doesn't work if the terminal size is unknown.
+if ! [ "$(stty -F /dev/tty size 2>/dev/null)" ]; then
+    echo "Terminal size unknown, disabling line editing (see 'resize')"
+    exec "$@"
+fi
+
+# rlwrap requires $HOME (or else it dumps core, CASTLE-4130).
+export HOME=/opt/Bose
+
+exec rlwrap --history-filename /mnt/nv/tap_history "$@"

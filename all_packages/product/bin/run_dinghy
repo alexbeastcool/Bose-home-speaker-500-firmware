@@ -1,0 +1,261 @@
+#!/bin/bash
+
+cd "$(dirname "$0")" || exit
+WPE_PARENT_DIR=/opt/Bose
+MONACO_PARENT_DIR=${WPE_PARENT_DIR}
+MONACO_DIR=${MONACO_PARENT_DIR}/monaco
+BRUSSELS_DIR=${MONACO_PARENT_DIR}/brussels
+WPE_DIR=${WPE_PARENT_DIR}/wpe
+MIME_DIR=/usr/share/mime
+ETH0_IP_ADDRESS=$(ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
+WLAN0_IP_ADDRESS=$(ifconfig wlan0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
+IP_ADDRESS=${WLAN0_IP_ADDRESS}
+WEB_BROWSER=${WPE_DIR}/bin/dinghy
+DEFAULT_FBDEV=/dev/fb1
+TEST1_URL="https://people.igalia.com/clopez/webBenchmarks/JetStream/JetStream-1.1/index.html"
+TEST2_URL="https://people.igalia.com/clopez/webBenchmarks/octane/index.html?auto=1"
+TEST3_URL="https://people.igalia.com/clopez/webBenchmarks/MotionMark/index.html"
+TEST4_URL="https://people.igalia.com/clopez/webBenchmarks/kraken/hosted/kraken-1.1/driver.html"
+TEST5_URL="file:///opt/Bose/lcd/cat-walk.html"
+TEST6_URL="file:///opt/Bose/lcd/hypnotoad.html"
+TEST7_URL="file:///opt/Bose/lcd/fps_test/css-3d-number-rotation.html"
+TEST8_URL="file:///opt/Bose/lcd/fps_test/html_canvas.html"
+LOCAL_URL="false"
+URL=""
+
+export LD_LIBRARY_PATH=${WPE_PARENT_DIR}/lib
+export GIGACAGE_ENABLED=false
+
+# Fix for tearing by calling gl_finish after each frame.
+# All options:
+#   flush: calls glFlush() on each frame
+#   finish: calls glFinish() on each frame
+#   unbind: glBindFramebuffer() with a null (zero) FBO handle. Only applicable with double-buffering
+#export WPE_BACKEND_BOSE_FRAME_FLUSH=finish
+
+##########################################################
+############################################ WPE verbosity
+##########################################################
+# Uncomment one or more of the following lines to enable debug logging.
+#export G_MESSAGES_DEBUG=all
+#export WPE_DYZSHM_DEBUG=1
+#export WPE_DYZSHM_CONSOLE_LOG=1
+
+
+# Manually override some behaviours in the WPE backend, and in general it
+# should not be needed to use it because there is an automatic detection
+# mechanism in the backend.
+#export WPE_BACKEND_BOSE_OVERRIDE_HWINFO=fb_open_clear
+
+
+##########################################################
+############################################## Framebuffer
+##########################################################
+
+PRODUCT_TYPE=`mfgdata get productType`
+
+# If there is no existing frame buffer device set in the environment
+# we check to see if the default one ($DEFAULT_FBDEV) exists or if the
+# product type requires framebuffer output to be disabled.
+if [ -z "$WPE_BACKEND_BOSE_FBDEV" ]; then
+
+    if [ ! -e "${DEFAULT_FBDEV}" ]; then
+
+        echo "Frame buffer '${DEFAULT_FBDEV}' not found. Disabling FB output."
+        export WPE_BACKEND_BOSE_FBDEV="none"
+
+    else
+
+        export WPE_BACKEND_BOSE_FBDEV="${DEFAULT_FBDEV}"
+
+    fi
+fi
+
+echo "Selecting FB device '${WPE_BACKEND_BOSE_FBDEV}'"
+
+
+##########################################################
+########################################### WPE parameters
+##########################################################
+# Parse out some options that are not present in the dingy executable
+# and/or that need environment variables set.
+shopt -s nocasematch
+
+EXEC_OPTIONS=""
+URL_OPTION=""
+
+##########################################################
+################################################## network
+##########################################################
+if [[ -z "${IP_ADDRESS}" ]]; then
+    IP_ADDRESS=${ETH0_IP_ADDRESS}
+fi
+
+if [[ -z "${IP_ADDRESS}" ]]; then
+    IP_ADDRESS="NO NETWORK"
+fi
+
+for i in "$@"
+do
+case $i in
+    --single-buffer)
+    export WPE_BACKEND_BOSE_OVERRIDE_HWINFO=single_buffer
+    echo "Disabling double buffering"
+    shift
+    ;;
+
+    --remote-inspector)
+    export WEBKIT_INSPECTOR_SERVER="${IP_ADDRESS}:1234"
+    EXEC_OPTIONS="${EXEC_OPTIONS} --dev-tools"
+    echo "Enabling webkit inspector service at '${IP_ADDRESS}:1234'"
+    shift
+    ;;
+
+    # All other options get passed directly to the executable
+    --*)
+    EXEC_OPTIONS="${EXEC_OPTIONS} $i"
+    shift
+    ;;
+
+    *)
+    URL_OPTION=$i
+    shift
+    ;;
+esac
+done
+
+##########################################################
+###################################################### URL
+##########################################################
+
+case "${URL_OPTION}" in
+    "MONACO")
+        LOCAL_URL="true"
+        URL=file:${MONACO_DIR}/index.html
+        ;;
+    "MONACO_VERBOSE")
+        LOCAL_URL="true"
+        URL=file:${MONACO_DIR}/index.html?logSocket=VERBOSE
+        ;;
+    "MONACO_DEBUG")
+        LOCAL_URL="true"
+        URL=file:${MONACO_DIR}/index.html?logSocket=DEBUG
+        ;;
+    "BRUSSELS")
+        LOCAL_URL="true"
+        URL=file:${BRUSSELS_DIR}/index.html
+        ;;
+    "BRUSSELS_VERBOSE")
+        LOCAL_URL="true"
+        URL=file:${BRUSSELS_DIR}/index.html?logSocket=VERBOSE
+        ;;
+    "BRUSSELS_DEBUG")
+        LOCAL_URL="true"
+        URL=file:${BRUSSELS_DIR}/index.html?logSocket=DEBUG
+        ;;
+    "TEST1")
+        URL=${TEST1_URL}
+        ;;
+    "TEST2")
+        URL=${TEST2_URL}
+        ;;
+    "TEST3")
+        URL=${TEST3_URL}
+        ;;
+    "TEST4")
+        URL=${TEST4_URL}
+        ;;
+    "TEST5")
+        LOCAL_URL="true"
+        URL=${TEST5_URL}
+        ;;
+    "TEST6")
+        LOCAL_URL="true"
+        URL=${TEST6_URL}
+        ;;
+    "TEST7")
+        LOCAL_URL="true"
+        URL=${TEST7_URL}
+        ;;
+    "TEST8")
+        LOCAL_URL="true"
+        URL=${TEST8_URL}
+        ;;
+    "--HELP" | "-HELP" | "HELP")
+        echo "URL is HELP"
+        URL=""
+        ;;
+    *)
+        URL=${URL_OPTION}
+        ;;
+esac
+
+if [[ -z "${URL}" ]]; then
+    echo "#########################################################"
+    echo "Usage: $0 URL [--remote-inspector] [--single-buffer] [--scale=1.0] [--log-console]"
+    echo "       URL: Mandantory. Must be full and exact:"
+    echo "                 ex.: https://www.youtube.com"
+    echo "                 ex.: file://opt/Bose/webkit/target_scripts/lcd/css-3d-number-rotation.html"
+    echo ""
+    echo "       --single-buffer: Optional. Disables double buffering."
+    echo ""
+    echo "       --remote-inspector: Optional. Debugger information is redirected to"
+    echo "                   http://${IP_ADDRESS}:1234 where an host remote computer can"
+    echo "                   remotely debug the target webkit with a WebKitGTK+ (>= 2.20.0) browser."
+    echo ""
+    echo "       --scale=X.Y: Optional. Display scalling. Default is 1.0; 0.25 will zoom out by 4x."
+    echo ""
+    echo "       --log-console: Optional. Enables console logging."
+    echo ""
+    echo "       Predefined URLs are: TEST1   : Jet Stream performance test"
+    echo "                            TEST2   : Octane performance test"
+    echo "                            TEST3   : Motion Mark performance test"
+    echo "                            TEST4   : Kraken performance test"
+    echo "                            TEST5   : Walking cat GIF animation"
+    echo "                            TEST6   : hypnotoad screen tearing test"
+    echo "                            TEST7   : FPS test using CSS 3D rotating number wheels"
+    echo "                            TEST8   : FPS test using HTML canvas"
+    echo "                            MONACO  : Monaco user interface application"
+    echo "                            MONACO_VERBOSE  : Run Monaco with verbose logging"
+    echo "                            MONACO_DEBUG  : Run Monaco with debug logging"
+    echo "                            BRUSSELS: Brussels user interface application"
+    echo "                            BRUSSELS_VERBOSE: Run Brussels with verbose logging"
+    echo "                            BRUSSELS_DEBUG: Run Brussels with debug logging"
+    echo "#########################################################"
+    exit 1
+fi
+
+shift # URL
+
+##########################################################
+################################################### DINGHY
+##########################################################
+if [ ! -e "${WEB_BROWSER}" ]; then
+    echo "Error: web browser executable '${WEB_BROWSER}' does not exist"
+    exit 1
+fi
+
+##########################################################
+##################################################### mime
+##########################################################
+if [ ! -d "${MIME_DIR}" ]; then
+    echo "Error: unable to find required directory '${MIME_DIR}"
+    exit 1
+fi
+
+echo "###############################################################"
+echo "## url                    : ${URL}"
+echo "## WPE directory          : ${WPE_DIR}"
+echo "## WPE executable         : ${WEB_BROWSER}"
+echo "## inspector URL          : ${WEBKIT_INSPECTOR_SERVER}"
+echo "## local IP address       : ${IP_ADDRESS}"
+echo "## Bose back-end override : ${WPE_BACKEND_BOSE_OVERRIDE_HWINFO}"
+echo "## Back-end frame flush   : ${WPE_BACKEND_BOSE_FRAME_FLUSH}"
+echo "## Executable options     : ${EXEC_OPTIONS}"
+echo "###############################################################"
+
+##########################################################
+############################################# Lauching WPE
+##########################################################
+echo $$ > /var/run/local-ui.pid
+exec "${WEB_BROWSER}" "${URL}" --doc-viewer --webprocess-failure=exit ${EXEC_OPTIONS}

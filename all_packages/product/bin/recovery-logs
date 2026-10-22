@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# recovery logs from /cache/recovery/ delivered via the /recovery.txt endpoint of the PtsServer.
+#
+
+if (( $# > 0 )); then
+    echo >&2 "$0: unexpected argument '$1'"
+    exit 1
+fi
+
+exec 2>&1 # stderr goes to stdout
+PS4='> '; set -x
+
+date
+uptime
+if [ -f "/cache/recovery/ota_status" ]; then
+    echo "OTA Status: "
+    cat /cache/recovery/ota_status
+fi
+
+if [ -f "/cache/recovery-in-progress" ]; then
+    echo "RECOVERY IN PROGRESS"
+fi
+
+if [ -f "/cache/recovery/last_kmsg" ]; then
+    echo "---------------------------------------------------"
+    echo "Last Kernel Logs:"
+    cat /cache/recovery/last_kmsg
+fi
+
+if [ -f "/cache/recovery/last_log" ]; then
+    echo "---------------------------------------------------"
+    echo "Last recvoery log:"
+    cat /cache/recovery/last_log
+fi
+

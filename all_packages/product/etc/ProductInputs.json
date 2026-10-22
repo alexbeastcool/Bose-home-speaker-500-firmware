@@ -1,0 +1,15 @@
+{
+  "Config": {
+    "supportedInputs": [
+      {
+        "inputName": "FRIENDLY_NAME_AUX",
+        "inputSource": "PRODUCT",
+        "inputAccount": "AUX"
+      },
+      {
+        "inputName": "FRIENDLY_NAME_BLUETOOTH",
+        "inputSource": "BLUETOOTH"
+      }
+    ]
+  }
+}

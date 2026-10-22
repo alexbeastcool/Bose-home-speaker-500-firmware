@@ -1,0 +1,21 @@
+<ShepherdConfig>
+
+  <daemon name="ProductController"
+          recovery="reboot"/>
+
+  <daemon name="avahi-daemon"
+          exe="start-avahi"/>
+
+  <daemon name="CAPS"
+          recovery="reboot">
+    <arg>-c/opt/Bose/etc/CAPS.xml</arg>
+  </daemon>
+
+  <daemon name="Amazon"/>
+  <daemon name="BMX"/>
+  <daemon name="Deezer"/>
+  <daemon name="IHeart"/>
+  <daemon name="Spotify"/>
+  <daemon name="Upnp"/>
+
+</ShepherdConfig>

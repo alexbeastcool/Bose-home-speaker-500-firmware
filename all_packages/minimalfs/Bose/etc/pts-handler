@@ -1,0 +1,738 @@
+#!/usr/bin/python
+#
+# updating to /usr/bin/python as this script is compatible to python2.7 as well as python 3.8.
+# Riviera and Coronado have python2.7 while Lamarr has python3.8 and hence it uses only python.
+#
+# Invoked by PtsServer for each HTTP client connection.
+# HTTP payload is to be read from stdin.
+# HTTP response headers and payload are to be written to stdout.
+#
+from __future__ import print_function
+import os
+import sys
+import subprocess
+import socket as s
+
+debug = False
+
+def log(*args):
+    print("pts-handler:", " ".join(map(lambda a: str(a), args)), file=sys.stderr)
+
+_, method, path, version, headers = sys.argv
+if debug:
+    log("method '{}', path '{}', version '{}'".format(method, path, version))
+
+# ----------------------------------------------------------------------------
+
+def http_ok(content_type="text/plain"):
+    print ("""\
+HTTP/1.1 200 OK\r
+Content-Type: {}\r
+Cache-Control: no-cache\r
+\r""".format(content_type))
+
+def http_err(code="404 Not Found"):
+    print ("""\
+HTTP/1.1 {code}\r
+Content-Type: text/plain\r
+\r
+{code}\r""".format(code=code))
+
+usb_ifaces = ["usb*", "rndis*"]
+
+def http_redirect(actual_path, from_path, to_path):
+    if actual_path == from_path:
+        print ("""\
+HTTP/1.1 301 Moved Permanently\r
+Location: {}\r
+\r
+Moved Permanently\r
+""".format(to_path))
+        sys.exit()
+
+def only_for_usb():
+    only_for_ifaces(usb_ifaces)
+
+def only_for_ifaces(allowed_ifaces):
+    iface = os.environ.get("IFACE", "")
+    for allowed_iface in allowed_ifaces:
+        if allowed_iface.endswith("*"):
+            if iface.startswith(allowed_iface[:-1]):
+                return
+        else:
+            if iface == allowed_iface:
+                return
+    log("Attempt to access {} via interface {}".format(path, iface))
+    if os.path.exists("/mnt/nv/product-persistence/anyiface"):
+        return
+    http_err()
+    sys.exit()
+
+def redirect_stderr():
+    # Redirect stderr to stdout
+    os.dup2(sys.stdout.fileno(), sys.stderr.fileno())
+    sys.stdout.flush()
+
+def is_development():
+    return 0 == subprocess.call(["is-development"])
+
+def send_static_content(file_name, content_type):
+    with open(file_name) as fh:
+        http_ok(content_type)
+        while True:
+            buf = fh.read(4096)
+            if not buf:
+                break
+            sys.stdout.write(buf)
+    log("Sent {} ({})".format(file_name, content_type))
+
+def get_mfgdata():
+    import json
+    return json.load(open('/persist/mfg_data.json', 'rt'))
+
+# ----------------------------------------------------------------------------
+
+if method != "GET":
+    http_err()
+
+# ----------------------------------------------------------------------------
+# A way to download Spotify audio data dump files
+
+if path == "/audio.tar" and is_development():
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    # When the system is in development mode Spotify outputs the OGG Vorbis
+    # audio data files /tmp/spotify-<url id>-<timestamp>.ogg
+    # This can also be enabled with the tap command "spotify debug out"
+    os.execl("/bin/sh", "sh", "-c", "/bin/tar -c /tmp/spotify*.ogg")
+
+# ----------------------------------------------------------------------------
+# AirPlay2 Album Art
+if path.startswith("/AirPlay2/"):
+    iFile = path[len("/AirPlay2/"):] 
+    # Prevent dir traversal
+    if ".." in iFile:
+        http_err()
+        sys.exit()
+    # Strip Query string.
+    i = iFile.find("?")
+    if i != -1:
+        iFile = iFile[:i]
+    # Combine image file name with abs. path
+    image = "/var/run/AirPlay2/" + iFile
+    # Only jpeg and png images are supported.
+    if image.endswith('.jpg'):
+        http_ok("image/jpeg")
+    elif image.endswith('.png'):
+        http_ok("image/png")
+    else:
+        http_err()
+        sys.exit()
+
+    # Open the image file in binary mode
+    with open(image, 'rb') as img_file:
+        data = img_file.read()
+
+    try:
+        sys.stdout.buffer.write(data)
+    except AttributeError:
+        sys.stdout.write(data)
+
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Diagnostics pages.
+
+http_redirect(path, "/diag", "/diag/")
+
+if path.startswith("/diag/"):
+    only_for_usb()
+
+    path = path[len("/diag/"):]
+    if path == "":
+        path = "main"
+    prog = path
+    args = []
+    i = path.find("/")
+    if i != -1:
+        args.append(path[i+1:])
+        prog = path[:i]
+    log("diag", prog, args)
+    os.chdir("/opt/Bose/diag")
+    sys.stdout.flush()
+    os.execv(prog, [prog] + args)
+
+# ----------------------------------------------------------------------------
+# View the log message buffer.
+
+if path == "/logread.txt" and is_development():
+    http_ok()
+    sys.stdout.flush()
+    os.execlp("pts-logs", "pts-logs")
+
+if path == "/logread.txt.gz" and is_development(): # same but compressed
+    http_ok("application/x-gzip")
+    sys.stdout.flush()
+    os.execl("/bin/sh", "sh", "-c", "pts-logs | gzip")
+
+if path == "/logread.dat":      # same but encrypted
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    os.execl("/bin/sh", "sh", "-c", "encrypt-logs pts-logs | gzip")
+
+http_redirect(path, "/logread", "/logread.dat")
+
+#-----------------------------------------------------------------------------
+# View a constant stream of LPM logging messages.
+
+if path == "/lpmlogread.txt" and is_development:
+    http_ok()
+    sys.stdout.flush()
+    os.execlp("pts-lpmlogs", "pts-lpmlogs")
+
+# ----------------------------------------------------------------------------
+# View miscellaneous system status information.
+
+if path == "/pts.txt" and is_development():
+    http_ok()
+    sys.stdout.flush()
+    os.execlp("pts-info", "pts-info")
+
+if path == "/pts.dat":          # same but encrypted
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs pts-info | gzip")
+
+http_redirect(path, "/pts", "/pts.dat")
+
+# ----------------------------------------------------------------------------
+# View AIQ trace data.
+
+if path == "/ptsAiq.txt" and is_development():
+    http_ok()
+    sys.stdout.flush()
+    os.execlp("pts-aiq", "pts-aiq")
+
+if path == "/ptsAiq.dat":          # same but encrypted
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs pts-aiq | gzip")
+
+http_redirect(path, "/ptsAiq", "/ptsAiq.dat")
+
+# ----------------------------------------------------------------------------
+# View network status information.
+
+if path == "/network.txt" and is_development():
+    http_ok()
+    sys.stdout.flush()
+    os.execlp("network-info", "network-info")
+
+if path == "/network.dat":
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs network-info | gzip")
+
+http_redirect(path, "/network", "/network.dat")
+
+# ----------------------------------------------------------------------------
+# View recovery logs
+
+if path == "/recovery.txt" and is_development():
+    http_ok()
+    sys.stdout.flush()
+    os.execlp("recovery-logs", "recovery-logs")
+
+if path == "/recovery.dat":
+    http_ok("application/octet-stream")
+    sys.stdout.flush()
+    os.execlp("/bin/sh", "sh", "-c", "encrypt-logs recovery-logs | gzip")
+
+http_redirect(path, "/recovery", "/recovery.dat")
+
+# ----------------------------------------------------------------------------
+# Force the system into reflash mode (QFIL).
+
+if path == "/reflash":
+    only_for_usb()
+
+    http_ok("text/html")
+    print ("""\
+<html>
+<head>
+<title>Reflash Mode</title>
+<style type="text/css">
+ body {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+ }
+</style>
+</head>
+<body>
+<h1>Entering Reflash Mode</h1>
+<p>Please wait.
+</body>
+</html>
+""")
+    sys.stdout.flush()
+
+    # Sleep to give the output a chance to get out.
+    subprocess.call("""(
+  exec >&2;
+  sleep 3;
+  PlatformResetIntoQfil
+) &""", shell=True)
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Force the system into vt reflash mode (QFIL).
+
+if path == "/vt-reflash":
+    only_for_usb()
+
+    http_ok("text/html")
+    print ("""\
+<html>
+<head>
+<title>VT Reflash Mode</title>
+<style type="text/css">
+ body {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+ }
+</style>
+</head>
+<body>
+<h1>Entering VT Reflash Mode</h1>
+<p>Please wait.
+</body>
+</html>
+""")
+    sys.stdout.flush()
+
+    # Sleep to give the output a chance to get out.
+    subprocess.call("""(
+  exec >&2;
+  sleep 3;
+  tap-command 'lpm pt "vt qfil"'
+) &""", shell=True)
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Get Bose version
+
+if path == "/bose-version":
+    only_for_usb()
+
+    http_ok()
+    sys.stdout.write(open("/opt/Bose/etc/BoseVersion.json").read())
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Get Kernel version
+
+if path == "/kernel-version":
+    only_for_usb()
+
+    http_ok()
+    sys.stdout.write(open("/etc/riviera-version").read())
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Validate manufacturing data
+
+if path == "/validate-mfgdata":
+    only_for_usb()
+
+    http_ok()
+    redirect_stderr()
+    if subprocess.call(["validate-mfgdata"]) == 0:
+        print ("Valid Manufacturing Data.")
+    else:
+        print ("Invalid Manufacturing Data.")
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Get LPM controller version
+
+if path == "/controller-version":
+    only_for_usb()
+
+    http_ok()
+    redirect_stderr()
+    if os.path.isfile("/opt/Bose/etc/LpmComponentList.json"):
+        import json
+
+        comp_file = '/opt/Bose/etc/LpmComponentList.json'
+        comp = json.load(open(comp_file, 'rt'))
+        comp_list = comp['components']
+        verCmd = "ReadLpmVersion"
+        for component in comp_list:
+            verCmd += ' '
+            verCmd += str(component)
+        subprocess.call(verCmd.split())
+    else:
+        subprocess.call("ReadLpmVersion blob user-app boot-loader psoc lightbar-anim-db dsp darr f0 cc2640".split())
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Clear the "first greeting" flag.
+
+if path == "/clear-first-greeting":
+    only_for_usb()
+
+    http_ok()
+    try:
+        os.remove("/mnt/nv/product-persistence/FirstBootGreetingDone")
+        print ("Cleared first greeting.")
+        subprocess.call(["sync"])
+    except (OSError, e):
+        if e.strerror == "No such file or directory":
+            print ("The first greeting was already cleared.")
+        else:
+            print ("Unable to clear first greeting:", e.strerror)
+
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Read out this unit's device ID. This is used on the manufacturing
+# line in user mode at the very last test station that verifies
+# both device ID and that the user code was installed correctly.
+if path == "/device-id":
+    only_for_usb()
+
+    http_ok()
+    redirect_stderr()
+    os.execlp("get-device-id", "get-device-id")
+
+# ----------------------------------------------------------------------------
+# Show key configuration
+if path == '/keys' and is_development():
+    http_ok('text/html')
+
+    import json
+    import re
+
+    html_escape_re = re.compile(r'[<&>]')
+    html_escapes = { '<': '&lt;',
+                     '&': '&amp;',
+                     '>': '&gt;' }
+    def html_escape(text):
+        return html_escape_re.sub(lambda match: html_escapes[match.group(0)], text)
+
+    config_file = '/opt/Bose/etc/KeyConfiguration.json'
+    config = json.load(open(config_file, 'rt'))
+    key_table = config['keyTable']
+    print ("""
+<head>
+<title>Key Configuration</title>
+<style type="text/css">
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+table {
+    border-collapse: collapse;
+}
+th {
+    padding-top: 11px;
+    padding-bottom: 11px;
+    background-color: #4CAF50;
+    color: white;
+}
+td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+</style>
+</head>
+<body>
+<html>
+<h1>Key Configuration</h1>
+<table>
+<tr><th>Key Event</th><th>Action</th></tr>
+""")
+    prefix_re = re.compile(r'^Console:\s*')
+    delim_re = re.compile(r'\s+->\s+')
+    for key in key_table:
+        comment = key.get('comment', '(no comment)').strip()
+        comment = prefix_re.sub('', comment)
+        match = delim_re.search(comment)
+        if match:
+            i, j = match.span()
+            event = comment[:i]
+            action = comment[j:]
+            print('<tr><td>{event}</td><td>{action}</td></tr>'
+                  .format(event=html_escape(event),
+                          action=html_escape(action)))
+        else:
+            print('<tr><td colspan="2">{comment}</td></tr>'
+                  .format(comment=html_escape(comment)))
+
+    print("""\
+</table>
+</html>
+</body>
+""")
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Open source license documents.
+# The customer end-user documentation references this URL path.
+
+http_redirect(path.lower(), "/opensource", "/licenses/licenses.html")
+http_redirect(path.lower(), "/opensource/", "/licenses/licenses.html")
+
+# ----------------------------------------------------------------------------
+# Remanufacturing.
+
+if path == "/service" or path.startswith("/service?"):
+    if os.path.exists("/var/run/pts-handler-service"):
+        sock = s.socket(s.AF_UNIX, s.SOCK_STREAM)
+        sock.connect("/var/run/pts-handler-service")
+        filepath = path[len("/service?"):]
+        if filepath == "":
+            filepath = "?"
+        sock.send(filepath.encode('utf-8') if isinstance(filepath, str) else filepath)
+
+        while True:
+            data = sock.recv(1024)
+            if not data:
+                break
+            sys.stdout.write(data.decode('utf-8') if isinstance(data, bytes) else data)
+
+        sock.close()
+        sys.exit()
+    else :
+        prog = "/opt/Bose/etc/service"
+        os.execv(prog, [prog, path[len("/service?"):]])
+
+# ----------------------------------------------------------------------------
+# Development links.
+
+if path == "/dev" and is_development():
+    http_ok("text/html")
+
+    mfgdata = get_mfgdata()
+    product_type = mfgdata['productType']
+    macaddr = mfgdata['snMacWlan0']
+
+    title = '{} Development Links ({})' \
+            .format(product_type.title(),
+                    macaddr[9:].replace(':', ''))
+
+    print ("""\
+<html>
+<head>
+<title>$title</title>
+<style type="text/css">
+ body {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+ }
+ td {
+   padding: 3px;
+ }
+ tr:nth-child(even) {
+   background-color: lightgrey;
+ }
+ span.error {
+   color: red;
+ }
+ td.iface {
+   text-align: center;
+ }
+</style>
+
+<script>
+
+function set_address() {
+  var av = address.value.trim();
+  var err = "";
+  if (av.match(/^[-\w.]+(:\d+)?$/)) {
+    var anchors = document.getElementsByTagName("a");
+    for (var i = anchors.length; --i >= 0;) {
+      a = anchors[i];
+      a.href = "http://" + av + a.text;
+    }
+  }
+  else {
+    err = "(malformed)";
+  }
+  oops.textContent = err;
+  address.setSelectionRange(0, address.value.length);
+}
+
+</script>
+</head>
+<body onload="set_address()">
+<h1>$title</h1>
+""".replace('$title', title))
+
+    print ("""\
+<p>
+Address:
+<input type="text" id="address" value="{local_address}" onchange="set_address()">
+<span class="error" id="oops"/>
+""".format(local_address=os.environ.get("LOCAL_ADDRESS", "")))
+
+    print ("""\
+<p>
+<table>
+  <tr>
+    <th>Interface</th>
+    <th>Endpoint</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="iface">usb</td>
+    <td><a>/diag</a></td>
+    <td>Quality Audit</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>/logread.txt</a></td>
+    <td>A snapshot of the system log ring buffer*</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>/logread.txt.gz</a></td>
+    <td>Same as /logread.txt but compressed*</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>/pts.txt</a></td>
+    <td>Various Linux and system status information (e.g., ifconfig)*</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>/pts.dat</a></td>
+    <td>Same as /pts.txt but encrypted</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>/logread.dat</a></td>
+    <td>Same as /logread.txt but encrypted</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>/recovery.txt</a></td>
+    <td>Recovery mode logs for HSP update</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>/recovery.dat</a></td>
+    <td>Same as /recovery.txt but encrypted</td>
+  </tr>
+  <tr>
+    <td class="iface">usb</td>
+    <td><a>/reflash</a></td>
+    <td>Force the unit into reflash mode (QFIL)</td>
+  </tr>
+  <tr>
+    <td class="iface">usb</td>
+    <td><a>/bose-version</a></td>
+    <td>/opt/Bose/etc/BoseVersion.json</td>
+  </tr>
+  <tr>
+    <td class="iface">usb</td>
+    <td><a>/kernel-version</a></td>
+    <td>/etc/riviera-version</td>
+  </tr>
+  <tr>
+    <td class="iface">usb</td>
+    <td><a>/validate-mfgdata</a></td>
+    <td>Check the manufacturing data</td>
+  </tr>
+  <tr>
+    <td class="iface">usb</td>
+    <td><a>/controller-version</a></td>
+    <td>The LPM version strings</td>
+  </tr>
+  <tr>
+    <td class="iface">usb</td>
+    <td><a>/clear-first-greeting</a></td>
+    <td>Clear the flag indicating the unit's first boot</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>/opensource</a></td>
+    <td>The licenses of open source software used in the system</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>/service</a></td>
+    <td>Remanufacturing. Only in service mode</td>
+  </tr>
+  <tr>
+    <td class="iface">usb</td>
+    <td><a>/device-id</a></td>
+    <td>Get this unit's device ID</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>/keys</a></td>
+    <td>Show key configuration*</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>/dev</a></td>
+    <td>This page*</td>
+  </tr>
+  <tr>
+    <td class="iface">usb, wlan1, wlan2</td>
+    <td><a>/</a>, <a>/index.html</a></td>
+    <td>Wi-Fi setup</td>
+  </tr>
+  <tr>
+    <td class="iface">any</td>
+    <td><a>:17008/update.html</a></td>
+    <td>Bonjour Update</td>
+  </tr>
+</table>
+
+<p>
+* Only in development mode.
+
+</body>
+</html>
+""")
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Serve static content (files not served directly by PtsHandler via sendfile).
+
+# Ignore any query parameters from paths like
+# "/index.html?deeplink=com.bose.myApp&ssid=myNetwork&context=ApSetup".
+# See https://github.com/BoseCorp/bose-web-riviera-ap-page/
+
+if path == "/index.html" or path == "/" or \
+   path.startswith("/index.html?") or path.startswith("/?"):
+    # Wi-Fi setup page access is restricted to certain interfaces
+    only_for_ifaces(["wlan1", "wlan2"] + usb_ifaces)
+    send_static_content("/opt/Bose/html/index.html", "text/html")
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+# Enable lpm logging over ipc
+
+if path == "/enable-lpm-log":
+    http_ok()
+    sys.stdout.flush()
+
+    sys.stdout.flush()
+
+    # Sleep to give the output a chance to get out.
+    subprocess.call("""(
+  exec >&2;
+  sleep 3;
+  tap-command 'lpm pt "ll cec,insane"'
+  sleep 1;
+  tap-command 'lpm pt "le ipc,enabled,insane"'
+) &""", shell=True)
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+
+http_err()
+sys.exit()

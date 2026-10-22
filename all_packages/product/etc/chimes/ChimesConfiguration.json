@@ -1,0 +1,100 @@
+{
+  "supported_chimes": [
+    {
+      "event_id": 1,
+      "tone": "T1_welcome_to_bose.flac",
+      "volume": 52,
+      "comment": "Welcome, event first time the device boots up or after factory default"
+    },
+    {
+      "event_id": 2,
+      "tone": "T4_ready_to_connect.flac",
+      "volume": 38,
+      "comment": "bluetooth discoverable"
+    },
+    {
+      "event_id": 3,
+      "tone": "T13_not_available.flac",
+      "volume": 38,
+      "comment": "VPA button press while mic is muted"
+    },
+    {
+      "event_id": 4,
+      "tone": "T5_connected.flac",
+      "volume": 38,
+      "comment": "bluetooth connect notification"
+    },
+    {
+      "event_id": 6,
+      "tone": "T7_positive_confirmation.flac",
+      "volume": 38,
+      "comment": "store preset "
+    },
+    {
+      "event_id": 7,
+      "tone": "T13_not_available.flac",
+      "volume": 38,
+      "comment": "preset is empty"
+    },
+    {
+      "event_id": 8,
+      "tone": "T7_positive_confirmation.flac",
+      "volume": 38,
+      "comment": "mic unmuted"
+    },
+    {
+      "event_id": 9,
+      "tone": "T8_negative_confirmation.flac",
+      "volume": 38,
+      "comment": "mic muted "
+    },
+    {
+      "event_id": 10,
+      "tone": "T13_not_available.flac",
+      "volume": 38,
+      "comment": "source doesn't support next"
+    },
+    {
+      "event_id": 11,
+      "tone": "T13_not_available.flac",
+      "volume": 38,
+      "comment": "source doesn't support prev"
+    },
+    {
+      "event_id": 12,
+      "tone": "T13_not_available.flac",
+      "volume": 38,
+      "comment": "VPA (Voice Personal Assistant) not configured"
+    },
+    {
+      "event_id": 13,
+      "tone": "T15_success.flac",
+      "volume": 47,
+      "comment": "OOB Setup Completed"
+    },
+    {
+      "event_id": 14,
+      "tone": "T9_failure.flac",
+      "volume": 38,
+      "comment": "Failed to store preset"
+    },
+    {
+      "event_id": 15,
+      "tone": "T11_neutral_confirmation_loop.flac",
+      "volume": 38,
+      "comment": "Volume Changed"
+    },
+    {
+      "event_id": 16,
+      "tone": "T19_NeutralCeiling_50msIntroSilence_Eddie.flac",
+      "volume": 100,
+      "comment": "Volume set to max"
+    },
+    {
+      "event_id": 17,
+      "tone": "T11_NeutralVolume_50msIntroSilence_Eddie.flac",
+      "volume": 38,
+      "comment": "Volume unmute"
+    }
+  ]
+}

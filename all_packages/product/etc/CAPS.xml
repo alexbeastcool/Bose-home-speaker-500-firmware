@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <defaultSetupSsid>Bose ST TBD</defaultSetupSsid>
+  <hasStatusLed>false</hasStatusLed>
+  <hasWifiLed>false</hasWifiLed>
+  <isAudioNotificationSupported>true</isAudioNotificationSupported>
+  <isAvahiRequired>true</isAvahiRequired>
+  <isBluetoothAudioSourceSupported>true</isBluetoothAudioSourceSupported>
+  <isOutOfBoxAPSetupSupported>true</isOutOfBoxAPSetupSupported>
+  <hasKeys>false</hasKeys>
+  <moduleType>riviera</moduleType>
+  <productName>Bose Home Speaker 500</productName>
+  <speakerType>5</speakerType>
+  <swUpdateDeviceId>0x0939</swUpdateDeviceId>
+  <swUpdateXmlFilePath>/opt/Bose/etc/SCM_Update.xml</swUpdateXmlFilePath>
+  <variantName>eddie</variantName>
+  <volume thresholdLow="10"
+          thresholdHigh="70"
+          defaultValue="30"/>
+  <supportedRebroadcastLatencyModes>
+    <mode>SYNC_TO_ZONE</mode>
+  </supportedRebroadcastLatencyModes>
+</Configuration>

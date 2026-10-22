@@ -1,0 +1,4 @@
+<ShepherdConfig>
+  <daemon name="xApp" exe="startxApp">
+  </daemon>
+</ShepherdConfig>

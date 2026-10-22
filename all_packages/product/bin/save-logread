@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# Save a snapshot of the syslogd logread ring buffer.
+#
+
+# Do not save logread during SoundTouch stop or FactoryDefault
+if [ -e "/var/run/.factory_defaulting" ] || [ -e "/var/run/.soundtouch_stop_issued" ] ; then
+  echo "Skipping as the crash is during shutdown of the service."
+  exit
+fi
+
+cd /mnt/nv/BoseLog || exit
+
+clean_logs
+
+num=0 min=0 max=0
+shopt -s nullglob
+for i in logread-*.bz2; do
+    n=$(expr match "$i" '.*-0*\([1-9][0-9]*\)\.')
+    (( min == 0 || min > n )) && min=$n minf=$i
+    (( max < n )) && max=$n
+    num=$(( num + 1 ))
+done
+
+if (( num >= 4 )); then # keep at most this many old snapshots
+    rm "$minf"
+fi
+f=$(printf "logread-%04d.bz2" "$(( max + 1 ))")
+if logread | bzip2 >"$f"; then
+    echo "Saved logread snapshot to $f"
+else
+    echo "Failed to save logread snapshot to $f"
+fi

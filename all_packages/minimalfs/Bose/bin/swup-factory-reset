@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# script which clears software update data during factory reset
+
+if ! [ -e /mnt/nv/update/install-in-progress ]; then
+    # Clear pending update status if any
+    # Checking for install-in-progress protect against clearing partial install
+    rm -rfv /mnt/nv/update*.dat
+    # only component status file removal is required and ipks and other update files will be removed 
+    # by SoftwareUpdateService on next boot is there is no components found in components status file.
+else
+    log warning "Partially installed Software Update found. Will not clear Update during Factory Default"
+fi

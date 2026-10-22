@@ -1,0 +1,105 @@
+#!/bin/bash
+#
+# Hook script called by the WiFiManager.
+#
+
+this=${0##*/}                   # this script's name
+tag="$this[$$]"                 # identifier for log messages
+
+log () {
+    local pri="$1"; shift
+
+    # warning does to stderr, too.  info does not.
+    local s=-s; [ "$pri" = info ] && s=
+
+    logger $s -t "$tag" -p "$pri" "$*"
+}
+
+run () {
+    "$@"
+    local e=$?
+    if [ $e -eq 0 ]; then
+        log info "run: $*"
+    else
+        log warning "run (failed $e): $*"
+    fi
+    return $e
+}
+
+if [ $# -lt 1 ]; then
+    log warning "incorrect usage"
+    exit 1
+fi
+op=$1; shift
+
+case "$op" in
+  (init)
+    if (( $# != 1 )); then
+        echo >&2 "$0: missing country code argument"
+        exit 1
+    fi
+    country=$1
+    # Called from WiFiManager::Init before the wpa_supplicant has been
+    # launched.
+
+    # These daemons shouldn't be running already, but just in case...  For
+    # udhcpd, we kill off only the instance that was passed udhcpd.conf as a
+    # command-line argument; we don't want to kill off the udhcpd running on
+    # usb0.
+    run killwait wpa_supplicant hostapd
+    run killbyarg udhcpd /tmp/udhcpd.conf
+
+    run ifconfig wlan0 up
+
+    run iw reg set "$country"
+
+    # Perform a site scan and save the results in a file.  This information
+    # can can be uploaded later to the data collection server via
+    # NetworkDataCollection.
+    f=/tmp/iw-wlan0-scan
+    fz="$f.bz2"
+    rm -f "$f" "$fz"
+    run iw wlan0 scan > "$f" || exit
+
+    sed -i '
+      # Redact the SSID by replacing it with an equal number of Xs.
+      # <tab> "SSID: wireless"
+      # <tab> "SSID: \x00\x00\x00\x00\x00\x00\x00"
+      /^\tSSID: / {
+        s///
+        s/\(\\x..\|.\)/x/g
+        s/^/\tSSID: /
+      }
+      # The serial number is often just the MAC address.
+      /^\t\t \* Serial Number: /d
+    ' "$f" || exit
+
+    n=$(grep -c ^BSS "$f")
+    b=BSSes; [ $n -eq 1 ] && b=BSS
+    s=$(stat -c %s "$f")
+    run bzip2 "$f" || exit
+    sz=$(stat -c %s "$fz")
+    log info "Found $n $b, created $fz ($s/$sz)"
+    ;;
+
+  (conf-hostapd)
+    # The AP daemon hostapd config file ($1) has just been written, but
+    # hostapd hasn't been launched yet.  This is an opportunity to tweak the
+    # configuration.
+    cnf=$1
+    log info "hostapd config file: $cnf"
+    ;;
+
+  (conf-udhcpd)
+    # The AP mode DHCP server daemon udhcpd config file ($1) has just been
+    # written, but udhcpd hasn't been launched yet.  This is an opportunity
+    # to tweak the configuration.
+    cnf=$1
+    log info "udhcpd config file: $cnf"
+    ;;
+
+  (*)
+    log warning "unexpected operation '$op'"
+    exit 1
+    ;;
+esac

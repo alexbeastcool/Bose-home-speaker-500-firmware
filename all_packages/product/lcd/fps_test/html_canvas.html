@@ -1,0 +1,138 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="fpsmeter_css.js"></script>
+
+	<script type="text/javascript">
+
+var meter;
+var sun 	= new Image();
+var moon 	= new Image();
+var earth 	= new Image();
+
+var canvasWidth;
+var canvasHeight;
+
+// CSS-based FPS meter
+function initFpsMeter()
+{
+	if (! window.FPSMeter)
+	{
+	  document.getElementById("results").innerHTML = "Browser not compatible with this test."; 
+	}
+	else
+	{
+	  document.addEventListener("fps",
+	      function(evt) {
+	          document.getElementById("fps").innerHTML = evt.fps + " fps";
+	      },
+	      false);
+	  FPSMeter.run(0.5);
+	}
+}
+
+function init()
+{
+	var body 			= document.body;
+	var canvasElem 		= document.getElementById('canvas');
+    var html 			= document.documentElement;
+
+    //meter 				= new FPSMeter(document.getElementById('fps'), { graph: 1 });
+
+	canvasWidth 		= html.clientWidth;
+	canvasHeight 		= html.clientHeight;
+	canvasElem.width 	= canvasWidth;
+	canvasElem.height 	= canvasHeight;
+
+	sun.src 			= './sun.png';
+	moon.src 			= './moon.png';
+  	earth.src 			= './earth.png';
+
+  	initFpsMeter();
+
+	window.requestAnimationFrame(render);
+}
+
+// This animation is stolen from 
+// https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_animations
+function render() 
+{
+	var canvas = document.getElementById('canvas');
+	var ctx = document.getElementById('canvas').getContext('2d');
+	// Scale to the largest square that can be fit in our canvas.
+	// Scene was originally written for 300x300 canvas.
+	var xyScale = Math.min(canvasWidth, canvasHeight) / 300;
+
+	// Initial transforms.
+	ctx.save();
+	ctx.scale(xyScale, xyScale);
+
+	ctx.globalCompositeOperation = 'destination-over';
+	ctx.globalAlpha = 1.0;
+
+	ctx.clearRect(0, 0, 300, 300);
+	ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+	ctx.strokeStyle = 'rgba(0, 153, 255, 0.4)';
+	ctx.save();
+	ctx.translate(150, 150);
+
+	// Earth
+	var time = new Date();
+	ctx.rotate(2 * Math.PI * (time.getSeconds() / 60) + 2 * Math.PI * (time.getMilliseconds() / 60000));
+	ctx.translate(105, 0);
+	ctx.fillRect(0, -12, 50, 24); // Shadow
+	ctx.drawImage(earth, -12, -12);
+
+	// Moon
+	ctx.save();
+	ctx.rotate(2 * Math.PI * (time.getSeconds() / 6) + 2 * Math.PI * (time.getMilliseconds() / 6000));
+	ctx.translate(0, 28.5);
+	ctx.drawImage(moon, -3.5, -3.5);
+	ctx.restore();
+
+	ctx.restore();
+
+	// Path
+	ctx.beginPath();
+	ctx.arc(150, 150, 105, 0, Math.PI * 2, false); // Earth orbit
+	ctx.stroke();
+
+	// Sun
+	ctx.globalAlpha = Math.sin(Math.PI  * (window.performance.now() % 5000) / 5000);
+	ctx.drawImage(sun, 0, 0, 300, 300);
+
+	ctx.restore();	// pop initial transforms
+
+  	window.requestAnimationFrame(render);
+
+}
+
+	</script>
+
+	<style>
+		body { background-color: rgba(0, 0, 0, 1.0); }
+
+        #canvas { position: absolute; left: 0px; z-index: 0; }
+
+        #fps {
+        	position: absolute;
+        	left: 0px;
+        	top: 0px;
+        	width: 100px;
+        	height: 20px;
+        	z-index: 10;
+        	color: black;
+        	background-color:white;
+        }
+    </style>
+</head>
+
+<body onload="init()">
+
+	<canvas id="canvas"></canvas>
+
+	<div id="fps">&nbsp;</div>
+
+</body>
+
+</html>

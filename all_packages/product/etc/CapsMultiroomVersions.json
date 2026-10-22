@@ -1,0 +1,7 @@
+{
+    "MultiroomVersions":
+    {
+        "NowPlaying_Version":{"major_version":1,"minor_version":0},
+        "PlaybackRequest_Version":{"major_version":1,"minor_version":0}
+    }
+}

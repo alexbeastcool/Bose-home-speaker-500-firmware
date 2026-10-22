@@ -1,0 +1,4 @@
+<ShepherdConfig>
+  <daemon name="GoogleCastLite" exe="startGoogleCast">
+  </daemon>
+</ShepherdConfig>

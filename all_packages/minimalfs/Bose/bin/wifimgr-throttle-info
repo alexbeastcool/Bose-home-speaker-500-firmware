@@ -1,0 +1,65 @@
+#!/usr/bin/python
+# updating to /usr/bin/python as this script is compatible to python2.7 as well as python 3.8.
+# Riviera and Coronado have python2.7 while Lamarr has python3.8 and hence it uses only python.
+#
+# Python script called by the WiFiManager when evern any connection happens
+# to capture the throttle level of the device for NDC(Network Data Collection)
+#
+import sys
+import os
+import subprocess
+import re
+import json
+
+this_script = os.path.basename(sys.argv.pop(0))
+
+throttleRe = re.compile(r"^.*\[\s*(?P<timeStamp>.+)\]\s+TXRX:\s*Setting\s*throttle\s*level\s*(?P<level>.+)$")
+
+# Execute dmesg to capture informationa about throttling of the device
+# can can be uploaded later to the data collection server via
+# NetworkDataCollection.
+# Runs the comnmand to capture dmesg
+def dmesg():
+    cmd = ["dmesg"]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    result = proc.stdout.read()
+    return result
+
+# Parses the response from the command "dmesg"
+def parse(content):
+    cells = []
+    lines = content.decode('utf-8').split('\n')
+    throttleOneCaptured = False
+    throttleTwoCaptured = False
+    throttleThreeCaptured = False
+    for line in reversed(lines):
+        line = line.strip()
+        throttle = throttleRe.search(line)
+        if throttle is not None:
+            match = throttle.groupdict()
+            level = match["level"]
+            if level == "3":
+                if not throttleThreeCaptured:
+                    throttleThreeCaptured = True
+                    cells.append(throttle.groupdict())
+            elif level == "2":
+                if not throttleTwoCaptured :
+                    throttleTwoCaptured = True
+                    cells.append(throttle.groupdict())
+            elif level == "1":
+                if not throttleOneCaptured:
+                    throttleOneCaptured = True
+                    cells.append(throttle.groupdict())
+            if throttleThreeCaptured and throttleTwoCaptured and throttleOneCaptured:
+                break
+    cells = json.dumps(cells, indent=4)
+    return cells
+
+output = dmesg()
+cells = parse(output)
+
+finalJson = {}
+finalJson["throttleInfo"] = json.loads(cells)
+
+with open("/tmp/wifimgr-throttle-info.json", "w") as f:
+    json.dump(finalJson, f)

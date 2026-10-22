@@ -1,0 +1,3 @@
+<ShepherdConfig>
+  <daemon name="IoT" />
+</ShepherdConfig>

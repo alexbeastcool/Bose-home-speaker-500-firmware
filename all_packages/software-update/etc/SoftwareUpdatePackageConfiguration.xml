@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SwUpPackageConfiguration>
+	<configFilePath>/mnt/nv/update/</configFilePath>
+	<commandPathFile>/opt/Bose/update/opkg/opkg</commandPathFile>
+	<architecture>armv7a-vfp-neon</architecture>
+	<destination>/opt/Bose/</destination>
+	<bandwidth>100</bandwidth>
+	<distributionName>product</distributionName>
+	<sourceURL>http://10.60.11.51/eddie/latest/</sourceURL>
+	
+	<cachePath>/opt/Bose/.swUpdateCache/ipks/</cachePath>
+	<verbose>false</verbose>
+	<downloadOnly>false</downloadOnly>
+	<noAction>false</noAction>
+
+</SwUpPackageConfiguration>

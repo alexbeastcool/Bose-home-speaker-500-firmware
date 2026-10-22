@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Enables LPM logging message delivery to the
+# /lpmlogread.txt endpoint of the PtsServer.
+#
+
+if (( $# > 0 )); then
+	echo >&2 "$0: unexpected argument '$1'"
+	exit 1
+fi
+
+printf "LPM Logread initializing . . .\n"
+tap-command 'lpm pt "lstore info,ipc"'
+
+logread -f | grep "LPM Log"

@@ -1,0 +1,5 @@
+<ShepherdConfig>
+  <daemon name="GalapagosClient">
+    <arg>-c/opt/Bose/etc/GalapagosClient.json</arg>
+  </daemon>
+</ShepherdConfig>

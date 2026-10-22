@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<config>
+    <header master_version="4.0.34.8afd612.5519017" name="eddie_package.bos"/>
+    <checksum value="41477364"/>
+    <filename name="eddie_package_4.0.34.8afd612.5519017.bos"/>
+    <manifest_entries multiblob="false">
+        <entry name="eddie.bin" path="./eddie.bin" region="US GB JP" version="4.0.34.8afd612"/>
+        <entry name="eddie_mfg.bin" path="./eddie_mfg.bin" region="US GB JP" version="1.0.3.3822"/>
+        <entry name="eddie_bl.bin" path="./eddie_bl.bin" region="US GB JP" version="0.1.0.1599"/>
+        <entry name="eddieclu_lb_anim_db.bin" path="./eddieclu_lb_anim_db.bin" region="US GB JP" version="2.11"/>
+        <entry name="eddie_lb_anim_db.bin" path="./eddie_lb_anim_db.bin" region="US GB JP" version="2.10"/>
+        <entry name="psoc.cyacd" path="./psoc.cyacd" region="US GB JP" version="4.3"/>
+    </manifest_entries>
+</config>

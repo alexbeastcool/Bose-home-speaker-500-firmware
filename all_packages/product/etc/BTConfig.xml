@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BluetoothConfigMsg
+    manual_carousel="true"
+    source_enabled="true"
+    sink_enabled="true"
+    hfp_enabled="false"
+    hfag_enabled="false"
+    ble_encryption_enabled="true"
+    sink_aac_enabled="true"
+    bluetooth_arbitration_enabled="true"
+    quicksimplesync_enabled="true"
+    source_aac_enabled="false"
+    blea_sink_enabled="false"
+    blea_unicast_source_enabled="false"
+    blea_broadcast_source_enabled="false"
+    eatt_enabled="false">
+    <btsource_a2dp_packet_delivery_timings
+        delivery_time_5G_ms="10"
+        delivery_time_2G_ms="20"
+        max_delivery_delta_time_ms="10"/>
+</BluetoothConfigMsg>

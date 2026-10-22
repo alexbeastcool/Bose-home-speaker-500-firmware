@@ -1,0 +1,52 @@
+#!/bin/sh
+#
+# Kill a process and wait for it to die.  If it doesn't die, hit it harder.
+#
+# Process can be identified by PID or (a la pgrep/killall) process name.
+#
+this=${0##*/}
+
+exit=0
+while [ $# -gt 0 ]; do
+    pid=$1; shift
+
+    if ! [ "$pid" -gt 0 ] 2>/dev/null; then
+        set -- $(pgrep "$pid") "$@"
+        continue
+    fi
+    kill "$pid" 2>/dev/null
+
+    # If the process no longer exists, then /proc/$pid/cmdline won't exist.
+    # If the process has exited but has not yet been waited for (i.e., it's a
+    # zombie), then cmdline will exist but be empty.
+    i=0
+    while [ -s "/proc/$pid/cmdline" ] && [ $i -lt 20 ]; do
+        i=$((i + 1))
+        sleep .1
+    done
+    # If it's still alive, slow down the polling but keep trying, and
+    # occasionally send a new signal.
+    i=0
+    while [ -s "/proc/$pid/cmdline" ]; do
+        i=$((i + 1))
+        case $i in
+            (10)
+                kill "$pid" || break
+                ;;
+            (20)
+                echo >&2 "$this: process $pid is still running, sending SIGQUIT"
+                kill -QUIT "$pid" || break
+                ;;
+            (30)
+                echo >&2 "$this: process $pid is still running, sending SIGKILL"
+                kill -KILL "$pid" || break
+                ;;
+            (40)
+                echo >&2 "$this: process $pid is still running, giving up"
+                exit=1
+                ;;
+        esac
+        sleep 1
+    done
+done
+exit $exit

@@ -1,0 +1,15 @@
+{
+  "abbrev_commit": "02f4457",
+  "branch": "master",
+  "build_number": "0",
+  "commit": "02f4457391bf0710f0783b1389b0fd41628c07a4",
+  "host": "ip-10-141-255-116",
+  "localtime": "2025-07-02T05:39:35",
+  "long": "0.4.14.0 jenkins@ip-10-141-255-116 2025-07-02T05:39:35 02f4457",
+  "major": "0",
+  "minor": "4",
+  "patch": "14",
+  "short": "0.4.14",
+  "time": 1751434775,
+  "user": "jenkins"
+}

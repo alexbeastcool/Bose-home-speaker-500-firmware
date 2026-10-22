@@ -1,0 +1,13 @@
+{
+	"WSSCfg": {
+                "disableWSS": false,
+                "disableJWT": false,
+                "disablePolicyCheck": false,
+                "disableWSSProductToProduct": false,
+                "disableJWTProductToProduct": false,
+                "disableSSLPayloadServer": false,
+                "disableSecureAPMode": false,
+                "disableWSSMtlsProductToProduct": false,
+                "disableMtlsProductToProduct": false
+	}
+}

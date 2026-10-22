@@ -1,0 +1,40 @@
+#!/bin/bash
+# Runs GoogleCastLite with alternate HOME env
+
+CONFIG_FILE="/opt/Bose/etc/GoogleCastConfig.json"
+CAST_HOME_DIR="/mnt/nv/product-persistence/google-cast-library"
+export CAST_CLIENT_CERTS="$CAST_HOME_DIR/.config/cast_shell/certs"
+export CAST_CLIENT_CERT="$CAST_CLIENT_CERTS/client.crt"
+
+# Remove Cast Data Directory if cert expired
+if test -f "$CAST_CLIENT_CERT"; then
+    if ! openssl x509 -checkend 0 -noout -in "$CAST_CLIENT_CERT"; then
+        echo "Removing Cast directory because Cast client certs expired!"
+        rm -rf "$CAST_HOME_DIR"
+    fi
+fi
+
+mkdir -pm700 "$CAST_CLIENT_CERTS"
+chmod 0700 "$CAST_CLIENT_CERTS"
+
+if test -f "$CAST_CLIENT_CERT"; then
+    CAST_CLIENT_CERT_PERM=`stat -c "%a" $CAST_CLIENT_CERT`
+    if [ "$CAST_CLIENT_CERT_PERM" != "444" ]; then
+        echo "Changing permission for $CAST_CLIENT_CERT from $CAST_CLIENT_CERT_PERM to 444"
+        chmod 444 $CAST_CLIENT_CERT
+    fi
+fi
+
+cd "$CAST_HOME_DIR"
+
+IN=
+#IN="gdb --args"
+#IN="strace -f"
+
+CAST_OTA_LAUNCHER="/opt/Bose/bin/cast-updater/cast_ota_start.sh"
+if test -f "$CAST_OTA_LAUNCHER"; then
+    echo "starting cast_ota"
+    source "$CAST_OTA_LAUNCHER" &
+fi
+
+HOME="$CAST_HOME_DIR" exec $IN GoogleCastLite -c "$CONFIG_FILE"

@@ -1,0 +1,160 @@
+#!/usr/bin/python2.7
+#
+# Display tests.
+#
+# For example, for the URL
+#
+#   http://203.0.113.1/diag/display/black.png?show
+#
+# this script invokes as
+#
+#   display black.png?show
+#
+# This invocation shows the specified image on the display and outputs a
+# simple HTTP response, "OK".
+#
+# Without the "?show" part, the script returns the image as the HTTP
+# response.
+#
+# Without the "/black.png..." part, show the test page.
+#
+# With "?done", end the tests and redirect to the /diag page.
+#
+import os
+import sys
+import subprocess
+
+if len(sys.argv) == 1:
+    print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/html\r
+Cache-Control: no-cache\r
+\r
+<html>
+<head>
+<title>Diagnostics: Display Tests</title>
+<style type="text/css">
+ body {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+ }
+ hr {
+   border: 1px solid blue;
+   color: #fff;
+   background-color: #fff;
+   height: 1px;
+   width: 100%;
+ }
+ div.box {
+   background-color: lightgrey;
+   border: thin dotted;
+   padding: 1em;
+   margin: 1em;
+ }
+ td.showimg {
+   background-color: lightgrey;
+   padding: 8px;
+   border-style: dotted;
+   border-width: 1px;
+ }
+ .hilite {
+   background-color: yellow;
+ }
+</style>
+<script>
+function showimg(which) {
+  var f = document.getElementById("ok");
+  f.contentWindow.document.open();
+  //f.contentWindow.document.write("Wait");
+  f.contentWindow.document.close();
+  f.src = "/diag/display/" + which + ".png?show";
+}
+</script>
+</head>
+<body>
+<h1>Diagnostics: Display Tests</h1>
+<hr>
+<table>
+<tr>
+"""
+    for img in "red green blue black white outline".split():
+        print """<td class="showimg">\
+<img width="60" height="80" onclick='showimg("{img}")' \
+src="/diag/display/{img}.png"></td>""".format(img=img)
+
+    print """
+<td><iframe id="ok" width="60" height="80" frameborder="0"></iframe></td>
+</tr>
+</table>
+<hr>
+<button onclick="location.href='/diag/display/?done'">Done</button>
+</body>
+</html>
+"""
+    sys.exit()
+
+if len(sys.argv) != 2:
+    raise Exception("wrong usage " + str(sys.argv))
+image = sys.argv[1]
+
+params = None
+i = image.find("?")
+if i != -1:
+    params = image[i+1:]
+    image = image[:i]
+
+if params == "done":
+    try:
+        os.symlink("/opt/Bose/etc/Shepherd-Monaco.xml", "/var/run/shepherd/Shepherd-Monaco.xml")
+    except OSError, exc:
+        if exc.strerror != "File exists":
+            raise
+    subprocess.call(["shepherd-wait", "/var/run/shepherd", "/var/run/shepherd/pid"],
+                    stdout=open("/dev/null", "w"), stderr=subprocess.STDOUT)
+    print """\
+HTTP/1.1 307 Temporary Redirect\r
+Location: /diag\r
+\r
+Temporary Redirect\r
+"""
+    sys.exit()
+
+# Protect against potentially malicious pathnames.
+if "/" in image or not image.endswith(".png") or not os.path.exists(image) or \
+   os.path.islink(image):
+    raise Exception("bad image name: " + image)
+
+if params == "show":
+    # Used by Test/mfgdata/diagnostics_mfgdata_page.py
+    subprocess.call(["logger", "display-test", image])
+
+    devnull = open("/dev/null", "w")
+
+    try:
+        os.remove("/var/run/shepherd/Shepherd-Monaco.xml")
+        removed = True
+    except:
+        removed = False
+    if removed:
+        # Stop Monaco from managing the display.
+        subprocess.call(["shepherd-wait", "/var/run/shepherd", "/var/run/shepherd/pid"],
+                        stdout=devnull, stderr=subprocess.STDOUT)
+
+    # Show the image on the unit's display and
+    # send "OK" as the HTTP response.
+    subprocess.call(["show_splash", image],
+                    stdout=devnull, stderr=subprocess.STDOUT)
+
+    print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/plain\r
+Cache-Control: no-cache\r
+\r
+OK\r"""
+
+else:
+    # Output the image as the HTTP response.
+    print """\
+HTTP/1.1 200 OK\r
+Content-Type: image/png\r
+\r"""
+    sys.stdout.write(open(image, "rb").read())

@@ -1,0 +1,85 @@
+#!/bin/bash
+
+BackUpPath="/opt/Bose/.swUpdateCache/BackUp/"
+PublicCertPath="/opt/Bose/etc/secure/"
+BasePath=/opt/Bose/bin/
+
+if (( $# == 0 )); then
+    echo "Provide install status, \"start\" / \"stop\""
+    exit 1
+fi
+
+if (( $# >= 1 )) && [ "$1" = start ]; then
+    PATH="$BackUpPath":/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+
+    swup=(                        
+        Shepherd-NetManager.xml
+        Shepherd-FrontDoor.xml
+        Shepherd-GalapagosClient.xml
+        Shepherd-HTTPProxy.xml
+        Shepherd-ClockSync.xml
+    )
+
+    mkdir -p "$BackUpPath" || exit
+    productType=$(mfgdata get productType) # No need to exit from here
+
+    # In case of power interruption during installation certificates should already present at backup location
+    # Do not overwrite the certificates if it already exists
+    if [ ! -d "$BackUpPath/secure" ]; then
+        # copy public certificates to backup location
+        cp -rp "$PublicCertPath" "$BackUpPath" || exit
+    fi
+
+    cp -f "$BasePath"/shepherdd "$BackUpPath" || exit
+    cp -f "$BasePath"/NetManager "$BackUpPath" || exit
+    cp -f "$BasePath"/StartNetManager "$BackUpPath" || exit
+    cp -f "$BasePath"/FrontDoor "$BackUpPath" || exit
+    cp -f "$BasePath"/GalapagosClient "$BackUpPath" || exit
+    cp -f "$BasePath"/HTTPProxy "$BackUpPath" || exit
+    cp -f "$BasePath"/ProductDiscoveryService "$BackUpPath" # making it optional as minimalFS do not have it
+    cp -f "$BasePath"/ClockSync "$BackUpPath" || exit
+
+    cp -f "$BasePath"/ntpservers.txt "$BackUpPath"
+   
+    sync
+
+    rundir=/var/run/shepherd
+    pidfile="$rundir"/pid
+
+    echo "Enabling services to enter swup mode"
+    mkdir -p "$rundir" || exit
+    cd "$rundir" || exit
+    rm -f "$rundir"/Shepherd*.xml || exit
+    for i in "${swup[@]}"; do
+        ln -sf "/opt/Bose/etc/$i" || exit
+    done
+
+    # making it optional as minimalFS do not have it
+    if [ -f /opt/Bose/etc/Shepherd-ProductDiscoveryService.xml ]; then
+        ln -sf /opt/Bose/etc/Shepherd-ProductDiscoveryService.xml
+    fi
+
+    if [[ "$productType" == "angus" ]]; then
+        cp -f "$BasePath"/LPMService "$BackUpPath" || exit
+
+        # Start LPMService from backup location with recovery option disabled
+        # because SWUP will kill LPMService whenever it will try to install lpm_updater / VT ipks
+        echo "<ShepherdConfig> 
+            <daemon name=\"LPMService\" recovery=\"ignore\"/> 
+        </ShepherdConfig>" > "$BackUpPath"/Shepherd-LPMService.xml || exit
+
+        ln -sf "$BackUpPath/Shepherd-LPMService.xml" || exit
+        sync
+    fi
+    cd "$BackUpPath" || exit
+
+    ./shepherdd "$rundir" --default-cpu-set 7 &
+    echo "$!" >"$pidfile" || exit
+fi
+
+if (( $# >= 1 )) && [ "$1" = stop ]; then
+    if [ -e "$BackUpPath" ]; then
+        /opt/Bose/bin/SoundTouch stop 
+        rm -rf "$BackUpPath" || exit
+    fi
+fi

@@ -1,0 +1,37 @@
+{
+  "distributionConfig": {
+    "auxStreamConfig": {
+      "fecGridRow": 3,
+      "fecGridCol": 3,
+      "audioFrameDurationMs": 20,
+      "audioBitRateKBPS": 192,
+      "payloadBytes": 600,
+      "redistributionDelay": 500000
+    },
+    "airplayStreamConfig": {
+      "fecGridRow": 3,
+      "fecGridCol": 3,
+      "audioFrameDurationMs": 20,
+      "audioBitRateKBPS": 192,
+      "payloadBytes": 600,
+      "redistributionDelay": 500000
+    },
+    "btStreamConfig": {
+      "fecGridRow": 3,
+      "fecGridCol": 3,
+      "audioFrameDurationMs": 20,
+      "audioBitRateKBPS": 192,
+      "payloadBytes": 1000,
+      "redistributionDelay": 500000
+    },
+    "lowLatencyAuxStreamConfig": {
+      "fecGridRow": 3,
+      "fecGridCol": 3,
+      "audioFrameDurationMs": 5,
+      "audioBitRateKBPS": 192,
+      "payloadBytes": 400,
+      "redistributionDelay": 130000
+    }
+  },
+  "nbDropGrids":500
+}

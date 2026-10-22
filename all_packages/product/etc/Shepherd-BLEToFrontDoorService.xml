@@ -1,0 +1,6 @@
+<ShepherdConfig>
+
+  <daemon name="BLEToFrontDoorService"
+          recovery="reboot"/>
+
+</ShepherdConfig>

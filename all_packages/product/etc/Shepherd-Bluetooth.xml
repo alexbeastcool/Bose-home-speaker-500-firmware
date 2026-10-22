@@ -1,0 +1,9 @@
+<ShepherdConfig>
+    <daemon name="Bluetooth"
+            recovery="reboot"
+            cpuset="2"
+            nice="-19">
+        <arg>-c</arg>
+        <arg>/opt/Bose/etc/BTConfig.xml</arg>
+    </daemon>
+</ShepherdConfig>

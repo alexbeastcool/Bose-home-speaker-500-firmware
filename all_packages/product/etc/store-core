@@ -1,0 +1,212 @@
+#!/bin/sh
+# Helper script for `/proc/sys/kernel/core_pattern`.
+# Launched by the Linux kernel to store a core file.
+# With no arguments, set the core_pattern.
+
+PATH=/opt/Bose/bin:/bin:/usr/bin
+
+core_tmp_dir="/tmp"
+
+if [ $# -eq 0 ]; then
+    ulimit -c unlimited
+    echo "|/opt/Bose/etc/store-core %p %u %g %e %s %t %i %E" \
+         >/proc/sys/kernel/core_pattern
+    # %p PID
+    # %u user
+    # %g group
+    # %e task name or basename of executable (see prctl PR_SET_NAME)
+    # %s number of signal causing dump
+    # %t time of dump (POSIX time - seconds since 1970)
+    # %i TID (thread ID) of the thread that triggered the core dump
+    # %E executable pathname (slashes/ changed to bangs!)
+
+    # Ensure the logs directory exists and has the right permissions
+    mkdir -p /data/logs
+    chown bose:bose /data/logs
+    chmod 770 /data/logs
+
+    exit
+fi
+pid=$1; shift
+user=$1; shift
+group=$1; shift
+comm=$1; shift
+sig=$1; shift
+time=$1; shift
+tid=$1; shift
+exe=$*
+
+warn () {
+    logger -s -t "store-core[$$]" -p warning "$*"
+}
+
+warn "pid=$pid, user=$user, group=$group, comm=$comm, sig=$sig, time=$time, tid=$tid, exe=$exe"
+
+commit=$(jq -r .abbrev_commit /opt/Bose/etc/BoseVersion.json) ||
+    commit=unknown
+
+version_short=$(jq -r .short /opt/Bose/etc/BoseVersion.json) ||
+    version_short=unknown
+
+build_number=$(jq -r .build_number /opt/Bose/etc/BoseVersion.json) ||
+    build_number=unknown
+
+core_dir="/mnt/nv/BoseLog"
+core_name=core-$commit-${exe##*!}-$comm-$pid-$tid-$sig-$user-$group-$time
+
+core=$core_dir/$core_name.gz
+logs=$core_dir/$core_name.log
+metadata=$core_dir/$core_name.json
+
+# using /var/run path for coronado platform because core_tmp_dir may be private and store-core will not have access to it
+if [ -e "/var/run/.factory_defaulting" ] || [ -e "/var/run/.soundtouch_stop_issued" ] ; then
+  warn "Not creating core file '$core' during factory default."
+  exit
+fi
+
+is_dev_mode=false
+if is-development; then
+    is_dev_mode=true
+fi
+
+store_cores_cfg_enabled=$(config-key-get diagnostics.store-cores)
+should_store_cores=false
+if [ "$is_dev_mode" = true ] || [ "$store_cores_cfg_enabled" = "true" ]; then
+    should_store_cores=true
+fi
+
+clean_logs
+
+core_reason="Core:$sig"  # default fallback
+
+# Estimate core size from /proc - the kernel keeps /proc/$pid alive during core pipe
+vm_size_kb=0
+vm_data_kb=0
+if [ -f "/proc/$pid/status" ]; then
+    vm_size_kb=$(grep -i "VmSize:" /proc/$pid/status 2>/dev/null | awk '{print $2}')
+    vm_size_kb=${vm_size_kb:-0}
+    vm_data_kb=$(grep -i "VmData:" /proc/$pid/status 2>/dev/null | awk '{print $2}')
+    vm_data_kb=${vm_data_kb:-0}
+fi
+
+# Check available space on core_tmp_dir and /data (in KB)
+tmp_avail_kb=$(df -k "$core_tmp_dir" 2>/dev/null | awk 'NR==2 {print $4}')
+tmp_avail_kb=${tmp_avail_kb:-0}
+data_avail_kb=$(df -k /data 2>/dev/null | awk 'NR==2 {print $4}')
+data_avail_kb=${data_avail_kb:-0}
+
+warn "VmSize: ${vm_size_kb}KB, VmData: ${vm_data_kb}KB, $core_tmp_dir available: ${tmp_avail_kb}KB, /data available: ${data_avail_kb}KB"
+
+# Determine whether to skip the temp file and pipe directly to gzip.
+# Skip if gdb is not available (extract-core-reason requires it) or if the
+# estimated core size (VmData + 5% headroom) won't fit in core_tmp_dir.
+use_fast_path=false
+if ! command -v gdb >/dev/null 2>&1; then
+    warn "gdb not found. Skipping reason extraction, piping directly to gzip."
+    use_fast_path=true
+elif [ "$vm_data_kb" -gt 0 ] && [ "$tmp_avail_kb" -gt 0 ]; then
+    vm_data_with_headroom=$(( vm_data_kb + vm_data_kb / 20 ))
+    if [ "$vm_data_with_headroom" -ge "$tmp_avail_kb" ]; then
+        warn "Core too large for $core_tmp_dir (VmData+5%%: ${vm_data_with_headroom}KB vs available: ${tmp_avail_kb}KB). Skipping reason extraction, piping directly to gzip."
+        use_fast_path=true
+    fi
+fi
+
+if [ "$use_fast_path" = true ]; then
+    if [ "$should_store_cores" = true ]; then
+        warn "Creating core file '$core' (direct pipe)..."
+        gzip > "$core"
+        gzip_status=$?
+        if [ $gzip_status -eq 0 ]; then
+            actual_core_size=$(du -k "$core" 2>/dev/null | awk '{print $1}')
+            warn "gzip succeeded for '$core' (compressed size: ${actual_core_size:-unknown}KB)"
+        else
+            warn "gzip failed for '$core'"
+        fi
+    else
+        warn "should_store_cores is false, discarding core data."
+        cat > /dev/null
+    fi
+else
+    core_tmp_file="$core_tmp_dir/core.$$"
+    extract_reason_file="$core_tmp_dir/core_reason.$$"
+
+    # Write stdin to a temp file
+    cat > "$core_tmp_file"
+
+    if [ "$should_store_cores" = true ]; then
+        # gzip the core file if core storage is enabled or if dev
+        warn "Creating core file '$core'..."
+        gzip < "$core_tmp_file" > "$core"
+        gzip_status=$?
+        if [ $gzip_status -eq 0 ]; then
+            actual_core_size=$(du -k "$core" 2>/dev/null | awk '{print $1}')
+            actual_uncompressed_size=$(du -k "$core_tmp_file" 2>/dev/null | awk '{print $1}')
+            warn "gzip succeeded for '$core' (uncompressed: ${actual_uncompressed_size:-unknown}KB, compressed: ${actual_core_size:-unknown}KB)"
+        else
+            warn "gzip failed for '$core'"
+        fi
+    else
+        warn "should_store_cores is false, skipping core file creation and log saving."
+    fi
+
+    warn "extract-core-reason $exe $sig $pid $user $group $comm $core_tmp_file"
+    extract-core-reason "$exe" "$sig" "$pid" "$user" "$group" "$comm" "$core_tmp_file" > "$extract_reason_file"
+    extract_status=$?
+    if [ $extract_status -eq 0 ]; then
+        warn "extract-core-reason succeeded for '$core_tmp_file'"
+        core_reason=$(cat "$extract_reason_file")
+    else
+        warn "extract-core-reason failed for '$core_tmp_file'"
+    fi
+
+    # Cleanup the temp files
+    rm -f "$extract_reason_file" "$core_tmp_file"
+fi
+
+if [ "$should_store_cores" = true ]; then
+    # run logread as root to capture the current log buffer
+    sg root "logread > '$logs'"
+
+    if [ -e "$logs" ] && [ -s "$logs" ]; then
+        warn "Creating log file '$logs'...done"
+    else
+        warn "Creating log file '$logs'...failed or empty"
+    fi
+fi
+
+# Write metadata to a file in JSON formatecho $
+cat <<EOF > $metadata
+{
+  "pid" : "$pid",
+  "tid" : "$tid",
+  "comm" : "$comm",
+  "sig" : "$sig",
+  "time" : "$time",
+  "user" : "$user",
+  "group" : "$group",
+  "reason" : "$core_reason",
+  "version_short" : "$version_short",
+  "build_number" : "$build_number",
+  "commit" : "$commit",
+  "exe": "$exe",
+  "is-development" : $is_dev_mode,
+  "core_name" : "$core_name"
+}
+EOF
+
+if [ -e "$metadata" ]; then
+    warn "Creating meta data file '$metadata'...done"
+else
+    warn "Creating meta data file '$metadata'...failed"
+fi
+
+# After creating the files, change ownership to bose user
+chown bose:bose "$core" "$logs" "$metadata" 2>/dev/null || true
+
+# Want version string to be in the format of 0.7.3-886+b76f772
+# This is so it can be used to lookup the build artifacts on solid
+version_string=$version_short-$build_number+$commit
+
+# /telemetry-record-crash <service> <reason> <version>
+telemetry-record-crash $comm $core_reason $version_string

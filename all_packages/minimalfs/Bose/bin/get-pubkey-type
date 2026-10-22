@@ -1,0 +1,121 @@
+#!/bin/sh
+
+# Determine if firmware is production or development signed. Usage:
+#   get-pubkey-type [PATH-TO-CERT-CHAINS]
+if [ $# -gt 1 ]; then
+  echo "usage: $0 [/opt/Bose/etc/secure/publicKeys/bose_public_key_swupdate.pem]" >/dev/stderr
+  exit 1
+fi
+
+# On Coronado systems the signature type is tied to MRC fuse values.
+# This file is created by signature-type.service.
+if [ $# == 0 ] && [ -f /var/run/signature-type ]; then
+  cat /var/run/signature-type
+  exit 0
+fi
+
+# Existing usage of this script passes in the path of the attestation
+# certificate. (Confusingly, this is mislabeled as the "public key".)
+# To maintain compatibility, strip off the final two path components
+# in order to isolate the directory containing all the certificates.
+ATTESTATION_PATH="publicKeys/bose_public_key_swupdate.pem"
+CA_CHAIN_PATH="CACerts/bose_ca_cert_swupdate.pem"
+CERT_DIR=`dirname ${1:-/opt/Bose/etc/secure/$ATTESTATION_PATH}`
+CERT_DIR=`dirname $CERT_DIR}`
+
+# Checks if the chain under $2 is valid against the root in $1.
+check_chain() {
+    echo "$1" | \
+    openssl verify >/dev/null 2>&1 \
+        -CAfile /dev/stdin \
+        -untrusted "$2/$CA_CHAIN_PATH" \
+        "$2/$ATTESTATION_PATH"
+}
+
+# The development RSA-PKCS1.5 certificate chain used on Riviera.
+DEVELOPMENT_ROOT='-----BEGIN CERTIFICATE-----
+MIIC+jCCAmOgAwIBAgIJAPSu7HRSrxxuMA0GCSqGSIb3DQEBCwUAMIGUMQswCQYD
+VQQGEwJVUzEWMBQGA1UECAwNTWFzc2FjaHVzZXR0czEZMBcGA1UECgwQQm9zZSBD
+b3Jwb3JhdGlvbjEgMB4GA1UECwwXU1NHIFByb2R1Y3QgRGV2ZWxvcG1lbnQxMDAu
+BgNVBAMMJ0Jvc2UgREVWIFJPT1QgQ0EgLSBERVZFTE9QTUVOVCBVU0UgT05MWTAg
+Fw03MDAxMDEwNTEwMjJaGA8yMDY5MTIwNzA1MTAyMlowgZQxCzAJBgNVBAYTAlVT
+MRYwFAYDVQQIDA1NYXNzYWNodXNldHRzMRkwFwYDVQQKDBBCb3NlIENvcnBvcmF0
+aW9uMSAwHgYDVQQLDBdTU0cgUHJvZHVjdCBEZXZlbG9wbWVudDEwMC4GA1UEAwwn
+Qm9zZSBERVYgUk9PVCBDQSAtIERFVkVMT1BNRU5UIFVTRSBPTkxZMIGfMA0GCSqG
+SIb3DQEBAQUAA4GNADCBiQKBgQDUBhYYS0KmO4EvLsx1LzTzyFWGZI7pX/oL0DOI
+cszQKBCG/Rywr15bciygfZxbqC7TNd4P8RlxSVaQp63HqZX6+5IJlFJv1IQK6aN4
+Q1hGLUDvdLtrJXFJANFERre7AD3aNnT6VhXn7nwxqGjJZkSJXA2P8OMPwrRbZdmu
+Ei3OFwIDAQABo1AwTjAdBgNVHQ4EFgQUuj0zj6RVJTNOB9J01cLU6YMT5AowHwYD
+VR0jBBgwFoAUuj0zj6RVJTNOB9J01cLU6YMT5AowDAYDVR0TBAUwAwEB/zANBgkq
+hkiG9w0BAQsFAAOBgQCPkjIvr8DbUG3HkZQsb5n18Gr1qAPiTLyUtDCKzlnpeHQM
+/1bs4G2cr8NdM6MBEO+2dADM56n7fVr/ErgePddIAR4WuRTPDeFNLUvOcO2bnJ8V
+LEK9WklOa1ekCi/8gA6aHVIDPidtwtZ2oSYuJrJrvvvLJfuuQateCng4Y/dkrg==
+-----END CERTIFICATE-----'
+
+# The production RSA-PKCS1.5 certificate chain used on Riviera.
+PRODUCTION_ROOT='-----BEGIN CERTIFICATE-----
+MIIDyDCCArCgAwIBAgIBATANBgkqhkiG9w0BAQsFADB0MQswCQYDVQQGEwJVUzEZ
+MBcGA1UECgwQQm9zZSBDb3Jwb3JhdGlvbjEkMCIGA1UECwwbQm9zZSBQcm9kdWN0
+IFJvb3QgQ0EgLSBQU1IwMSQwIgYDVQQDDBtCb3NlIFByb2R1Y3QgUm9vdCBDQSAt
+IFBTUjAwIBcNMTgwMjIzMjIyMzMyWhgPMjAzODEyMzEyMzU5NTlaMHQxCzAJBgNV
+BAYTAlVTMRkwFwYDVQQKDBBCb3NlIENvcnBvcmF0aW9uMSQwIgYDVQQLDBtCb3Nl
+IFByb2R1Y3QgUm9vdCBDQSAtIFBTUjAxJDAiBgNVBAMMG0Jvc2UgUHJvZHVjdCBS
+b290IENBIC0gUFNSMDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMJH
+SOP+cP/kdMiVkxDgZL7a9Q9g6eqfB6UWW0LmukoTedzi8gurqIGlClWU6iUn/9jO
+O/ce1YFDRwxlpIKAvu5qyAM47fmhqEBwu8rfLF/irxk2T34wuCWD/1OsWCdbAw2X
+2/YSsfMh2hQigH4/h+VkE9kvatmBFCVsgTr07+gVgl2cwJULOyOIqKemhJuj756S
+QVHshgrswy7sJmkP5Bze1r1Z7IJHlOQ1XT1N7tnWCoFHDeg2uuCY7VGrKmuUTW+A
+LBTd2LRfa30bKMmUJeZU1F3rMo3LpYgjUgdkIiJSWdCU6aoqSqH7zq5NF7MYM5Cd
+T9djSnE1GlSPvhEQlW0CAwEAAaNjMGEwDgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB
+/wQFMAMBAf8wHQYDVR0OBBYEFEf0hcw9hDJrjGJRtlqb8Gu/FRHeMB8GA1UdIwQY
+MBaAFEf0hcw9hDJrjGJRtlqb8Gu/FRHeMA0GCSqGSIb3DQEBCwUAA4IBAQAp/KMa
+4emw+LRfKptmTeni6QdV8nBM0q8nfcTzpu32OceNFl+9WfhYE/J1HSN6kim8uFt2
+fve6CG+dNfZy5c66tDTDYIqzJM3Y69peoZTUi2HyxZu1UiiPrV8b0eNsSzI0vxKw
+g6TRq33aWzY3nhDcL90qCHh/HkS66K/k1Gq6W4J7+tsejU1W51kS7jznIwJderiz
+i7BMaqCPNPTVDpmdMRs7Ulkc3prKwhhCRJuG0XW/cVTpvGoXOwRStI3nNfnyxkAr
+Rz6h3yORIjfQUSWfj11HgnMukrBwq0v8nS8O/LdBgh56ohkmkFGmDh/bPTnPMime
+hHN1RoWM8EwO51N1
+-----END CERTIFICATE-----'
+
+# The production RSA-PSS certificate chain used on Coronado.
+PRODUCTION_PSS_ROOT='-----BEGIN CERTIFICATE-----
+MIIEPjCCAvKgAwIBAgIRAJ1SC3Aq/c4mtpjK/hmAAVEwQQYJKoZIhvcNAQEKMDSg
+DzANBglghkgBZQMEAgEFAKEcMBoGCSqGSIb3DQEBCDANBglghkgBZQMEAgEFAKID
+AgEgMHQxCzAJBgNVBAYTAlVTMRkwFwYDVQQKDBBCb3NlIENvcnBvcmF0aW9uMSQw
+IgYDVQQLDBtCb3NlIFByb2R1Y3QgUm9vdCBDQSAtIFBTUjAxJDAiBgNVBAMMG0Jv
+c2UgUHJvZHVjdCBSb290IENBIC0gUFNSMDAeFw0xODAyMjMyMjIzMzJaFw0zODEy
+MzEyMzU5NTlaMHQxCzAJBgNVBAYTAlVTMRkwFwYDVQQKDBBCb3NlIENvcnBvcmF0
+aW9uMSQwIgYDVQQLDBtCb3NlIFByb2R1Y3QgUm9vdCBDQSAtIFBTUjAxJDAiBgNV
+BAMMG0Jvc2UgUHJvZHVjdCBSb290IENBIC0gUFNSMDCCASIwDQYJKoZIhvcNAQEB
+BQADggEPADCCAQoCggEBAMJHSOP+cP/kdMiVkxDgZL7a9Q9g6eqfB6UWW0LmukoT
+edzi8gurqIGlClWU6iUn/9jOO/ce1YFDRwxlpIKAvu5qyAM47fmhqEBwu8rfLF/i
+rxk2T34wuCWD/1OsWCdbAw2X2/YSsfMh2hQigH4/h+VkE9kvatmBFCVsgTr07+gV
+gl2cwJULOyOIqKemhJuj756SQVHshgrswy7sJmkP5Bze1r1Z7IJHlOQ1XT1N7tnW
+CoFHDeg2uuCY7VGrKmuUTW+ALBTd2LRfa30bKMmUJeZU1F3rMo3LpYgjUgdkIiJS
+WdCU6aoqSqH7zq5NF7MYM5CdT9djSnE1GlSPvhEQlW0CAwEAAaNjMGEwDgYDVR0P
+AQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFEf0hcw9hDJrjGJR
+tlqb8Gu/FRHeMB8GA1UdIwQYMBaAFEf0hcw9hDJrjGJRtlqb8Gu/FRHeMEEGCSqG
+SIb3DQEBCjA0oA8wDQYJYIZIAWUDBAIBBQChHDAaBgkqhkiG9w0BAQgwDQYJYIZI
+AWUDBAIBBQCiAwIBIAOCAQEADZIhw1R9dQX/Dyyp1uxHJH6S1YZLCmP7tk0Tz8ps
+hb8Vwwp+lhG5OY/afyD62Durhi1cjyMdAji0yZ/g2Ll/am8HvKuaIanJ++B3NeSo
+UZ+DGZauS88mrEshlnrXQ7RC969dlCSIr3SHNQmbDTLRoUzCiDeP/UabxWWq0FCi
+84WiQFlxI3vjjtpH3X0ncNK0um92mxc8PtKcoVchoPAl1FVm1QVQ1Pbnk1kg+vm+
+cRWxkqTT7SNkRo7ubzdSA0sHfpqty0K1q+Di1M72017G5s9ifq0qhQrMR+pScmXc
+db92AKgRNEYW5daDD7V4Uayq7c/JquU1GF0p9OhrltIXdg==
+-----END CERTIFICATE-----'
+
+check_chain "$PRODUCTION_ROOT"     $CERT_DIR && echo production && exit 0
+check_chain "$PRODUCTION_PSS_ROOT" $CERT_DIR && echo production && exit 0
+check_chain "$DEVELOPMENT_ROOT"    $CERT_DIR && echo development && exit 0
+
+# The development chain is broken -- it incorrectly sets the X509v3 CA
+# extension to false. Hardcode the shasum of the certificate until the
+# chain is fixed.
+case `openssl sha256 -r $CERT_DIR/$ATTESTATION_PATH 2>/dev/null` in
+  0ac46e7c8f229a19fe8ee0827d6f252a7c41523f2a1e0529dfae7e3d07d45f57\ *)
+    echo development && exit 0
+    ;;
+esac
+
+echo unknown
+exit 1

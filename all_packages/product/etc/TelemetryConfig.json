@@ -1,0 +1,17 @@
+{
+   "TelemeteryCfg":{
+      "runTimerSeconds":43200,
+      "maxRandomAddedSeconds": 7200,
+      "maxRandomBootDelaySeconds": 60,
+      "numRunsBeforePost":1,
+      "collectShepherdData": true,
+      "collectDataFromClients": true,
+      "collectDataFromClientsWaitSeconds" : 60,
+      "postUpdatedFieldsOnly" : true,
+      "postSizeLimit" : 50000,
+      "collectUpTime": true,
+      "collectProcessCrashes": true,
+      "collectProcessesDiagnostics": false,
+      "processesDiagnosticsTracked":"APServer,AVS,A4V,Bose,BT,BLESetup,CLIServer,ClockSync,Deezer,Device,Eddie,FrontDoor,GalapagosClient,HTTPProxy,IHeart,Iot,LPMService,Passport,Professor,NetManger,Server,Software,Spotify,SWUpdateWebServer,STS,Telnet,STSCertified,UpnpSource,Vfe"
+    }
+}

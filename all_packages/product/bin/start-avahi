@@ -1,0 +1,54 @@
+#!/bin/sh
+#
+# Create the Avahi daemon's configuration file and then launch the daemon.
+#
+
+if [ $# != 0 ]; then
+    echo >&2 "$0: unexpected argument '$1'"
+    exit 1
+fi
+
+conf=/var/run/avahi-daemon.conf
+
+# Make a unique hostname.
+guid=`mfgdata get "guid"`
+if [ "$guid" ]; then
+    hostname="Bose-$guid"
+else
+    product="Bose-HS500" # Eddie
+    hwaddr=$(sed 's/://g' /sys/class/net/wlan0/address)
+    if [ "$hwaddr" ]; then
+        hostname="$product-$hwaddr"
+    else
+        hostname="$product-$(date +%s)"
+    fi
+fi
+
+# Make the general config file in a writable location
+cat <<EOF > "$conf" || exit
+[server]
+host-name=$hostname
+use-ipv4=yes
+use-ipv6=no
+ratelimit-interval-usec=1000000
+ratelimit-burst=1000
+
+[wide-area]
+enable-wide-area=no
+
+[publish]
+publish-workstation=no
+
+[reflector]
+enable-reflector=no
+
+[rlimits]
+rlimit-core=0
+rlimit-data=4194304
+rlimit-fsize=0
+rlimit-nofile=768
+rlimit-stack=4194304
+rlimit-nproc=3
+EOF
+
+exec /opt/Bose/bin/avahi-daemon --no-drop-root --syslog -f "$conf"

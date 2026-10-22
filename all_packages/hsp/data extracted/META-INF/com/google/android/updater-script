@@ -1,0 +1,37 @@
+# Full update script
+
+# First update the images we normally update
+package_extract_file("apq8017-sysfs-unsparse.ext4", "/dev/block/bootdevice/by-name/system");
+package_extract_file("apq8017-boot.img", "/dev/block/bootdevice/by-name/boot");
+
+# Next switch the GPT to use the *bak partitions and update main images
+ifelse(msm.boot_update("main"), (
+package_extract_file("keymaster.mbn", "/dev/mmcblk0p42");
+package_extract_file("sbl1.mbn", "/dev/mmcblk0p4");
+package_extract_file("tz.mbn", "/dev/mmcblk0p8");
+package_extract_file("cmnlib64.mbn", "/dev/mmcblk0p40");
+package_extract_file("cmnlib.mbn", "/dev/mmcblk0p38");
+package_extract_file("emmc_appsboot.mbn", "/dev/mmcblk0p19");
+package_extract_file("rpm.mbn", "/dev/mmcblk0p6");
+package_extract_file("devcfg.mbn", "/dev/mmcblk0p10");
+), "");
+
+# Swap back from the *bak partitions to the now update the *bak partitions
+ifelse(msm.boot_update("backup"), (
+package_extract_file("keymaster.mbn", "/dev/mmcblk0p43");
+package_extract_file("sbl1.mbn", "/dev/mmcblk0p5");
+package_extract_file("tz.mbn", "/dev/mmcblk0p9");
+package_extract_file("cmnlib64.mbn", "/dev/mmcblk0p41");
+package_extract_file("cmnlib.mbn", "/dev/mmcblk0p39");
+package_extract_file("emmc_appsboot.mbn", "/dev/mmcblk0p20");
+package_extract_file("rpm.mbn", "/dev/mmcblk0p7");
+package_extract_file("devcfg.mbn", "/dev/mmcblk0p11");
+), "");
+
+# Cleanup GPT changes
+msm.boot_update("finalize");
+
+# Update non-boot critical firmware
+package_extract_file("adspso.bin", "/dev/block/bootdevice/by-name/dsp");
+package_extract_file("NON-HLOS.bin", "/dev/block/bootdevice/by-name/modem");
+

@@ -1,0 +1,3 @@
+#!/bin/sh
+> "/var/run/.factory_defaulting" # For Riviera platform
+exec /opt/Bose/bin/SoundTouch factory_default "$@"
